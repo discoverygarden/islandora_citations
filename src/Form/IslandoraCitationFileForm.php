@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * IslandoraCitationFileForm form.
  *
- * @property \Drupal\islandora_citations\IslandoraCitationInterface $entity
+ * Class of Islandora citation file upload form.
  */
 class IslandoraCitationFileForm extends IslandoraCitationForm {
 

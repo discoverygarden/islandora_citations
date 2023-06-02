@@ -8,7 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * IslandoraCitationForm form.
  *
- * @property \Drupal\islandora_citations\IslandoraCitationInterface $entity
+ * Class of Islandora citation form.
  */
 class IslandoraCitationForm extends EntityForm {
 
