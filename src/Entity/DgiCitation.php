@@ -1,9 +1,9 @@
 <?php
 
-namespace Drupal\dgi_citation\Entity;
+namespace Drupal\islandora_citations\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
-use Drupal\dgi_citation\DgiCitationInterface;
+use Drupal\islandora_citations\DgiCitationInterface;
 
 /**
  * Defines the dgi_citation entity type.
@@ -19,11 +19,11 @@ use Drupal\dgi_citation\DgiCitationInterface;
  *     plural = "@count dgi_citations",
  *   ),
  *   handlers = {
- *     "list_builder" = "Drupal\dgi_citation\DgiCitationListBuilder",
+ *     "list_builder" = "Drupal\islandora_citations\DgiCitationListBuilder",
  *     "form" = {
- *       "add" = "Drupal\dgi_citation\Form\DgiCitationForm",
- *       "add-file" = "Drupal\dgi_citation\Form\DgiCitationFileForm",
- *       "edit" = "Drupal\dgi_citation\Form\DgiCitationForm",
+ *       "add" = "Drupal\islandora_citations\Form\DgiCitationForm",
+ *       "add-file" = "Drupal\islandora_citations\Form\DgiCitationFileForm",
+ *       "edit" = "Drupal\islandora_citations\Form\DgiCitationForm",
  *       "delete" = "Drupal\Core\Entity\EntityDeleteForm"
  *     }
  *   },

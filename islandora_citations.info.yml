@@ -1,4 +1,4 @@
-name: dgi_citation
+name: Islandora citations
 type: module
 description: Provides service to manage citation in drupal system.
 package: Custom

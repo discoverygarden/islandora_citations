@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\dgi_citation;
+namespace Drupal\islandora_citations;
 
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 

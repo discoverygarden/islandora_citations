@@ -1,12 +1,12 @@
 <?php
 
-namespace Drupal\dgi_citation;
+namespace Drupal\islandora_citations;
 
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 
 /**
- * Provides a listing of dgi_citations.
+ * Provides a listing of islandora_citations.
  */
 class DgiCitationListBuilder extends ConfigEntityListBuilder {
 

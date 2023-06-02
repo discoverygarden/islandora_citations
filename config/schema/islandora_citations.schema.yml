@@ -10,5 +10,5 @@ dgi_citation.dgi_citation.*:
       label: Label
     uuid:
       type: string
-    description:
-      type: string
+    csl:
+      type: text
