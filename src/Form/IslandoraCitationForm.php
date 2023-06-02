@@ -6,11 +6,11 @@ use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Dgi_citation form.
+ * IslandoraCitationForm form.
  *
- * @property \Drupal\islandora_citations\DgiCitationInterface $entity
+ * @property \Drupal\islandora_citations\IslandoraCitationInterface $entity
  */
-class DgiCitationForm extends EntityForm {
+class IslandoraCitationForm extends EntityForm {
 
   /**
    * {@inheritdoc}
@@ -24,7 +24,7 @@ class DgiCitationForm extends EntityForm {
       '#title' => $this->t('Label'),
       '#maxlength' => 255,
       '#default_value' => $this->entity->label(),
-      '#description' => $this->t('Label for the dgi citation.'),
+      '#description' => $this->t('Label for the islandora citation.'),
       '#required' => TRUE,
     ];
 
@@ -32,7 +32,7 @@ class DgiCitationForm extends EntityForm {
       '#type' => 'machine_name',
       '#default_value' => $this->entity->id(),
       '#machine_name' => [
-        'exists' => '\Drupal\islandora_citations\Entity\DgiCitation::load',
+        'exists' => '\Drupal\islandora_citations\Entity\IslandoraCitation::load',
       ],
       '#disabled' => !$this->entity->isNew(),
     ];
@@ -41,7 +41,7 @@ class DgiCitationForm extends EntityForm {
       '#type' => 'textarea',
       '#title' => $this->t('CSL'),
       '#default_value' => $this->entity->get('csl'),
-      '#description' => $this->t('CSL of the dgi citation.'),
+      '#description' => $this->t('CSL of the islandora citation.'),
     ];
 
     return $form;
@@ -54,8 +54,8 @@ class DgiCitationForm extends EntityForm {
     $result = parent::save($form, $form_state);
     $message_args = ['%label' => $this->entity->label()];
     $message = $result == SAVED_NEW
-      ? $this->t('Created new dgi_citation %label.', $message_args)
-      : $this->t('Updated dgi_citation %label.', $message_args);
+      ? $this->t('Created new islandora_citation %label.', $message_args)
+      : $this->t('Updated islandora_citation %label.', $message_args);
     $this->messenger()->addStatus($message);
     $form_state->setRedirectUrl($this->entity->toUrl('collection'));
     return $result;

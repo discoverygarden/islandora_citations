@@ -3,4 +3,4 @@ type: module
 description: Provides service to manage citation in drupal system.
 package: Custom
 core_version_requirement: ^9 || ^10
-configure: entity.dgi_citation.collection
+configure: entity.islandora_citations.collection

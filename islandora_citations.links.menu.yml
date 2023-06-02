@@ -1,5 +1,5 @@
-entity.dgi_citation.overview:
-  title: Dgi citations
+entity.islandora_citations.overview:
+  title: Islandora citations
   parent: system.admin_structure
-  description: 'List of dgi_citations to extend site functionality.'
-  route_name: entity.dgi_citation.collection
+  description: 'List of Islandora citations to extend site functionality.'
+  route_name: entity.islandora_citations.collection

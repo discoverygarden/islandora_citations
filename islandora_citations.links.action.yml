@@ -1,11 +1,11 @@
-entity.dgi_citation.add_form:
-  route_name: 'entity.dgi_citation.add_form'
-  title: 'Add dgi citation'
+entity.islandora_citations.add_form:
+  route_name: 'entity.islandora_citations.add_form'
+  title: 'Add islandora citation'
   appears_on:
-    - entity.dgi_citation.collection
+    - entity.islandora_citations.collection
 
-entity.dgi_citation.add_file:
-  route_name: 'entity.dgi_citation.add_from_file'
+entity.islandora_citations.add_file:
+  route_name: 'entity.islandora_citations.add_from_file'
   title: 'Install style from file'
   appears_on:
-    - entity.dgi_citation.collection
+    - entity.islandora_citations.collection

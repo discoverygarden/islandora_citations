@@ -1,6 +1,6 @@
-dgi_citation.dgi_citation.*:
+islandora_citations.islandora_citations.*:
   type: config_entity
-  label: dgi_citation
+  label: islandora_citations
   mapping:
     id:
       type: string

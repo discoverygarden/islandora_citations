@@ -1,42 +1,42 @@
-entity.dgi_citation.collection:
-  path: '/admin/structure/dgi-citation'
+entity.islandora_citations.collection:
+  path: '/admin/structure/islandora-citations'
   defaults:
-    _entity_list: 'dgi_citation'
-    _title: 'Dgi citation configuration'
+    _entity_list: 'islandora_citations'
+    _title: 'Islandora citations configuration'
   requirements:
-    _permission: 'administer dgi_citation'
+    _permission: 'administer islandora_citations'
 
-entity.dgi_citation.add_form:
-  path: '/admin/structure/dgi_citation/add'
+entity.islandora_citations.add_form:
+  path: '/admin/structure/islandora-citations/add'
   defaults:
-    _entity_form: 'dgi_citation.add'
-    _title: 'Add a dgi citation'
+    _entity_form: 'islandora_citations.add'
+    _title: 'Add a islandora citation'
   requirements:
-    _permission: 'administer dgi_citation'
+    _permission: 'administer islandora_citations'
 
-entity.dgi_citation.edit_form:
-  path: '/admin/structure/dgi-citation/{dgi_citation}'
+entity.islandora_citations.edit_form:
+  path: '/admin/structure/islandora-citation/{islandora_citations}'
   defaults:
-    _entity_form: 'dgi_citation.edit'
-    _title: 'Edit a dgi citation'
+    _entity_form: 'islandora_citations.edit'
+    _title: 'Edit a islandora citation'
   requirements:
-    _permission: 'administer dgi_citation'
+    _permission: 'administer islandora_citations'
 
-entity.dgi_citation.delete_form:
-  path: '/admin/structure/dgi-citation/{dgi_citation}/delete'
+entity.islandora_citations.delete_form:
+  path: '/admin/structure/islandora-citation/{islandora_citations}/delete'
   defaults:
-    _entity_form: 'dgi_citation.delete'
-    _title: 'Delete a dgi citation'
+    _entity_form: 'islandora_citations.delete'
+    _title: 'Delete a islandora citation'
   requirements:
-    _permission: 'administer dgi_citation'
+    _permission: 'administer islandora_citations'
 
-entity.dgi_citation.add_from_file:
-  path: '/admin/structure/dgi-citation/add-file'
+entity.islandora_citations.add_from_file:
+  path: '/admin/structure/islandora-citation/add-file'
   defaults:
-    _entity_form: 'dgi_citation.add-file'
-    entity_type_id: 'dgi_citation'
+    _entity_form: 'islandora_citations.add-file'
+    entity_type_id: 'islandora_citations'
     _title: 'Add CSL style from file'
   requirements:
-    _permission: 'administer dgi_citation'
+    _permission: 'administer islandora_citations'
   options:
     _admin_route: TRUE

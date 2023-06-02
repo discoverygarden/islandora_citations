@@ -8,7 +8,7 @@ use Drupal\Core\Entity\EntityInterface;
 /**
  * Provides a listing of islandora_citations.
  */
-class DgiCitationListBuilder extends ConfigEntityListBuilder {
+class IslandoraCitationListBuilder extends ConfigEntityListBuilder {
 
   /**
    * {@inheritdoc}
@@ -24,7 +24,7 @@ class DgiCitationListBuilder extends ConfigEntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    /** @var \Drupal\dgi_citation\DgiCitationInterface $entity */
+    /** @var \Drupal\islandora_citations\IslandoraCitationInterface $entity */
     $row['label'] = $entity->label();
     $row['id'] = $entity->id();
     $row['status'] = $entity->status() ? $this->t('Enabled') : $this->t('Disabled');

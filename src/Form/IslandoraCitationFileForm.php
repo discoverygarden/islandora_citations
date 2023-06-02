@@ -5,11 +5,11 @@ namespace Drupal\islandora_citations\Form;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Dgi_citation form.
+ * IslandoraCitationFileForm form.
  *
- * @property \Drupal\dgi_citation\DgiCitationInterface $entity
+ * @property \Drupal\islandora_citations\IslandoraCitationInterface $entity
  */
-class DgiCitationFileForm extends DgiCitationForm {
+class IslandoraCitationFileForm extends IslandoraCitationForm {
 
   /**
    * {@inheritdoc}
@@ -36,8 +36,8 @@ class DgiCitationFileForm extends DgiCitationForm {
     $result = parent::save($form, $form_state);
     $message_args = ['%label' => $this->entity->label()];
     $message = $result == SAVED_NEW
-      ? $this->t('Created new dgi_citation %label.', $message_args)
-      : $this->t('Updated dgi_citation %label.', $message_args);
+      ? $this->t('Created new Islandora citation %label.', $message_args)
+      : $this->t('Updated Islandora citation %label.', $message_args);
     $this->messenger()->addStatus($message);
     $form_state->setRedirectUrl($this->entity->toUrl('collection'));
     return $result;

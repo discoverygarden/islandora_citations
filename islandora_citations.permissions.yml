@@ -1,7 +1,7 @@
-administer dgi_citation configuration:
-  title: 'Administer dgi_citation configuration'
+administer islandora_citations configuration:
+  title: 'Administer islandora_citations configuration'
   description: 'Optional description.'
   restrict access: true
 
-administer dgi_citation:
-  title: 'Administer dgi_citation'
+administer islandora_citations:
+  title: 'Administer islandora_citations'
