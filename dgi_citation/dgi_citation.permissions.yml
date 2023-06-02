@@ -1,0 +1,7 @@
+administer dgi_citation configuration:
+  title: 'Administer dgi_citation configuration'
+  description: 'Optional description.'
+  restrict access: true
+
+administer dgi_citation:
+  title: 'Administer dgi_citation'

@@ -1,0 +1,42 @@
+entity.dgi_citation.collection:
+  path: '/admin/structure/dgi-citation'
+  defaults:
+    _entity_list: 'dgi_citation'
+    _title: 'Dgi citation configuration'
+  requirements:
+    _permission: 'administer dgi_citation'
+
+entity.dgi_citation.add_form:
+  path: '/admin/structure/dgi_citation/add'
+  defaults:
+    _entity_form: 'dgi_citation.add'
+    _title: 'Add a dgi citation'
+  requirements:
+    _permission: 'administer dgi_citation'
+
+entity.dgi_citation.edit_form:
+  path: '/admin/structure/dgi-citation/{dgi_citation}'
+  defaults:
+    _entity_form: 'dgi_citation.edit'
+    _title: 'Edit a dgi citation'
+  requirements:
+    _permission: 'administer dgi_citation'
+
+entity.dgi_citation.delete_form:
+  path: '/admin/structure/dgi-citation/{dgi_citation}/delete'
+  defaults:
+    _entity_form: 'dgi_citation.delete'
+    _title: 'Delete a dgi citation'
+  requirements:
+    _permission: 'administer dgi_citation'
+
+entity.dgi_citation.add_from_file:
+  path: '/admin/structure/dgi-citation/add-file'
+  defaults:
+    _entity_form: 'dgi_citation.add-file'
+    entity_type_id: 'dgi_citation'
+    _title: 'Add CSL style from file'
+  requirements:
+    _permission: 'administer dgi_citation'
+  options:
+    _admin_route: TRUE

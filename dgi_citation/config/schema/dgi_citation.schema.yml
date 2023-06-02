@@ -1,0 +1,14 @@
+dgi_citation.dgi_citation.*:
+  type: config_entity
+  label: dgi_citation
+  mapping:
+    id:
+      type: string
+      label: ID
+    label:
+      type: label
+      label: Label
+    uuid:
+      type: string
+    description:
+      type: string
