@@ -3,7 +3,6 @@
 namespace Drupal\islandora_citations\Form;
 
 use Drupal\Core\Form\FormStateInterface;
-use \DOMDocument;
 
 /**
  * IslandoraCitationFileForm form.
@@ -36,12 +35,13 @@ class IslandoraCitationFileForm extends IslandoraCitationForm {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     if ($file = $this->extractFile()) {
       $content = file_get_contents($file->getRealPath());
-      
+
       if ($this->isXMLContentValid($content)) {
         $csl = simplexml_load_string($content);
         $form_state->setValue('csl', $content);
         parent::validateForm($form, $form_state);
-      } else {
+      }
+      else {
         $form_state->setErrorByName('file', $this->t('The uploaded file does not contain valid CSL.'));
       }
     }
@@ -50,18 +50,25 @@ class IslandoraCitationFileForm extends IslandoraCitationForm {
     }
   }
 
-/**
- * @param string $xmlContent A well-formed XML string
- * @param string $version 1.0
- * @param string $encoding utf-8
- * @return bool
- */
-  function isXMLContentValid($xmlContent, $version = '1.0', $encoding = 'utf-8'){
+  /**
+   * Validating XML content.
+   *
+   * @param string $xmlContent
+   *   A well-formed XML string.
+   * @param string $version
+   *   Default value 1.0.
+   * @param string $encoding
+   *   Default valu utf-8.
+   *
+   * @return bool
+   *   Return TRUE or FALSE
+   */
+  public function isXmlContentValid($xmlContent, $version = '1.0', $encoding = 'utf-8') {
     if (trim($xmlContent) == '') {
-        return false;
+      return FALSE;
     }
-    libxml_use_internal_errors(true);
-    $doc = new DOMDocument($version, $encoding);
+    libxml_use_internal_errors(TRUE);
+    $doc = new \DOMDocument($version, $encoding);
     $doc->loadXML($xmlContent);
     $errors = libxml_get_errors();
     libxml_clear_errors();
