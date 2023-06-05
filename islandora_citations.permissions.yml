@@ -1,6 +1,6 @@
 administer islandora_citations configuration:
-  title: 'Administer islandora_citations configuration'
-  description: 'Optional description.'
+  title: 'Administer islandora citations configuration'
+  description: 'Full access to all citation style.'
   restrict access: true
 
 administer islandora_citations:

@@ -1,11 +1,11 @@
 entity.islandora_citations.add_form:
   route_name: 'entity.islandora_citations.add_form'
-  title: 'Add islandora citation'
+  title: 'Add citation style'
   appears_on:
     - entity.islandora_citations.collection
 
 entity.islandora_citations.add_file:
   route_name: 'entity.islandora_citations.add_from_file'
-  title: 'Install style from file'
+  title: 'Add citation style from file'
   appears_on:
     - entity.islandora_citations.collection

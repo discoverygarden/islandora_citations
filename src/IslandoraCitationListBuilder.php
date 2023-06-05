@@ -16,7 +16,6 @@ class IslandoraCitationListBuilder extends ConfigEntityListBuilder {
   public function buildHeader() {
     $header['label'] = $this->t('Label');
     $header['id'] = $this->t('Machine name');
-    $header['status'] = $this->t('Status');
     return $header + parent::buildHeader();
   }
 
@@ -27,7 +26,6 @@ class IslandoraCitationListBuilder extends ConfigEntityListBuilder {
     /** @var \Drupal\islandora_citations\IslandoraCitationInterface $entity */
     $row['label'] = $entity->label();
     $row['id'] = $entity->id();
-    $row['status'] = $entity->status() ? $this->t('Enabled') : $this->t('Disabled');
     return $row + parent::buildRow($entity);
   }
 
