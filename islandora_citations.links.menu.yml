@@ -3,6 +3,7 @@ entity.islandora_citations.overview:
   parent: system.admin_structure
   description: 'List of Islandora citations to extend site functionality.'
   route_name: entity.islandora_citations.collection
+
 entity.islandora_citations.config_overview:
   title: 'Islandora citations'
   parent: system.admin_config
