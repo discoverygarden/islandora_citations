@@ -37,7 +37,6 @@ class IslandoraCitationFileForm extends IslandoraCitationForm {
       $content = file_get_contents($file->getRealPath());
 
       if ($this->isXMLContentValid($content)) {
-        $csl = simplexml_load_string($content);
         $form_state->setValue('csl', $content);
         parent::validateForm($form, $form_state);
       }
