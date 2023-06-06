@@ -78,4 +78,19 @@ class IslandoraCitation extends ConfigEntityBase implements IslandoraCitationInt
    */
   protected $csl;
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getCslText() {
+    return $this->csl;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setCslText($csl_text) {
+    $this->csl = $csl_text;
+    return $this;
+  }
+
 }
