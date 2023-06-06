@@ -1,0 +1,14 @@
+islandora_citations.islandora_citations.*:
+  type: config_entity
+  label: islandora_citations
+  mapping:
+    id:
+      type: string
+      label: ID
+    label:
+      type: label
+      label: Label
+    uuid:
+      type: string
+    csl:
+      type: text

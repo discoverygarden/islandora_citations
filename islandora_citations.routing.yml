@@ -1,0 +1,42 @@
+entity.islandora_citations.collection:
+  path: '/admin/structure/islandora-citations'
+  defaults:
+    _entity_list: 'islandora_citations'
+    _title: 'Islandora citations configuration'
+  requirements:
+    _permission: 'administer islandora_citations'
+
+entity.islandora_citations.add_form:
+  path: '/admin/structure/islandora-citations/add'
+  defaults:
+    _entity_form: 'islandora_citations.add'
+    _title: 'Add a citation style'
+  requirements:
+    _permission: 'administer islandora_citations'
+
+entity.islandora_citations.edit_form:
+  path: '/admin/structure/islandora-citation/{islandora_citations}'
+  defaults:
+    _entity_form: 'islandora_citations.edit'
+    _title: 'Edit a citation style'
+  requirements:
+    _permission: 'administer islandora_citations'
+
+entity.islandora_citations.delete_form:
+  path: '/admin/structure/islandora-citation/{islandora_citations}/delete'
+  defaults:
+    _entity_form: 'islandora_citations.delete'
+    _title: 'Delete a citation style'
+  requirements:
+    _permission: 'administer islandora_citations'
+
+entity.islandora_citations.add_from_file:
+  path: '/admin/structure/islandora-citation/add-file'
+  defaults:
+    _entity_form: 'islandora_citations.add-file'
+    entity_type_id: 'islandora_citations'
+    _title: 'Add CSL style from file'
+  requirements:
+    _permission: 'administer islandora_citations'
+  options:
+    _admin_route: TRUE

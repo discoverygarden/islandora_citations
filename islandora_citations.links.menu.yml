@@ -1,0 +1,12 @@
+entity.islandora_citations.overview:
+  title: Islandora citations
+  parent: system.admin_structure
+  description: 'List of citation styles available.'
+  route_name: entity.islandora_citations.collection
+
+entity.islandora_citations.config_overview:
+  title: 'Islandora citations'
+  parent: system.admin_config
+  description: 'List of citation styles available.'
+  route_name: entity.islandora_citations.collection
+  weight: 100
