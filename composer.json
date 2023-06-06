@@ -1,0 +1,7 @@
+{
+    "name": "discoverygarden/islandora_citations",
+    "description": "A module for managing citations in Islandora",
+    "homepage": "https://github.com/discoverygarden/islandora_citations",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later"
+}
