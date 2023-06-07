@@ -12,3 +12,13 @@ islandora_citations.islandora_citations.*:
       type: string
     csl:
       type: text
+
+field.widget.third_party.islandora_citations:
+  type: mapping
+  mapping:
+    csl_name:
+      type: string
+      label: Name of CSL
+    field_name:
+      type: string
+      label: Name of Field
