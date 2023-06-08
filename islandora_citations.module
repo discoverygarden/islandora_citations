@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * @file
+ * General hook implementations.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function islandora_citations_form_field_config_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $cslFields = [
+    "type" => "type",
+    "abstract" => "abstract",
+    "annote" => "annote",
+    "archive" => "archive",
+    "archive_location" => "archive_location",
+    "archive-place" => "archive-place",
+    "authority" => "authority",
+    "call-number" => "call-number",
+    "chapter-number" => "chapter-number",
+  ];
+  $entity = $form_state->getFormObject()->getEntity();
+
+  $field_id = $entity->id();
+  $form['third_party_settings']['islandora_citations']['csl_id'] = [
+    '#type' => 'select',
+    '#title' => \t('CSL Field'),
+    '#empty_option' => \t('- Select -'),
+    '#options' => $cslFields,
+    '#description' => \t('User is prevented from submitting the form unless all enabled <em>filehash</em> algorithms match the user provided values.'),
+    '#default_value' => $entity->getThirdPartySetting('islandora_citations', 'csl_id'),
+  ];
+  $form['actions']['submit']['#submit'][] = 'islandora_citations_field_config_edit_form_submit';
+  return $form;
+}
+
+/**
+ * Submit handler for field config edit form.
+ *
+ * Copied and slightly modifed from FieldConfigEditForm::submitForm().
+ *
+ * @see \Drupal\field_ui\Form\FieldConfigEditForm::submitForm()
+ */
+function islandora_citations_field_config_edit_form_submit(array &$form, FormStateInterface $form_state) {
+  $entity = $form_state->getFormObject()->getEntity();
+
+  $csl_field = $form_state->getValue([
+    'third_party_settings',
+    'islandora_citations',
+    'csl_id',
+  ]);
+
+  $entity->setThirdPartySetting('islandora_citations', 'csl_id', $csl_field);
+}
