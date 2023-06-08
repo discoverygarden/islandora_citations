@@ -52,6 +52,8 @@ function islandora_citations_field_config_edit_form_submit(array &$form, FormSta
     'islandora_citations',
     'csl_id',
   ]);
-
+  if (empty($csl_field)) {
+    $entity->unsetThirdPartySetting('islandora_citations', 'csl_id');
+  }
   $entity->setThirdPartySetting('islandora_citations', 'csl_id', $csl_field);
 }
