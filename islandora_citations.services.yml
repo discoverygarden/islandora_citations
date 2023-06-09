@@ -1,0 +1,4 @@
+services:
+  islandora_citations.controller:
+    class: Drupal\islandora_citations\Controller\IslandoraCitationsController
+    arguments: ['@entity_field.manager']

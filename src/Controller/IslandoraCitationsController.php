@@ -5,6 +5,7 @@ namespace Drupal\islandora_citations\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Entity\EntityFieldManager;
 
 /**
  * Returns responses for islandora_citations module routes.
@@ -12,6 +13,24 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 class IslandoraCitationsController extends ControllerBase {
 
   use StringTranslationTrait;
+
+  /**
+   * The entity field manager.
+   *
+   * @var \Drupal\Core\Entity\EntityFieldManager
+   */
+
+  protected $entityFieldManager;
+
+  /**
+   * Construct.
+   *
+   * @param \Drupal\Core\Entity\EntityFieldManager $entityFieldManager
+   *   The entity type manager service.
+   */
+  public function __construct(EntityFieldManager $entityFieldManager) {
+    $this->entityFieldManager = $entityFieldManager;
+  }
 
   /**
    * Provide arguments for FieldConfigUpdate.
@@ -29,7 +48,7 @@ class IslandoraCitationsController extends ControllerBase {
       'col2' => $this->t('CSL Field'),
       'col3' => $this->t('Operation'),
     ];
-    $entityFieldManager = \Drupal::service('entity_field.manager');
+    $entityFieldManager = $this->entityFieldManager;
     $fields = $entityFieldManager->getFieldDefinitions('node', $node_type);
 
     foreach ($fields as $field_definition) {

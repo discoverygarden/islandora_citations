@@ -45,6 +45,6 @@ islandora_citations.tab.node:
   path: '/admin/structure/types/manage/{node_type}/field-config-update'
   defaults:
     _title: 'Islandora field configuration'
-    _controller: '\Drupal\islandora_citations\Controller\IslandoraCitationsController::provideArguments'
+    _controller: 'islandora_citations.controller:provideArguments'
   requirements:
     _permission: 'administer islandora_citations'
