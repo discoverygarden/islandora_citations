@@ -40,3 +40,11 @@ entity.islandora_citations.add_from_file:
     _permission: 'administer islandora_citations'
   options:
     _admin_route: TRUE
+    
+islandora_citations.tab.node:
+  path: '/admin/structure/types/manage/{node_type}/field-config-update'
+  defaults:
+    _title: 'Islandora field configuration'
+    _controller: '\Drupal\islandora_citations\Controller\IslandoraCitationsController::provideArguments'
+  requirements:
+    _permission: 'administer islandora_citations'
