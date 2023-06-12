@@ -16,6 +16,6 @@ islandora_citations.islandora_citations.*:
 field.field.*.*.*.third_party.islandora_citations:
   type: mapping
   mapping:
-    csl_id:
+    csl_field:
       type: string
       label: CSL Field
