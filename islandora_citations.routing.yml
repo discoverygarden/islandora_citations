@@ -42,9 +42,9 @@ entity.islandora_citations.add_from_file:
     _admin_route: TRUE
     
 islandora_citations.tab.node:
-  path: '/admin/structure/types/manage/{node_type}/field-config-update'
+  path: '/admin/structure/types/manage/{node_type}/citations-map-configuration'
   defaults:
-    _title: 'Islandora field configuration'
+    _title: 'Citations Map Configuration'
     _controller: 'islandora_citations.controller:provideArguments'
   requirements:
     _permission: 'administer islandora_citations'
