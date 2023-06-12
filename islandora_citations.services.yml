@@ -2,3 +2,8 @@ services:
   islandora_citations.controller:
     class: Drupal\islandora_citations\Controller\IslandoraCitationsController
     arguments: ['@entity_field.manager']
+  islandora_citations.route_subscriber:
+    class: Drupal\islandora_citations\Routing\RouteSubscriber
+    arguments: [ '@entity_type.manager', '@config.factory' ]
+    tags:
+      - { name: event_subscriber }

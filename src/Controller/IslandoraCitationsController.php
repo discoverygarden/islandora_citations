@@ -72,4 +72,44 @@ class IslandoraCitationsController extends ControllerBase {
     ];
   }
 
+  /**
+   * Provide arguments for FieldConfigUpdate.
+   *
+   * @param string $paragraphs_type
+   *   Node type.
+   *
+   * @return array
+   *   Form array.
+   */
+  public function paragraphsArguments($paragraphs_type) {
+
+    $header = [
+      'col1' => $this->t('Field'),
+      'col2' => $this->t('CSL Field'),
+      'col3' => $this->t('Operation'),
+    ];
+    $entityFieldManager = $this->entityFieldManager;
+    $fields = $entityFieldManager->getFieldDefinitions('paragraph', $paragraphs_type->id());
+
+    foreach ($fields as $field_definition) {
+      if (!empty($field_definition->getTargetBundle())) {
+        $rows[] = [$field_definition->getName(),
+          $field_definition->getThirdPartySetting('islandora_citations', 'csl_field') ? $field_definition->getThirdPartySetting('islandora_citations', 'csl_field') : "-",
+          [
+            'data' => new FormattableMarkup('<a href=":link">@name</a>',
+          [
+            ':link' => 'fields/paragraph.' . $paragraphs_type->id() . '.' . $field_definition->getName(),
+            '@name' => $this->t('Edit'),
+          ]),
+          ],
+        ];
+      }
+    }
+    return [
+      '#type' => 'table',
+      '#header' => $header,
+      '#rows' => $rows,
+    ];
+  }
+
 }
