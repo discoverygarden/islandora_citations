@@ -54,7 +54,7 @@ class IslandoraCitationsController extends ControllerBase {
     foreach ($fields as $field_definition) {
       if (!empty($field_definition->getTargetBundle())) {
         $rows[] = [$field_definition->getName(),
-          $field_definition->getThirdPartySetting('islandora_citations', 'csl_id') ? $field_definition->getThirdPartySetting('islandora_citations', 'csl_id') : "-",
+          $field_definition->getThirdPartySetting('islandora_citations', 'csl_field') ? $field_definition->getThirdPartySetting('islandora_citations', 'csl_field') : "-",
           [
             'data' => new FormattableMarkup('<a href=":link">@name</a>',
           [
