@@ -11,17 +11,11 @@ use Drupal\Core\Form\FormStateInterface;
  * Implements hook_form_FORM_ID_alter().
  */
 function islandora_citations_form_field_config_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $cslFields = [
-    "type" => "type",
-    "abstract" => "abstract",
-    "annote" => "annote",
-    "archive" => "archive",
-    "archive_location" => "archive_location",
-    "archive-place" => "archive-place",
-    "authority" => "authority",
-    "call-number" => "call-number",
-    "chapter-number" => "chapter-number",
-  ];
+  $get_variable_one = \Drupal::config('islandora_citations.settings')->get('allowed_types');
+  foreach ($get_variable_one as $value) {
+    $cslFields[$value] = $value;
+  }
+
   $entity = $form_state->getFormObject()->getEntity();
   $form['third_party_settings']['islandora_citations']['csl_field'] = [
     '#type' => 'select',

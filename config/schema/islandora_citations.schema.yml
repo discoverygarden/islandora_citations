@@ -12,3 +12,21 @@ islandora_citations.islandora_citations.*:
       type: string
     csl:
       type: text
+
+field.field.*.*.*.third_party.islandora_citations:
+  type: mapping
+  mapping:
+    csl_field:
+      type: string
+      label: CSL Field
+
+islandora_citations.settings:
+  type: config_object
+  label: 'CSL field values'
+  mapping:
+    allowed_types:
+      type: sequence
+      label: 'CSL default field values'
+      sequence:
+        type: string
+        label: 'CSL'
