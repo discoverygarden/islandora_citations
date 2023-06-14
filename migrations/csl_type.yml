@@ -1,0 +1,23 @@
+id: csl_type
+label: CSL Type.
+migration_tags:
+  - taxonomy
+source:
+  plugin: 'csv'
+  path: 'modules/islandora_citations/data/csl_type.csv'
+  delimiter: ','
+  enclosure: '"'
+  header_offset: 0
+  ids:
+    - name
+  fields:
+    0:
+      name: name
+      label: 'Name'
+
+process:
+  name: name
+
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: csl_type
