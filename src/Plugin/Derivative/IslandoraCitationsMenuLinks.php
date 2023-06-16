@@ -37,7 +37,7 @@ class IslandoraCitationsMenuLinks extends DeriverBase implements ContainerDerive
   protected $moduleHandler;
 
   /**
-   * Creates an DevelLocalTask object.
+   * Creates objects.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity manager.

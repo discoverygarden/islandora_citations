@@ -29,7 +29,7 @@ class IslandoraCitationsLocalTask extends DeriverBase implements ContainerDerive
   protected $entityTypeManager;
 
   /**
-   * Creates an DevelLocalTask object.
+   * Creates objects.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity manager.

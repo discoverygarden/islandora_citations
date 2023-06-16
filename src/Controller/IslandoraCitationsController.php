@@ -2,10 +2,10 @@
 
 namespace Drupal\islandora_citations\Controller;
 
-use Drupal\Core\Controller\ControllerBase;
 use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityFieldManager;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Returns responses for islandora_citations module routes.
@@ -48,13 +48,14 @@ class IslandoraCitationsController extends ControllerBase {
       'col2' => $this->t('CSL Field'),
       'col3' => $this->t('Operation'),
     ];
-    $entityFieldManager = $this->entityFieldManager;
-    $fields = $entityFieldManager->getFieldDefinitions('node', $node_type);
+    $fields = $this->entityFieldManager->getFieldDefinitions('node', $node_type);
 
     foreach ($fields as $field_definition) {
+
       if (!empty($field_definition->getTargetBundle())) {
+        $data = $field_definition->getThirdPartySetting('islandora_citations', 'csl_field');
         $rows[] = [$field_definition->getName(),
-          $field_definition->getThirdPartySetting('islandora_citations', 'csl_field') ? $field_definition->getThirdPartySetting('islandora_citations', 'csl_field') : "-",
+          $data ? implode(',', $data) : '-',
           [
             'data' => new FormattableMarkup('<a href=":link">@name</a>',
           [
@@ -88,13 +89,13 @@ class IslandoraCitationsController extends ControllerBase {
       'col2' => $this->t('CSL Field'),
       'col3' => $this->t('Operation'),
     ];
-    $entityFieldManager = $this->entityFieldManager;
-    $fields = $entityFieldManager->getFieldDefinitions('paragraph', $paragraphs_type->id());
+    $fields = $this->entityFieldManager->getFieldDefinitions('paragraph', $paragraphs_type->id());
 
     foreach ($fields as $field_definition) {
       if (!empty($field_definition->getTargetBundle())) {
+        $data = $field_definition->getThirdPartySetting('islandora_citations', 'csl_field');
         $rows[] = [$field_definition->getName(),
-          $field_definition->getThirdPartySetting('islandora_citations', 'csl_field') ? $field_definition->getThirdPartySetting('islandora_citations', 'csl_field') : "-",
+          $data ? implode(',', $data) : '-',
           [
             'data' => new FormattableMarkup('<a href=":link">@name</a>',
           [
