@@ -27,7 +27,7 @@ islandora_citations.settings:
   type: config_object
   label: 'CSL field values'
   mapping:
-    allowed_types:
+    citation_fields:
       type: sequence
       label: 'CSL default field values'
       sequence:

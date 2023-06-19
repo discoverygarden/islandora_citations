@@ -1,0 +1,11 @@
+islandora_citations.islandora_citations.node:
+  title: CSL Map
+  route_name: islandora_citations.tab.node
+  base_route: entity.node_type.edit_form
+  weight: 11
+
+islandora_citations.islandora_citations.paragraphs:
+  title: CSL Map
+  class: \Drupal\Core\Menu\LocalTaskDefault
+  deriver: \Drupal\islandora_citations\Plugin\Derivative\IslandoraCitationsLocalTask
+  weight: 11

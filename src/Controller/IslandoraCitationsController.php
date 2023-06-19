@@ -48,8 +48,7 @@ class IslandoraCitationsController extends ControllerBase {
       'col2' => $this->t('CSL Field'),
       'col3' => $this->t('Operation'),
     ];
-    $entityFieldManager = $this->entityFieldManager;
-    $fields = $entityFieldManager->getFieldDefinitions('node', $node_type);
+    $fields = $this->entityFieldManager->getFieldDefinitions('node', $node_type);
 
     foreach ($fields as $field_definition) {
 
@@ -90,8 +89,7 @@ class IslandoraCitationsController extends ControllerBase {
       'col2' => $this->t('CSL Field'),
       'col3' => $this->t('Operation'),
     ];
-    $entityFieldManager = $this->entityFieldManager;
-    $fields = $entityFieldManager->getFieldDefinitions('paragraph', $paragraphs_type->id());
+    $fields = $this->entityFieldManager->getFieldDefinitions('paragraph', $paragraphs_type->id());
 
     foreach ($fields as $field_definition) {
       if (!empty($field_definition->getTargetBundle())) {
