@@ -26,7 +26,7 @@ class CslDateFormatter extends FormatterBase implements ContainerFactoryPluginIn
   /**
    * Date formatter.
    *
-   * @var $dateFormatter \Drupal\Core\Datetime\DateFormatter
+   * @var \Drupal\Core\Datetime\DateFormatter
    */
   protected $dateFormatter;
 
