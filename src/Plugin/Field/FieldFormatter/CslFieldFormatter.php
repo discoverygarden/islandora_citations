@@ -24,6 +24,9 @@ class CslFieldFormatter extends FormatterBase {
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $element = [];
     $cslFields = $items->getFieldDefinition()->getThirdPartySetting('islandora_citations', 'csl_field');
+    if (empty($cslFields) || empty($items->value)) {
+      return [];
+    }
     foreach ($cslFields as $value) {
       foreach ($items as $item) {
 
