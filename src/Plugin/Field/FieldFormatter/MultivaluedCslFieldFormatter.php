@@ -34,7 +34,7 @@ class MultivaluedCslFieldFormatter extends FormatterBase {
     }
 
     $element = [
-      '#markup' => array_values($cslFields)[0] . ' => "' . implode(',', $data).'"',
+      '#markup' => array_values($cslFields)[0] . ' => "' . implode(',', $data) . '"',
     ];
 
     return $element;
