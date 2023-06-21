@@ -1,0 +1,29 @@
+uuid: 79ab60ad-d755-4b81-9493-bee0bc1a3e01
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_csl_type
+    - node.type.islandora_object
+    - taxonomy.vocabulary.csl_type
+id: node.islandora_object.field_csl_type
+field_name: field_csl_type
+entity_type: node
+bundle: islandora_object
+label: 'Object Type (Citation)'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      csl_type: csl_type
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
