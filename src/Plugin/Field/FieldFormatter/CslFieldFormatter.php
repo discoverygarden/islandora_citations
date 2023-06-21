@@ -30,14 +30,9 @@ class CslFieldFormatter extends FormatterBase {
     foreach ($cslFields as $value) {
       foreach ($items as $item) {
 
-        $data[] = $value . ' => ' . $item->value;
+        $element[$value] = $item->value;
       }
     }
-
-    $element = [
-      '#markup' => implode(',', $data),
-    ];
-
     return $element;
   }
 
