@@ -23,16 +23,16 @@ class CslOrganizationsFormatter extends EntityReferenceFormatterBase {
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $element = [];
-    $cslFields = $items->getFieldDefinition()->getThirdPartySetting('islandora_citations', 'csl_field');
-    if (empty($cslFields) || empty($this->getEntitiesToView($items, $langcode))) {
+    if (empty($items)) {
       return [];
     }
-    foreach ($cslFields as $value) {
-      $label = [];
-      foreach ($this->getEntitiesToView($items, $langcode) as $entity) {
-        $label[] = $entity->getName();
-      }
-      $element[$value] = $label;
+
+    foreach ($items as $item) {
+
+      $rel_types = $item->getRelTypes();
+      $rel_type = $rel_types[$item->rel_type] ?? $item->rel_type;
+
+      $element[$rel_type][] = $item->entity->getName();
     }
     return $element;
   }
