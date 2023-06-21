@@ -28,15 +28,13 @@ class MultivaluedCslFieldFormatter extends FormatterBase {
     if (empty($cslFields) || empty($items->value)) {
       return [];
     }
-
-    foreach ($items as $item) {
-      $data[] = $item->value;
+    foreach ($cslFields as $value) {
+      $data = [];
+      foreach ($items as $item) {
+        $data[] = $item->value;
+      }
+      $element[$value] = implode(',', $data);
     }
-
-    $element = [
-      '#markup' => array_values($cslFields)[0] . ' => "' . implode(',', $data) . '"',
-    ];
-
     return $element;
   }
 
