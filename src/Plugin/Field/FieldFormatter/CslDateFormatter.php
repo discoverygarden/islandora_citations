@@ -85,14 +85,9 @@ class CslDateFormatter extends FormatterBase implements ContainerFactoryPluginIn
         $datetime = new DrupalDateTime($item->value, 'UTC');
         $date = $this->dateFormatter->format($datetime->getTimestamp(), 'custom', 'Y-m-d');
 
-        $data[] = $value . ' => ' . $date;
+        $element[$value] = $date;
       }
     }
-
-    $element = [
-      '#markup' => implode(',', $data),
-    ];
-
     return $element;
   }
 
