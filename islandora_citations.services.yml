@@ -11,3 +11,11 @@ services:
     class: Drupal\islandora_citations\Encoder\IslandoraCSLEncoder
     tags:
       - { name: encoder, priority: 10, format: csl-json }
+  serializer.islandora_citations.csljson.content_entity:
+    class: Drupal\islandora_citations\Normalizer\ContentEntityNormalizer
+    tags:
+      - { name: normalizer, priority: 10 }
+  serializer.islandora_citations.csljson.field_item_list:
+    class: Drupal\islandora_citations\Normalizer\FieldItemListNormalizer
+    tags:
+      - { name: normalizer, priority: 10 }

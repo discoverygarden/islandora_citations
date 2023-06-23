@@ -17,7 +17,7 @@ class IslandoraCSLEncoder extends SymfonyJsonEncoder {
    * @var string
    * @see src/IslandoraCitationsServiceProvider.php
    */
-  protected $format = ['csl-json'];
+  protected $format = 'csl-json';
 
   /**
    * {@inheritdoc}
