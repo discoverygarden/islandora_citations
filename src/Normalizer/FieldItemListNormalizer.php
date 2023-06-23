@@ -42,15 +42,11 @@ class FieldItemListNormalizer extends NormalizerBase {
       $normalized_field['content'] = ['value' => reset($field_item_values)];
     }
     else {
-      $content = array_reduce(
-        $field_item_values,
-        function ($carry, $field_item_value) {
-          // Prefix each value with a '* ' and suffix with a \n.
-          return $carry . "* $field_item_value\n";
-        },
-        "\n"
-      );
-      $normalized_field['content'] = ['value' => $content];
+      // Comma separated values.
+
+      // LinkedRelation - array values
+
+      // Paragraph - comma separated same field values.
     }
 
     return $normalized_field;
