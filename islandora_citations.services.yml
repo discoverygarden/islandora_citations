@@ -28,3 +28,7 @@ services:
     arguments: ['@config.factory','@date.formatter']
     tags:
       - { name: normalizer, priority: 10 }
+  serializer.normalizer.text_item:
+    class: Drupal\islandora_citations\Normalizer\TextItemNormalizer
+    tags:
+      - { name: normalizer, priority: 10 }
