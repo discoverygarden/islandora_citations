@@ -19,6 +19,7 @@ class ContentEntityNormalizer extends NormalizerBase {
    * {@inheritdoc}
    */
   public function normalize($entity, $format = NULL, array $context = []) {
+    $normalized_field_item = [];
     foreach ($entity->getFields(TRUE) as $field_item_list) {
       $definition = $field_item_list->getFieldDefinition();
 
@@ -29,30 +30,19 @@ class ContentEntityNormalizer extends NormalizerBase {
 
       $thirdPartySetting = $definition->getThirdPartySetting('islandora_citations', 'csl_field');
 
-      // Do not process if there are field is not mapped.
+      // Do not process if field is not mapped.
       if (empty($thirdPartySetting)) {
         continue;
       }
 
-      $field_item_values = [];
-      foreach ($field_item_list as $field_item) {
-        /** @var \Drupal\Core\Field\FieldItemInterface $field_item */
-        $field_item_values[] = $this->serializer->normalize($field_item, $format, $context);
-      }
+      $context['csl-map'] = $thirdPartySetting;
 
-      $cardinality = $definition->getFieldStorageDefinition()->getCardinality();
-
-      if ($cardinality == 1) {
-        // Single valued field.
-      }
-      else {
-        // Multi-value field.
-      }
-
-      return $field_item_values;
+      // Defer the field normalization to other individual normalizers.
+      $normalized_field_item = $this->serializer->normalize($field_item_list, $format, $context);
 
     }
 
+    return $normalized_field_item;
   }
 
 }
