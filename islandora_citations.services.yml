@@ -7,3 +7,7 @@ services:
     arguments: [ '@entity_type.manager', '@config.factory' ]
     tags:
       - { name: event_subscriber }
+  serializer.encoder.csljson:
+    class: Drupal\islandora_citations\Encoder\IslandoraCSLEncoder
+    tags:
+      - { name: encoder, priority: 10, format: csl-json }
