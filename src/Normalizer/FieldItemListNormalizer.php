@@ -43,9 +43,7 @@ class FieldItemListNormalizer extends NormalizerBase {
     }
     else {
       // Comma separated values.
-
-      // LinkedRelation - array values
-
+      // LinkedRelation - array values.
       // Paragraph - comma separated same field values.
     }
 
