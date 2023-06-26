@@ -56,7 +56,7 @@ class DateTimeNormalizer extends NormalizerBase {
       return $drupal_date_time;
     }
     if (empty($context['csl-map'])) {
-      continue;
+      return $drupal_date_time;
     }
     foreach ($context['csl-map'] as $cslField) {
       $date = $this->dateFormatter->format($drupal_date_time->getTimestamp(), 'custom', 'Y-m-d');
