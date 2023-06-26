@@ -19,3 +19,8 @@ services:
     class: Drupal\islandora_citations\Normalizer\FieldItemListNormalizer
     tags:
       - { name: normalizer, priority: 10 }
+  serializer.normalizer.typed_relation:
+    class: \Drupal\islandora_citations\Normalizer\TypedRelationNormalizer
+    tags:
+      - { name: normalizer, priority: 20 }
+
