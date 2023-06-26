@@ -7,7 +7,7 @@ use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\TypedData\Type\DateTimeInterface;
 
 /**
- * Converts values for datetime objects to CSL indexed array and from common formats.
+ * Converts values for datetime objects to CSL indexed array.
  *
  * @internal
  */
@@ -37,7 +37,6 @@ class DateTimeNormalizer extends NormalizerBase {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   A config factory for retrieving required config objects.
-   *
    * @param Drupal\Core\Datetime\DateFormatter $dateFormatter
    *   The date formatter.
    */
