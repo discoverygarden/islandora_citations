@@ -1,0 +1,7 @@
+{
+    "name": "discoverygarden/islandora_citations",
+    "type": "drupal-module",
+      "require": {
+        "seboettg/citeproc-php": "^2.6.0"
+    } 
+}
