@@ -21,17 +21,38 @@ class TypedRelationNormalizer extends NormalizerBase {
   public function normalize($object, $format = NULL, array $context = []) {
 
     $attributes = [];
-    foreach ($object->getProperties(TRUE) as $name => $field) {
 
-      if ($name == 'rel_type') {
-        if ($field->getParent()) {
-          $rel_types = $field->getParent()->getRelTypes();
-          $rel_type = $rel_types[$field->getParent()->rel_type];
-          $attributes[$rel_type][] = $field->getParent()->entity->getName();
-        }
-      }
+    $bundle = $object->getParent()->entity->bundle();
+    if ($bundle == 'corporate_body') {
+      $rel_types = $object->getRelTypes();
+      $rel_type = $rel_types[$object->rel_type];
+      $attributes[$rel_type][] = $this->getNames($object->getParent()->entity->getName());
+    }
+    elseif ($bundle == 'person') {
+      $rel_types = $object->getRelTypes();
+      $rel_type = $rel_types[$object->rel_type];
+      $attributes[$rel_type][] = $object->getParent()->entity->getName();
+    }
+    else {
+      $rel_types = $object->getRelTypes();
+      $rel_type = $rel_types[$object->rel_type];
+      $attributes[$rel_type][] = $this->getNames($object->getParent()->entity->getName());
     }
     return $attributes;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getNames($name) {
+    if (strpos($name, ',') !== FALSE) {
+      $names = explode(',', $name);
+      return is_array($names) ? $names[1] . ' || ' . $names[0] : $name;
+    }
+    else {
+      $names = explode(' ', $name);
+      return is_array($names) ? $names[0] . ' || ' . $names[1] : $name;
+    }
   }
 
 }
