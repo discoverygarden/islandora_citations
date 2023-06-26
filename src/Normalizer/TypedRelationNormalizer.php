@@ -33,11 +33,6 @@ class TypedRelationNormalizer extends NormalizerBase {
       $rel_type = $rel_types[$object->rel_type];
       $attributes[$rel_type][] = $object->getParent()->entity->getName();
     }
-    else {
-      $rel_types = $object->getRelTypes();
-      $rel_type = $rel_types[$object->rel_type];
-      $attributes[$rel_type][] = $this->getNames($object->getParent()->entity->getName());
-    }
     return $attributes;
   }
 
