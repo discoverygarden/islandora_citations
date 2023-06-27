@@ -26,11 +26,12 @@ class TextItemNormalizer extends NormalizerBase {
       }
 
       $field_value = check_markup($value, 'citation_html', $langcode = '', $filter_types_to_skip = []);
-      $field_values = $field_value->__toString();
-      foreach ($context['csl-map'] as $cslField) {
-        $attributes[$cslField] = $field_values;
+      if ($field->getName() == 'value') {
+        $field_values = $field_value->__toString();
+        foreach ($context['csl-map'] as $cslField) {
+          $attributes[$cslField] = $field_values;
+        }
       }
-
     }
     return $attributes;
   }
