@@ -32,3 +32,7 @@ services:
     class: Drupal\islandora_citations\Normalizer\TextItemNormalizer
     tags:
       - { name: normalizer, priority: 10 }
+  serializer.normalizer.string_item:
+    class: Drupal\islandora_citations\Normalizer\StringItemNormalizer
+    tags:
+      - { name: normalizer, priority: 10 }

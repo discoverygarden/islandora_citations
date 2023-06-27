@@ -3,16 +3,16 @@
 namespace Drupal\islandora_citations\Normalizer;
 
 /**
- * Converts TextItem fields to an array including computed values.
+ * Converts StringItem fields to an array including computed values.
  */
-class TextItemNormalizer extends NormalizerBase {
+class StringItemNormalizer extends NormalizerBase {
 
   /**
    * The interface or class that this Normalizer supports.
    *
    * @var string
    */
-  protected $supportedInterfaceOrClass = 'Drupal\text\Plugin\Field\FieldType\TextItemBase';
+  protected $supportedInterfaceOrClass = 'Drupal\Core\Field\Plugin\Field\FieldType\StringItemBase';
 
   /**
    * {@inheritdoc}
@@ -24,13 +24,9 @@ class TextItemNormalizer extends NormalizerBase {
       if (is_object($value)) {
         $value = $this->serializer->normalize($value, $format, $context);
       }
-
-      $field_value = check_markup($value, 'citation_html', $langcode = '', $filter_types_to_skip = []);
-      $field_values = $field_value->__toString();
       foreach ($context['csl-map'] as $cslField) {
-        $attributes[$cslField] = $field_values;
+        $attributes[$cslField] = $value;
       }
-
     }
     return $attributes;
   }
