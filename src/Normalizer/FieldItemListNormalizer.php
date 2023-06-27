@@ -43,14 +43,24 @@ class FieldItemListNormalizer extends NormalizerBase {
       $normalized_field['content'] = ['value' => reset($field_item_values)];
     }
     else {
-      foreach ($context['csl-map'] as $cslField) {
-        $content[$cslField] = implode(',', $field_item_values);
+      foreach ($field_item_values as $value) {
+        if (isset($value['value'])) {
+          foreach ($value['value'] as $dateKey => $dateValue) {
+            $normalizedData[$dateKey] = empty($normalizedData[$dateKey]) ? $dateValue : $normalizedData[$dateKey] .= ',' . $dateValue;
+          }
+        }
+        else {
+          foreach ($value as $text_key => $textfieldValue) {
+            $normalizedData[$text_key] = empty($normalizedData[$text_key]) ? $textfieldValue : $normalizedData[$text_key] .= ',' . $textfieldValue;
+          }
+        }
       }
-      $normalized_field['content'] = ['value' => $content];
+      $normalized_field['content'] = ['value' => $normalizedData];
       // Comma separated values.
       // LinkedRelation - array values.
       // Paragraph - comma separated same field values.
     }
+
     return $normalized_field;
   }
 
