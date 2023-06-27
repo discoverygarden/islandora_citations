@@ -19,4 +19,3 @@ services:
     class: Drupal\islandora_citations\Normalizer\FieldItemListNormalizer
     tags:
       - { name: normalizer, priority: 10 }
- 
