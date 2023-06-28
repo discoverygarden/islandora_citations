@@ -4,7 +4,7 @@ migration_tags:
   - taxonomy
 source:
   plugin: 'csv'
-  path: 'modules/islandora_citations/data/csl_type.csv'
+  path: 'modules/contrib/islandora_citations/data/csl_type.csv'
   delimiter: ','
   enclosure: '"'
   header_offset: 0
