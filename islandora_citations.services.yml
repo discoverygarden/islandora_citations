@@ -23,3 +23,8 @@ services:
     class: \Drupal\islandora_citations\Normalizer\TypedRelationNormalizer
     tags:
       - { name: normalizer, priority: 20 }
+  serializer.normalizer.datetime:
+    class: \Drupal\islandora_citations\Normalizer\DateTimeNormalizer
+    arguments: ['@config.factory','@date.formatter']
+    tags:
+      - { name: normalizer, priority: 10 }
