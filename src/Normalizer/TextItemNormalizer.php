@@ -2,6 +2,9 @@
 
 namespace Drupal\islandora_citations\Normalizer;
 
+use Drupal\Component\Render\MarkupInterface;
+use Drupal\text\Plugin\Field\FieldType\TextItemBase;
+
 /**
  * Converts TextItem fields to an array including computed values.
  */
@@ -12,22 +15,19 @@ class TextItemNormalizer extends NormalizerBase {
    *
    * @var string
    */
-  protected $supportedInterfaceOrClass = 'Drupal\text\Plugin\Field\FieldType\TextItemBase';
+  protected $supportedInterfaceOrClass = TextItemBase::class;
 
   /**
    * {@inheritdoc}
    */
   public function normalize($object, $format = NULL, array $context = []) {
     $attributes = [];
-    foreach ($object->getProperties(TRUE) as $field) {
-      $value = $this->serializer->normalize($field, $format, $context);
-      if (is_object($value)) {
-        $value = $this->serializer->normalize($value, $format, $context);
-      }
+    $field_value = $object->getValue();
 
-      $field_value = check_markup($value, 'citation_html', $langcode = '', $filter_types_to_skip = []);
-      if ($field->getName() == 'value') {
-        $field_values = $field_value->__toString();
+    if (isset($field_value['value'])) {
+      $processed_value = check_markup($field_value['value'], 'citation_html', $langcode = '', $filter_types_to_skip = []);
+      if ($processed_value instanceof MarkupInterface) {
+        $field_values = $processed_value->__toString();
         foreach ($context['csl-map'] as $cslField) {
           $attributes[$cslField] = $field_values;
         }
