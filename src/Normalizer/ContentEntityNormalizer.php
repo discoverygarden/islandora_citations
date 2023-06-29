@@ -29,14 +29,14 @@ class ContentEntityNormalizer extends NormalizerBase {
       }
 
       $thirdPartySetting = $definition->getThirdPartySetting('islandora_citations', 'csl_field');
-
+      $eRthirdpartySettings = $definition->getThirdPartySetting('islandora_citations', 'use_entity_checkbox');
       // Do not process if field is not mapped.
       if (empty($thirdPartySetting)) {
         continue;
       }
 
       $context['csl-map'] = $thirdPartySetting;
-
+      $context['use-entity'] = $eRthirdpartySettings ? $eRthirdpartySettings : NULL;
       // Defer the field normalization to other individual normalizers.
       $normalized_field_items += $this->serializer->normalize($field_item_list, $format, $context);
 
