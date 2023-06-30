@@ -50,18 +50,15 @@ class DateTimeNormalizer extends NormalizerBase {
    */
   public function normalize($datetime, $format = NULL, array $context = []) {
     assert($datetime instanceof DateTimeInterface);
-    $element = [];
     $drupal_date_time = $datetime->getDateTime()->setTimezone($this->getNormalizationTimezone());
     if ($drupal_date_time === NULL) {
       return $drupal_date_time;
     }
-    if (empty($context['csl-map'])) {
-      return $drupal_date_time;
-    }
+    $date = $this->dateFormatter->format($drupal_date_time->getTimestamp(), 'custom', 'Y-m-d');
     foreach ($context['csl-map'] as $cslField) {
-      $date = $this->dateFormatter->format($drupal_date_time->getTimestamp(), 'custom', 'Y-m-d');
       $element[$cslField] = $date;
     }
+
     return $element;
   }
 
