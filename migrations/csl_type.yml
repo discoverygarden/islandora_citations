@@ -3,21 +3,103 @@ label: CSL Type.
 migration_tags:
   - taxonomy
 source:
-  plugin: 'csv'
-  path: 'modules/islandora_citations/data/csl_type.csv'
-  delimiter: ','
-  enclosure: '"'
-  header_offset: 0
+  plugin: embedded_data
+  data_rows:
+    -
+      name: 'article'
+    -
+      name: 'article-journal'
+    -
+      name: 'article-magazine'
+    -
+      name: 'article-newspaper'
+    -
+      name: 'bill'
+    -
+      name: 'book'
+    -
+      name: 'broadcast'
+    -
+      name: 'chapter'
+    -
+      name: 'classic'
+    -
+      name: 'collection'
+    -
+      name: 'dataset'
+    -
+      name: 'document'
+    -
+      name: 'entry'
+    -
+      name: 'entry-dictionary'
+    -
+      name: 'entry-encyclopedia'
+    -
+      name: 'event'
+    -
+      name: 'figure'
+    -
+      name: 'graphic'
+    -
+      name: 'hearing'
+    -
+      name: 'interview'
+    -
+      name: 'legal_case'
+    -
+      name: 'legislation'
+    -
+      name: 'manuscript'
+    -
+      name: 'map'
+    -
+      name: 'motion_picture'
+    -
+      name: 'musical_score'
+    -
+      name: 'pamphlet'
+    -
+      name: 'paper-conference'
+    -
+      name: 'patent'
+    -
+      name: 'performance'
+    -
+      name: 'periodical'
+    -
+      name: 'personal_communication'
+    -
+      name: 'post'
+    -
+      name: 'post-weblog'
+    -
+      name: 'regulation'
+    -
+      name: 'report'
+    -
+      name: 'review'
+    -
+      name: 'review-book'
+    -
+      name: 'software'
+    -
+      name: 'song'
+    -
+      name: 'speech'
+    -
+      name: 'standard'
+    -
+      name: 'thesis'
+    -
+      name: 'treaty'
+    -
+      name: 'Webpage'
   ids:
-    - name
-  fields:
-    0:
-      name: name
-      label: 'Name'
-
+    name:
+      type: string
 process:
   name: name
-
 destination:
   plugin: 'entity:taxonomy_term'
   default_bundle: csl_type
