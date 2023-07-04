@@ -22,25 +22,13 @@ services:
     class: Drupal\islandora_citations\Normalizer\FieldItemListNormalizer
     tags:
       - { name: normalizer, priority: 10 }
-  serializer.normalizer.text_item:
-    class: Drupal\islandora_citations\Normalizer\TextItemNormalizer
-    tags:
-      - { name: normalizer, priority: 10 }
-  serializer.normalizer.datetime:
-    class: \Drupal\islandora_citations\Normalizer\DateTimeNormalizer
-    arguments: ['@config.factory','@date.formatter']
-    tags:
-      - { name: normalizer, priority: 20 }
   serializer.normalizer.typed_relation:
     class: \Drupal\islandora_citations\Normalizer\TypedRelationNormalizer
     tags:
       - { name: normalizer, priority: 20 }
-  serializer.normalizer.typed_relation_field_person:
-    class: \Drupal\islandora_citations\Normalizer\TypedRelationFieldPersonNormalizer
-    tags:
-      - { name: normalizer, priority: 20 }
-  serializer.normalizer.string_item:
-    class: Drupal\islandora_citations\Normalizer\StringItemNormalizer
+  serializer.normalizer.datetime:
+    class: \Drupal\islandora_citations\Normalizer\DateTimeNormalizer
+    arguments: ['@config.factory','@date.formatter']
     tags:
       - { name: normalizer, priority: 10 }
   serializer.normalizer.text_item:
