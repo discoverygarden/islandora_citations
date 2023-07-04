@@ -19,7 +19,6 @@ class FieldItemListNormalizer extends NormalizerBase {
    */
   public function normalize($field_item_list, $format = NULL, array $context = []) {
     /** @var \Drupal\Core\Field\FieldItemListInterface $field_item_list */
-
     // If the field can hold multiple values we want them as a list. If not,
     // as a plain value. For that we need to check how the field is defined to
     // see the cardinality value.
@@ -27,41 +26,49 @@ class FieldItemListNormalizer extends NormalizerBase {
       ->getFieldDefinition()
       ->getFieldStorageDefinition()
       ->getCardinality();
-
-    // We also want to check if the field has only one property (typically
-    // called 'value'). If that is the case, we will just return the content,
-    // and not bother with the property name.
-    $field_item_values = [];
     $context['cardinality'] = $cardinality;
+
+    $field_item_values = [];
+
     foreach ($field_item_list as $field_item) {
-      /** @var \Drupal\Core\Field\FieldItemInterface $field_item */
-
-      $field_item_values[] = $this->serializer->normalize($field_item, $format, $context);
-    }
-    // If this is a single field, just consider the first item.
-    if ($cardinality == 1) {
-      $normalized_field['content'] = ['value' => reset($field_item_values)];
-    }
-    else {
-      foreach ($field_item_values as $value) {
-        if (isset($value['value'])) {
-          foreach ($value['value'] as $dateKey => $dateValue) {
-            $normalizedData[$dateKey] = empty($normalizedData[$dateKey]) ? $dateValue : $normalizedData[$dateKey] .= ',' . $dateValue;
-          }
-        }
-        else {
-          foreach ($value as $text_key => $textfieldValue) {
-            $normalizedData[$text_key] = empty($normalizedData[$text_key]) ? $textfieldValue : $normalizedData[$text_key] .= ',' . $textfieldValue;
-          }
-        }
+      foreach ($context['csl-map'] as $cslField) {
+        /** @var \Drupal\Core\Field\FieldItemInterface $field_item */
+        $field_item_values[$cslField][] = $this->serializer->normalize($field_item, $format, $context);
+        ;
       }
-      $normalized_field['content'] = ['value' => $normalizedData];
-      // Comma separated values.
-      // LinkedRelation - array values.
-      // Paragraph - comma separated same field values.
     }
 
-    return $normalized_field;
+    $this->normalizeCslMultiValueFields($field_item_values);
+
+    return $field_item_values;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  private function normalizeCslMultiValueFields(&$field_item_values) {
+    foreach ($field_item_values as $cslKey => $cslValueArray) {
+      $fieldType = $this->getCslVariableType($cslKey);
+
+      // If the variable type if string, comma separate the values.
+      switch ($fieldType) {
+        case 'string':
+        case 'number':
+          $field_item_values[$cslKey] = implode(', ', $cslValueArray);
+          break;
+
+        case 'array':
+          foreach ($cslValueArray as $key => $arrayValue) {
+            $field_item_values[$cslKey][$key] = (object) $arrayValue;
+          }
+          break;
+
+        case 'object':
+          // Cannot have multi value fields here, so just taking the first item.
+          $field_item_values[$cslKey] = (object) ($cslValueArray[0] ?? $cslValueArray);
+          break;
+      }
+    }
   }
 
 }

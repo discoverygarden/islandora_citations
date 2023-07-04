@@ -21,19 +21,16 @@ class TextItemNormalizer extends NormalizerBase {
    * {@inheritdoc}
    */
   public function normalize($object, $format = NULL, array $context = []) {
-    $attributes = [];
+    $field_values = NULL;
     $field_value = $object->getValue();
 
     if (isset($field_value['value'])) {
       $processed_value = check_markup($field_value['value'], 'citation_html', $langcode = '', $filter_types_to_skip = []);
       if ($processed_value instanceof MarkupInterface) {
         $field_values = $processed_value->__toString();
-        foreach ($context['csl-map'] as $cslField) {
-          $attributes[$cslField] = $field_values;
-        }
       }
     }
-    return $attributes;
+    return $field_values;
   }
 
 }

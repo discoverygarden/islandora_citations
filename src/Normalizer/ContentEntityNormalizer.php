@@ -19,7 +19,7 @@ class ContentEntityNormalizer extends NormalizerBase {
    * {@inheritdoc}
    */
   public function normalize($entity, $format = NULL, array $context = []) {
-    $normalized_field_item = [];
+    $normalized_field_items = [];
     foreach ($entity->getFields(TRUE) as $field_item_list) {
       $definition = $field_item_list->getFieldDefinition();
 
@@ -38,11 +38,11 @@ class ContentEntityNormalizer extends NormalizerBase {
       $context['csl-map'] = $thirdPartySetting;
 
       // Defer the field normalization to other individual normalizers.
-      $normalized_field_item = $this->serializer->normalize($field_item_list, $format, $context);
+      $normalized_field_items += $this->serializer->normalize($field_item_list, $format, $context);
 
     }
-
-    return $normalized_field_item;
+    $normalized_field_items['type'] = 'book';
+    return $normalized_field_items;
   }
 
 }

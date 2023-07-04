@@ -28,28 +28,18 @@ class TypedRelationNormalizer extends NormalizerBase {
       $rel_types = $object->getRelTypes();
       $rel_type = $this->formatRelTypes($rel_types[$object->rel_type]);
       $label = $parent->getName();
+      unset($context['csl-map']);
+      $context['csl-map'][$rel_type] = $rel_type;
       if ($parent->bundle() === self::PERSON_VOCAB) {
-        $label = $this->formatNameVariables($label);
+        return $this->formatNameVariables($label, 'person');
+      }
+      else {
+        return $this->formatNameVariables($label, 'institution');
       }
 
-      $attributes[$rel_type] = $label;
     }
 
     return $attributes;
-  }
-
-  /**
-   * Formats name variables as per csl json.
-   */
-  private function formatNameVariables($name) {
-    if (strpos($name, ',') !== FALSE) {
-      $names = explode(',', $name);
-      return is_array($names) ? $names[1] . ' || ' . $names[0] : $name;
-    }
-    else {
-      $names = explode(' ', $name);
-      return is_array($names) ? $names[0] . ' || ' . $names[1] : $name;
-    }
   }
 
   /**

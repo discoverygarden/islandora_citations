@@ -2,37 +2,20 @@
 
 namespace Drupal\islandora_citations\Encoder;
 
-use Symfony\Component\Serializer\Encoder\JsonEncoder as SymfonyJsonEncoder;
+use Drupal\serialization\Encoder\JsonEncoder as SerializationJsonEncoder;
 
 /**
  * Encodes to CSL-json.
  *
  * Respond to csl-json format requests using the JSON encoder.
  */
-class IslandoraCSLEncoder extends SymfonyJsonEncoder {
+class IslandoraCSLEncoder extends SerializationJsonEncoder {
 
   /**
    * The formats that this Encoder supports.
    *
    * @var string
-   * @see src/IslandoraCitationsServiceProvider.php
    */
-  protected $format = 'csl-json';
-
-  /**
-   * {@inheritdoc}
-   */
-  public function supportsEncoding($format) {
-
-    return $format == $this->format;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function supportsDecoding($format) {
-
-    return $format == $this->format;
-  }
+  protected static $format = ['csl-json'];
 
 }
