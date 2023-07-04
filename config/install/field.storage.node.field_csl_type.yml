@@ -2,6 +2,9 @@ uuid: 25b49d78-a5f7-4ef8-9179-d6075482fe41
 langcode: en
 status: true
 dependencies:
+  enforced:
+    module:
+      - islandora_citations
   module:
     - field_permissions
     - node

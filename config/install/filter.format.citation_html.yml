@@ -1,7 +1,10 @@
 uuid: e24db8e8-7b97-41b6-8e75-f2a6b543a2b0
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - islandora_citations
 name: 'Citation HTML'
 format: citation_html
 weight: 0
