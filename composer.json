@@ -2,6 +2,7 @@
     "name": "discoverygarden/islandora_citations",
     "type": "drupal-module",
       "require": {
-        "seboettg/citeproc-php": "^2.6.0"
-    } 
+        "seboettg/citeproc-php": "^2.6.0",
+        "webflo/drupal-finder": "^1.2.2"
+    }
 }

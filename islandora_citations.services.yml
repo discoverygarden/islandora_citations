@@ -2,6 +2,9 @@ services:
   islandora_citations.controller:
     class: Drupal\islandora_citations\Controller\IslandoraCitationsController
     arguments: ['@entity_field.manager']
+  islandora_citations.helper:
+    class: Drupal\islandora_citations\IslandoraCitationsHelper
+    arguments: ['@entity_type.manager', '@file_system', '@serializer']
   islandora_citations.route_subscriber:
     class: Drupal\islandora_citations\Routing\RouteSubscriber
     arguments: [ '@entity_type.manager', '@config.factory' ]

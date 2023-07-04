@@ -23,22 +23,10 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
   }
 
   /**
-   * Loads csl json schema from file.
-   */
-  protected function loadCslJsonSchema() {
-    $schema = &drupal_static(__FUNCTION__);
-
-    if (!isset($schema)) {
-      $schema = json_decode(file_get_contents(__DIR__ . '/../../data/csl-data.json'), 1);
-    }
-    return $schema;
-  }
-
-  /**
    * Gets the type of csl variable.
    */
   protected function getCslVariableType($variableName) {
-    $schema = $this->loadCslJsonSchema();
+    $schema = \Drupal::service('islandora_citations.helper')->loadCslJsonSchema();
 
     if (isset($schema['items']['properties'][$variableName]['type'])) {
       return is_array($schema['items']['properties'][$variableName]['type']) ? $schema['items']['properties'][$variableName]['type'][0] : $schema['items']['properties'][$variableName]['type'];
