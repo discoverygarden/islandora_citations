@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 abstract class NormalizerBase extends SerializationNormalizerBase implements NormalizerInterface {
 
   /**
-   * {@inheritdoc}
+   * Supported format for normalizer.
    */
   const FORMAT = 'csl-json';
 
@@ -20,6 +20,68 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
    */
   public function supportsNormalization($data, $format = NULL) {
     return $format === static::FORMAT && parent::supportsNormalization($data, $format);
+  }
+
+  /**
+   * Loads csl json schema from file.
+   */
+  protected function loadCslJsonSchema() {
+    $schema = &drupal_static(__FUNCTION__);
+
+    if (!isset($schema)) {
+      $schema = json_decode(file_get_contents(__DIR__ . '/../../data/csl-data.json'), 1);
+    }
+    return $schema;
+  }
+
+  /**
+   * Gets the type of csl variable.
+   */
+  protected function getCslVariableType($variableName) {
+    $schema = $this->loadCslJsonSchema();
+
+    if (isset($schema['items']['properties'][$variableName]['type'])) {
+      return is_array($schema['items']['properties'][$variableName]['type']) ? $schema['items']['properties'][$variableName]['type'][0] : $schema['items']['properties'][$variableName]['type'];
+    }
+    elseif (isset($schema['items']['properties'][$variableName]['$ref'])) {
+      return 'object';
+    }
+    else {
+      return NULL;
+    }
+  }
+
+  /**
+   * Formats date variables as per csl json.
+   */
+  protected function formatDateVariables($date): array {
+    return ['date-parts' => [$date]];
+  }
+
+  /**
+   * Formats name variables as per csl json.
+   */
+  protected function formatNameVariables($name, $type): array {
+    switch ($type) {
+      case 'person':
+        if (strpos($name, ',') !== FALSE) {
+          $names = explode(',', $name);
+          return is_array($names) ?
+            ['family' => $names[1], 'given' => $names[0]] :
+            ['family' => $name];
+        }
+        else {
+          $names = explode(' ', $name);
+          return is_array($names) ?
+            ['given' => $names[1], 'family' => $names[0]] :
+            ['family' => $name];
+        }
+
+      case 'institution':
+        return ['literal' => $name];
+    }
+
+    return $name;
   }
 
 }

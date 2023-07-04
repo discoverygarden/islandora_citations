@@ -9,6 +9,11 @@ use Drupal\Core\TypedData\Type\DateTimeInterface;
 /**
  * Converts values for datetime objects to CSL indexed array.
  *
+ * Not used at this point as no values are mapped right now in FDR.
+ * May need some tweaks if being used elsewhere.
+ *
+ * @see ExtendedDateTimeNormalizer
+ *
  * @internal
  */
 class DateTimeNormalizer extends NormalizerBase {

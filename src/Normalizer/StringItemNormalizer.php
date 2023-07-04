@@ -18,17 +18,14 @@ class StringItemNormalizer extends NormalizerBase {
    * {@inheritdoc}
    */
   public function normalize($object, $format = NULL, array $context = []) {
-    $attributes = [];
+    $value = NULL;
     foreach ($object->getProperties(TRUE) as $field) {
       $value = $this->serializer->normalize($field, $format, $context);
       if (is_object($value)) {
         $value = $this->serializer->normalize($value, $format, $context);
       }
-      foreach ($context['csl-map'] as $cslField) {
-        $attributes[$cslField] = $value;
-      }
     }
-    return $attributes;
+    return $value;
   }
 
 }
