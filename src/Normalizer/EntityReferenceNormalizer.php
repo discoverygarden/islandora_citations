@@ -24,14 +24,20 @@ class EntityReferenceNormalizer extends EntityReferenceFieldItemNormalizer {
   public function normalize($field_item, $format = NULL, array $context = []) {
     assert($field_item instanceof EntityReferenceItem);
     $entity = $field_item->get('entity')->getValue();
-    if ($context['use-entity']) {
-      return $this->serializer->normalize($entity, 'csl-json');
+    if ($field_item->getFieldDefinition()->getType() == 'entity_reference_revisions') {
+      // dump($this->serializer->normalize($entity, 'csl-json'));.
+      return $this->serializer->normalize($entity, 'csl-json', $context);
     }
     else {
-      foreach ($context['csl-map'] as $cslField) {
-        $attributes[$cslField] = ($entity instanceof Term) ? $entity->getName() : $entity->getTitle();
+      if ($context['use-entity']) {
+        return $this->serializer->normalize($entity, 'csl-json');
       }
-      return $attributes;
+      else {
+        foreach ($context['csl-map'] as $cslField) {
+          $attributes[$cslField] = ($entity instanceof Term) ? $entity->getName() : $entity->getTitle();
+        }
+        return $attributes;
+      }
     }
   }
 

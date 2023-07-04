@@ -17,7 +17,6 @@ function islandora_citations_form_field_config_edit_form_alter(&$form, FormState
     $cslPropertyArray = array_keys($schema['items']['properties']);
     $cslFieldOptions = array_combine($cslPropertyArray, $cslPropertyArray);
     $entity = $form_state->getFormObject()->getEntity();
-
     $form['third_party_settings']['islandora_citations']['csl_field'] = [
       '#type' => 'select',
       '#title' => \t('CSL Field'),
@@ -26,6 +25,14 @@ function islandora_citations_form_field_config_edit_form_alter(&$form, FormState
       '#options' => $cslFieldOptions,
       '#default_value' => $entity->getThirdPartySetting('islandora_citations', 'csl_field'),
     ];
+    if ($entity->getType() == 'entity_reference') {
+      $form['third_party_settings']['islandora_citations']['use_entity_checkbox'] = [
+        '#title' => t('Map from entity'),
+        '#type' => 'checkbox',
+        '#required' => FALSE,
+        '#default_value' => $entity->getThirdPartySetting('islandora_citations', 'use_entity_checkbox'),
+      ];
+    }
     return $form;
   }
 }
