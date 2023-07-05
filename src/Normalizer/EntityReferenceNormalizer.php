@@ -23,8 +23,7 @@ class EntityReferenceNormalizer extends NormalizerBase {
     assert($field_item instanceof EntityReferenceItem);
     $entity = $field_item->get('entity')->getValue();
     if ($field_item->getFieldDefinition()->getType() == 'entity_reference_revisions') {
-      // dump($this->serializer->normalize($entity, 'csl-json'));.
-      return $this->serializer->normalize($entity, 'csl-json', $context);
+      return $this->serializer->normalize($entity, 'csl-json');
     }
     else {
       if ($context['use-entity']) {

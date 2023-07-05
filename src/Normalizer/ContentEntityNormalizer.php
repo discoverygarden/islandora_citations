@@ -30,8 +30,9 @@ class ContentEntityNormalizer extends NormalizerBase {
 
       $thirdPartySetting = $definition->getThirdPartySetting('islandora_citations', 'csl_field');
       $eRthirdpartySettings = $definition->getThirdPartySetting('islandora_citations', 'use_entity_checkbox');
+
       // Do not process if field is not mapped.
-      if (empty($thirdPartySetting)) {
+      if (empty($thirdPartySetting) && empty($eRthirdpartySettings)) {
         continue;
       }
 
