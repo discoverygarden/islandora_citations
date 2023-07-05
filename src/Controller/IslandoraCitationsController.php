@@ -68,6 +68,7 @@ class IslandoraCitationsController extends ControllerBase {
     }
     return [
       '#type' => 'table',
+      '#caption' => $this->t('For CSL fields that do not support multiple values like dates, only the first value of the field will be considered.'),
       '#header' => $header,
       '#rows' => $rows,
     ];
