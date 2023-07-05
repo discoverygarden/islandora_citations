@@ -43,3 +43,8 @@ services:
     class: Drupal\islandora_citations\Normalizer\ExtendedDateTimeNormalizer
     tags:
       - { name: normalizer, priority: 20 }
+  serializer.normalizer.entity_references:
+    class: Drupal\islandora_citations\Normalizer\EntityReferenceNormalizer
+    arguments: ['@entity.repository']
+    tags:
+      - { name: normalizer, priority: 15 }

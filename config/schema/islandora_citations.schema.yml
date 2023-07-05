@@ -22,6 +22,9 @@ field.field.*.*.*.third_party.islandora_citations:
       sequence:
         type: string
         label: 'CSL'
+    use_entity_checkbox:
+      label: 'CSL Mapping from Entity'
+      type: boolean
 
 islandora_citations.settings:
   type: config_object

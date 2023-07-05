@@ -18,27 +18,28 @@ class FieldItemListNormalizer extends NormalizerBase {
    * {@inheritdoc}
    */
   public function normalize($field_item_list, $format = NULL, array $context = []) {
-    /** @var \Drupal\Core\Field\FieldItemListInterface $field_item_list */
-    // If the field can hold multiple values we want them as a list. If not,
-    // as a plain value. For that we need to check how the field is defined to
-    // see the cardinality value.
-    $cardinality = $field_item_list
-      ->getFieldDefinition()
-      ->getFieldStorageDefinition()
-      ->getCardinality();
-    $context['cardinality'] = $cardinality;
-
     $field_item_values = [];
 
+    /** @var \Drupal\Core\Field\FieldItemListInterface $field_item_list */
     foreach ($field_item_list as $field_item) {
-      foreach ($context['csl-map'] as $cslField) {
-        /** @var \Drupal\Core\Field\FieldItemInterface $field_item */
-        $field_item_values[$cslField][] = $this->serializer->normalize($field_item, $format, $context);
-        ;
+      if ($field_item->isEmpty()) {
+        continue;
+      }
+
+      if ($context['use-entity']) {
+        $field_item_values = $this->serializer->normalize($field_item, $format, $context);
+      }
+      else {
+        foreach ($context['csl-map'] as $cslField) {
+          /** @var \Drupal\Core\Field\FieldItemInterface $field_item */
+          $field_item_values[$cslField][] = $this->serializer->normalize($field_item, $format, $context);
+        }
       }
     }
 
-    $this->normalizeCslMultiValueFields($field_item_values);
+    if (!$context['use-entity']) {
+      $this->normalizeCslMultiValueFields($field_item_values);
+    }
 
     return $field_item_values;
   }
@@ -54,7 +55,7 @@ class FieldItemListNormalizer extends NormalizerBase {
       switch ($fieldType) {
         case 'string':
         case 'number':
-          $field_item_values[$cslKey] = implode(', ', $cslValueArray);
+          $field_item_values[$cslKey] = is_array($cslValueArray) ? implode(', ', $cslValueArray) : $cslValueArray;
           break;
 
         case 'array':
