@@ -41,7 +41,6 @@ class ContentEntityNormalizer extends NormalizerBase {
       $normalized_field_items += $this->serializer->normalize($field_item_list, $format, $context);
 
     }
-    $normalized_field_items['type'] = 'book';
     return $normalized_field_items;
   }
 
