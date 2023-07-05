@@ -42,7 +42,7 @@ class IslandoraCitationsHelper {
   /**
    * Logger object.
    *
-   * @var LoggerInterface
+   * @var \Psr\Log\LoggerInterface
    */
   protected LoggerInterface $logger;
 
@@ -55,7 +55,7 @@ class IslandoraCitationsHelper {
    *   File system interface.
    * @param \Symfony\Component\Serializer\SerializerInterface $serializer
    *   Serializer.
-   * @param LoggerInterface $logger
+   * @param \Psr\Log\LoggerInterface $logger
    *   Logger.
    */
   public function __construct(EntityTypeManagerInterface $manager, FileSystemInterface $fileSystem, SerializerInterface $serializer, LoggerInterface $logger) {
@@ -107,7 +107,7 @@ class IslandoraCitationsHelper {
   public function loadStyle($styleName, $styleType = 'entity') {
     if ($styleType == 'entity') {
       $entity = $this->citationsStorage->load($styleName);
-      if ($entity instanceof  ConfigEntityInterface) {
+      if ($entity instanceof ConfigEntityInterface) {
         return $entity->getCslText();
       }
     }
