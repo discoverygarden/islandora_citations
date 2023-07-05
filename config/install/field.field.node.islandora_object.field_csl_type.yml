@@ -2,6 +2,9 @@ uuid: 79ab60ad-d755-4b81-9493-bee0bc1a3e01
 langcode: en
 status: true
 dependencies:
+  enforced:
+    module:
+      - islandora_citations
   config:
     - field.storage.node.field_csl_type
     - node.type.islandora_object

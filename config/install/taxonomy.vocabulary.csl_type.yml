@@ -1,7 +1,10 @@
 uuid: 09d75e58-48d1-4138-9acd-efd0cfe1a58e
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - islandora_citations
 name: 'CSL Type'
 vid: csl_type
 description: ''
