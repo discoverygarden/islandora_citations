@@ -2,11 +2,13 @@
 
 namespace Drupal\islandora_citations;
 
+use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use DrupalFinder\DrupalFinder;
+use Psr\Log\LoggerInterface;
 use Seboettg\CiteProc\CiteProc;
 use Seboettg\CiteProc\StyleSheet;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -38,6 +40,13 @@ class IslandoraCitationsHelper {
   protected SerializerInterface $serializer;
 
   /**
+   * Logger object.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected LoggerInterface $logger;
+
+  /**
    * Constructs a new Islandora Citations helper object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $manager
@@ -46,20 +55,14 @@ class IslandoraCitationsHelper {
    *   File system interface.
    * @param \Symfony\Component\Serializer\SerializerInterface $serializer
    *   Serializer.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Logger.
    */
-  public function __construct(EntityTypeManagerInterface $manager, FileSystemInterface $fileSystem, SerializerInterface $serializer) {
+  public function __construct(EntityTypeManagerInterface $manager, FileSystemInterface $fileSystem, SerializerInterface $serializer, LoggerInterface $logger) {
     $this->citationsStorage = $manager->getStorage('islandora_citations');
     $this->fileSystem = $fileSystem;
     $this->serializer = $serializer;
-  }
-
-  /**
-   * Get all csl styles on the site.
-   */
-  public function getAllCslStyles() {
-    $citeprocStyles = $this->loadStyleFromCiteproc();
-    $citationEntityList = $this->getCitationEntityList();
-    return $citeprocStyles + $citationEntityList;
+    $this->logger = $logger;
   }
 
   /**
@@ -84,7 +87,7 @@ class IslandoraCitationsHelper {
   /**
    * Load styles from citations style language.
    */
-  public function loadStyleFromCiteproc() {
+  public function getAllCslsFromCiteproc() {
     $drupalFinder = new DrupalFinder();
     $drupalFinder->locateRoot(DRUPAL_ROOT);
     $vendorDir = $drupalFinder->getVendorDir();
@@ -104,7 +107,9 @@ class IslandoraCitationsHelper {
   public function loadStyle($styleName, $styleType = 'entity') {
     if ($styleType == 'entity') {
       $entity = $this->citationsStorage->load($styleName);
-      return $entity->getCslText();
+      if ($entity instanceof ConfigEntityInterface) {
+        return $entity->getCslText();
+      }
     }
     else {
       return StyleSheet::loadStyleSheet($styleName);
@@ -119,10 +124,12 @@ class IslandoraCitationsHelper {
   public function renderWithCiteproc(array $data, string $style, string $mode = 'citation') {
     try {
       $citeProc = new CiteProc($style);
-      return $citeProc->render($data, $mode);
+      $rendered_array['data'] = $citeProc->render($data, $mode);
+      $rendered_array['styles'] = $citeProc->renderCssStyles();
+      return $rendered_array;
     }
     catch (\Exception $e) {
-      // Log error.
+      $this->logger->error($e->getMessage());
     }
   }
 
@@ -130,9 +137,14 @@ class IslandoraCitationsHelper {
    * Encode entity as a csl json array.
    *
    * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+   * @throws \Exception
    */
   public function encodeEntityForCiteproc(EntityInterface $entity) {
     $cslEncodedData = $this->serializer->normalize($entity, 'csl-json');
+    if (!isset($cslEncodedData['type'])) {
+      $this->logger->error('CSL encoding error. Type is a mandatory field.');
+      throw new \Exception('CSL encoding error. Type is a mandatory field.');
+    }
     return (object) $cslEncodedData;
   }
 
