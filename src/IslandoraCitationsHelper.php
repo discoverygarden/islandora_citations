@@ -111,9 +111,7 @@ class IslandoraCitationsHelper {
         return $entity->getCslText();
       }
     }
-    else {
-      return StyleSheet::loadStyleSheet($styleName);
-    }
+    return StyleSheet::loadStyleSheet($styleName);
   }
 
   /**
