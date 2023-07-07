@@ -18,44 +18,45 @@ class IslandoraCitationsService {
     $citeProc = new CiteProc($stylesheet);
     return $citeProc->render(json_decode($metadata), $mode);
   }
-    public function render() {
+
+  public function render() {
     $metadata = '[
-    {
-        "author": [
-            {
-                "family": "Doe", 
-                "given": "James", 
-                "suffix": "III"
-            }
-        ], 
-        "id": "item-1", 
-        "issued": {
-            "date-parts": [
-                [
-                    "2001"
+        {
+            "author": [
+                {
+                    "family": "Doe",
+                    "given": "James",
+                    "suffix": "III"
+                }
+            ],
+            "id": "item-1",
+            "issued": {
+                "date-parts": [
+                    [
+                        "2001"
+                    ]
                 ]
-            ]
-        }, 
-        "title": "My Anonymous Heritage", 
-        "type": "book"
-    },
-    {
-        "author": [
-            {
-                "family": "Anderson", 
-                "given": "John"
-            }, 
-            {
-                "family": "Brown", 
-                "given": "John"
-            }
-        ], 
-        "id": "ITEM-2", 
-        "type": "book",
-        "title": "Two authors writing a book"
-    }
-]';
+            },
+            "title": "My Anonymous Heritage",
+            "type": "book"
+        },
+        {
+            "author": [
+                {
+                    "family": "Anderson",
+                    "given": "John"
+                },
+                {
+                    "family": "Brown",
+                    "given": "John"
+                }
+            ],
+            "id": "ITEM-2",
+            "type": "book",
+            "title": "Two authors writing a book"
+        }
+    ]';
     return renderFromMetadata($metadata, 'din-1505-2', 'citation');
-    }
-?>
+  }
+}
 ```
