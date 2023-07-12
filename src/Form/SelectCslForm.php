@@ -5,6 +5,7 @@ namespace Drupal\islandora_citations\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
 use Drupal\islandora_citations\IslandoraCitationsHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -55,33 +56,43 @@ class SelectCslForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-
-    $form['csl_list'] = [
-      '#type' => 'select',
-      '#options' => $this->citationHelper->getCitationEntityList(),
-      '#empty_option' => $this->t('- Select csl -'),
-      '#ajax' => [
-        'callback' => '::getCitation',
-        'wrapper' => 'formatted-citation',
-        'method' => 'html',
-        'event' => 'change',
-      ],
-      '#attributes' => ['aria-label' => $this->t('Select CSL')],
-      '#theme_wrappers' => [],
-    ];
-    $form['formatted-citation'] = [
-      '#type' => 'item',
-      '#markup' => '<div id="formatted-citation"></div>',
-      '#theme_wrappers' => [],
-    ];
+    if (empty($this->citationHelper->getCitationEntityList())) :
+      $form['add_citation'] = [
+        '#type' => 'link',
+        '#title' => [
+          '#markup' => $this->t('Please add CSL from here'),
+        ],
+        '#url' => Url::fromRoute('entity.islandora_citations.add_form'),
+      ];
+    else :
+      $form['csl_list'] = [
+        '#type' => 'select',
+        '#options' => $this->citationHelper->getCitationEntityList(),
+        '#empty_option' => $this->t('- Select csl -'),
+        '#ajax' => [
+          'callback' => '::renderCitation',
+          'wrapper' => 'formatted-citation',
+          'method' => 'html',
+          'event' => 'change',
+        ],
+        '#attributes' => ['aria-label' => $this->t('Select CSL')],
+        '#theme_wrappers' => [],
+      ];
+      $form['formatted-citation'] = [
+        '#type' => 'item',
+        '#markup' => '<div id="formatted-citation"></div>',
+        '#theme_wrappers' => [],
+      ];
+    endif;
     $form['#cache']['contexts'][] = 'url';
+    $form['#theme'] = 'display_citations';
     return $form;
   }
 
   /**
    * Setting the message in our form.
    */
-  public function getCitation(array $form, FormStateInterface $form_state) {
+  public function renderCitation(array $form, FormStateInterface $form_state) {
     $csl_name = $form_state->getValue('csl_list');
     if ($csl_name == '') {
       return [
@@ -91,12 +102,14 @@ class SelectCslForm extends FormBase {
     $entity = $this->routeMatch->getParameter('node');
     $citationItems[] = $this->citationHelper->encodeEntityForCiteproc($entity);
     $style = $this->citationHelper->loadStyle($csl_name);
+
     $rendered = $this->citationHelper->renderWithCiteproc($citationItems, $style);
+
     $response = [
-      '#children' => $rendered,
+      '#children' => $rendered['data'],
     ];
 
-    return $response;
+    return $form['data'] = $response;
   }
 
   /**
