@@ -51,4 +51,4 @@ services:
     class: Drupal\islandora_citations\Normalizer\EntityReferenceNormalizer
     arguments: ['@entity.repository']
     tags:
-      - { name: normalizer, priority: 15 }
+      - { name: normalizer, priority: 20 }
