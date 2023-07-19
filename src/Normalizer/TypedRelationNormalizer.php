@@ -23,7 +23,7 @@ class TypedRelationNormalizer extends NormalizerBase {
   public function normalize($object, $format = NULL, array $context = []) {
     $attributes = [];
 
-    $parent = $object->getParent()->entity;
+    $parent = $object->get('entity')->getValue();
     if ($parent instanceof TermInterface) {
       $rel_types = $object->getRelTypes();
       $rel_type = $this->formatRelTypes($rel_types[$object->rel_type]);
