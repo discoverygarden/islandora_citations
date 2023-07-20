@@ -66,7 +66,7 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
         }
 
       case 'institution':
-        return ['literal' => $name];
+        return ['family' => $name];
     }
 
     return $name;

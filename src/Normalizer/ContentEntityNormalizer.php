@@ -38,9 +38,13 @@ class ContentEntityNormalizer extends NormalizerBase {
 
       $context['csl-map'] = $thirdPartySetting;
       $context['use-entity'] = $eRthirdpartySettings ? $eRthirdpartySettings : NULL;
+
+      if ($definition->getType() === 'typed_relation') {
+        $context['rel-csl-map'] = TRUE;
+      }
+
       // Defer the field normalization to other individual normalizers.
       $normalized_field_items += $this->serializer->normalize($field_item_list, $format, $context);
-
     }
     return $normalized_field_items;
   }
