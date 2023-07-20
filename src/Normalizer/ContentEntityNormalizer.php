@@ -39,7 +39,7 @@ class ContentEntityNormalizer extends NormalizerBase {
       $context['csl-map'] = $thirdPartySetting;
       $context['use-entity'] = $eRthirdpartySettings ? $eRthirdpartySettings : NULL;
 
-      if ($definition->getType() === 'typed_relation') {
+      if ($context['use-entity'] && $definition->getType() === 'typed_relation') {
         $context['rel-csl-map'] = TRUE;
       }
 
