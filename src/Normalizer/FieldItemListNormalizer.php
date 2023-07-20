@@ -25,6 +25,21 @@ class FieldItemListNormalizer extends NormalizerBase {
       if ($field_item->isEmpty()) {
         continue;
       }
+      if (!empty($field_item)) {
+        $definition = $field_item->getFieldDefinition();
+      }
+      if ($context['use-entity'] || $definition->getType() == 'entity_reference_revisions') {
+
+        $referencedData[$definition->getName()][] = $this->serializer->normalize($field_item, $format, $context);
+        if (!empty($referencedData)) {
+
+          $count = count($referencedData[$definition->getName()]);
+          if ($count > 1) {
+            for ($i = 0; $i <= $count; $i++) {
+
+              $primary_key = $referencedData[$definition->getName()][$i];
+
+              $secondary_key = array_keys($primary_key);
 
       if ($context['er-reference']) {
         $field_item_values[] = $this->serializer->normalize($field_item, $format, $context);
