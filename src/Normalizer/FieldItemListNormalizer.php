@@ -26,11 +26,11 @@ class FieldItemListNormalizer extends NormalizerBase {
         continue;
       }
 
-      if ($context['use-entity']) {
-        $field_item_values = $this->serializer->normalize($field_item, $format, $context);
-      }
-      elseif ($context['rel-csl-map']) {
+      if ($context['rel-csl-map']) {
         $field_item_values = $this->serializer->normalize($field_item, $format, $context['values'] = $field_item_values);
+      }
+      elseif ($context['use-entity']) {
+        $field_item_values = $this->serializer->normalize($field_item, $format, $context);
       }
       else {
         foreach ($context['csl-map'] as $cslField) {

@@ -121,7 +121,7 @@ class IslandoraCitationsHelper {
    *
    * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
    */
-  public function renderWithCiteproc(array $data, string $style, string $mode = 'citation') {
+  public function renderWithCiteproc(array $data, string $style, string $mode = 'bibliography') {
     try {
       $citeProc = new CiteProc($style);
       $rendered_array['data'] = $citeProc->render($data, $mode);
