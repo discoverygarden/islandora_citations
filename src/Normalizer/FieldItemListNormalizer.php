@@ -29,6 +29,9 @@ class FieldItemListNormalizer extends NormalizerBase {
       if ($context['use-entity']) {
         $field_item_values = $this->serializer->normalize($field_item, $format, $context);
       }
+      elseif ($context['rel-csl-map']) {
+        $field_item_values = $this->serializer->normalize($field_item, $format, $context['values'] = $field_item_values);
+      }
       else {
         foreach ($context['csl-map'] as $cslField) {
           /** @var \Drupal\Core\Field\FieldItemInterface $field_item */

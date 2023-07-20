@@ -21,20 +21,18 @@ class TypedRelationNormalizer extends NormalizerBase {
    * {@inheritdoc}
    */
   public function normalize($object, $format = NULL, array $context = []) {
-    $attributes = [];
+    $attributes = $context;
 
     $parent = $object->get('entity')->getValue();
     if ($parent instanceof TermInterface) {
       $rel_types = $object->getRelTypes();
       $rel_type = $this->formatRelTypes($rel_types[$object->rel_type]);
       $label = $parent->getName();
-      unset($context['csl-map']);
-      $context['csl-map'][$rel_type] = $rel_type;
       if ($parent->bundle() === self::PERSON_VOCAB) {
-        return $this->formatNameVariables($label, 'person');
+        $attributes[$rel_type][] = $this->formatNameVariables($label, 'person');
       }
       else {
-        return $this->formatNameVariables($label, 'institution');
+        $attributes[$rel_type][] = $this->formatNameVariables($label, 'institution');
       }
 
     }
