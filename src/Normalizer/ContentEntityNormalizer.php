@@ -25,6 +25,10 @@ class ContentEntityNormalizer extends NormalizerBase {
       $context['use-entity'] = '';
       $context['rel-csl-map'] = '';
       $context['er-reference'] = '';
+      $context['csl-map'] = '';
+      $context['use-entity'] = '';
+      $context['rel-csl-map'] = '';
+      $context['er-reference'] = '';
       $definition = $field_item_list->getFieldDefinition();
 
       // Do not process if there are no third party settings.
@@ -45,7 +49,7 @@ class ContentEntityNormalizer extends NormalizerBase {
       if ($context['use-entity'] && ($definition->getType() === 'entity_reference_revisions' || $definition->getType() == 'entity_reference')) {
         $context['er-reference'] = TRUE;
         $data = $this->serializer->normalize($field_item_list, $format, $context);
-        if (count($data) > 1) {
+        if (count($data > 1)) {
           for ($i = 1; $i < count($data); $i++) {
             $keys = array_keys($data);
             foreach ($data[$keys[$i]] as $key => $value) {
@@ -58,6 +62,19 @@ class ContentEntityNormalizer extends NormalizerBase {
       }
       elseif ($context['use-entity'] && $definition->getType() === 'typed_relation') {
         $context['rel-csl-map'] = TRUE;
+        $data = $this->serializer->normalize($field_item_list, $format, $context);
+        $key = array_key_first($data);
+        if (array_key_exists($key, $normalized_field_items)) {
+          foreach ($normalized_field_items[$key] as $index => $value) {
+            $normalized_field_items[$key][$index]['family'] = $normalized_field_items[$key][$index]['family'] . ',' . $data[$key][$index]['family'];
+          }
+        }
+        else {
+          $normalized_field_items += $data;
+        }
+      }
+      else {
+        $normalized_field_items += $this->serializer->normalize($field_item_list, $format, $context);
         $data = $this->serializer->normalize($field_item_list, $format, $context);
         $key = array_key_first($data);
         if (array_key_exists($key, $normalized_field_items)) {
