@@ -25,30 +25,16 @@ class FieldItemListNormalizer extends NormalizerBase {
       if ($field_item->isEmpty()) {
         continue;
       }
-      if (!empty($field_item)) {
-        $definition = $field_item->getFieldDefinition();
+
+      if ($context['er-reference']) {
+        $field_item_values[] = $this->serializer->normalize($field_item, $format, $context);
       }
-      if ($context['use-entity'] || $definition->getType() == 'entity_reference_revisions') {
-
-        $referencedData[$definition->getName()][] = $this->serializer->normalize($field_item, $format, $context);
-        if (!empty($referencedData)) {
-
-          $count = count($referencedData[$definition->getName()]);
-          if ($count > 1) {
-            for ($i = 0; $i <= $count; $i++) {
-
-              $primary_key = $referencedData[$definition->getName()][$i];
-
-              $secondary_key = array_keys($primary_key);
-
-      if ($context['rel-csl-map']) {
+      elseif ($context['rel-csl-map']) {
         $field_item_values = $this->serializer->normalize($field_item, $format, $context['values'] = $field_item_values);
-      }
-      elseif ($context['use-entity']) {
-        $field_item_values = $this->serializer->normalize($field_item, $format, $context);
       }
       else {
         foreach ($context['csl-map'] as $cslField) {
+
           /** @var \Drupal\Core\Field\FieldItemInterface $field_item */
           $field_item_values[$cslField][] = $this->serializer->normalize($field_item, $format, $context);
         }
@@ -58,7 +44,6 @@ class FieldItemListNormalizer extends NormalizerBase {
     if (!$context['use-entity']) {
       $this->normalizeCslMultiValueFields($field_item_values);
     }
-
     return $field_item_values;
   }
 
