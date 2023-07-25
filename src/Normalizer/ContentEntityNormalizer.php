@@ -41,10 +41,20 @@ class ContentEntityNormalizer extends NormalizerBase {
 
       if ($context['use-entity'] && $definition->getType() === 'typed_relation') {
         $context['rel-csl-map'] = TRUE;
+        $data = $this->serializer->normalize($field_item_list, $format, $context);
+        $key = array_key_first($data);
+        if (array_key_exists($key, $normalized_field_items)) {
+          foreach ($normalized_field_items[$key] as $index => $value) {
+            $normalized_field_items[$key][$index]['family'] = $normalized_field_items[$key][$index]['family'] . ',' . $data[$key][$index]['family'];
+          }
+        }
+        else {
+          $normalized_field_items += $data;
+        }
       }
-
-      // Defer the field normalization to other individual normalizers.
-      $normalized_field_items += $this->serializer->normalize($field_item_list, $format, $context);
+      else {
+        $normalized_field_items += $this->serializer->normalize($field_item_list, $format, $context);
+      }
     }
     return $normalized_field_items;
   }
