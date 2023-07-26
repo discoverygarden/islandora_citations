@@ -45,7 +45,7 @@ class ContentEntityNormalizer extends NormalizerBase {
       if ($context['use-entity'] && ($definition->getType() === 'entity_reference_revisions' || $definition->getType() == 'entity_reference')) {
         $context['er-reference'] = TRUE;
         $data = $this->serializer->normalize($field_item_list, $format, $context);
-        if (count($data > 1)) {
+        if (count($data) > 1) {
           for ($i = 1; $i < count($data); $i++) {
             $keys = array_keys($data);
             foreach ($data[$keys[$i]] as $key => $value) {
