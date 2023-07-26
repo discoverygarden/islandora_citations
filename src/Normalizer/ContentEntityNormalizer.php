@@ -54,7 +54,11 @@ class ContentEntityNormalizer extends NormalizerBase {
             }
           }
         }
-        $normalized_field_items += $data;
+        foreach ($data as $entity) {
+          foreach ($entity as $key => $value) {
+            $normalized_field_items = array_merge($normalized_field_items, $entity);
+          }
+        }
       }
       elseif ($context['use-entity'] && $definition->getType() === 'typed_relation') {
         $context['rel-csl-map'] = TRUE;
