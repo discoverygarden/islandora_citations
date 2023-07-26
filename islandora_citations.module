@@ -17,7 +17,7 @@ function islandora_citations_form_field_config_edit_form_alter(&$form, FormState
     $cslPropertyArray = array_keys($schema['items']['properties']);
     $cslFieldOptions = array_combine($cslPropertyArray, $cslPropertyArray);
     $entity = $form_state->getFormObject()->getEntity();
-    if ($entity->getType() == 'typed_relation' || $entity->getType() == 'entity_reference_revisions') {
+    if ($entity->getType() == 'typed_relation') {
       $form['third_party_settings']['islandora_citations']['use_entity_checkbox'] = [
         '#title' => t('Map CSL from relation type'),
         '#description' => t('Enable mapping of this typed relation  field from the selected relation type. Rel types, author and creator both get mapped to author.'),
@@ -36,7 +36,7 @@ function islandora_citations_form_field_config_edit_form_alter(&$form, FormState
         '#options' => $cslFieldOptions,
         '#default_value' => $entity->getThirdPartySetting('islandora_citations', 'csl_field'),
       ];
-      if ($entity->getType() == 'entity_reference') {
+      if ($entity->getType() == 'entity_reference' || $entity->getType() == 'entity_reference_revisions') {
         $form['third_party_settings']['islandora_citations']['use_entity_checkbox'] = [
           '#title' => t('Map from entity'),
           '#description' => \t('If this field is enabled, the csl mapping will be taken from the referenced entity. Make sure you map fields in the referenced entity before enabling this.'),
