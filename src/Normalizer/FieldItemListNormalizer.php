@@ -26,14 +26,15 @@ class FieldItemListNormalizer extends NormalizerBase {
         continue;
       }
 
-      if ($context['rel-csl-map']) {
-        $field_item_values = $this->serializer->normalize($field_item, $format, $context['values'] = $field_item_values);
+      if ($context['er-reference']) {
+        $field_item_values[] = $this->serializer->normalize($field_item, $format, $context);
       }
-      elseif ($context['use-entity']) {
-        $field_item_values = $this->serializer->normalize($field_item, $format, $context);
+      elseif ($context['rel-csl-map']) {
+        $field_item_values = $this->serializer->normalize($field_item, $format, $context['values'] = $field_item_values);
       }
       else {
         foreach ($context['csl-map'] as $cslField) {
+
           /** @var \Drupal\Core\Field\FieldItemInterface $field_item */
           $field_item_values[$cslField][] = $this->serializer->normalize($field_item, $format, $context);
         }
@@ -43,7 +44,6 @@ class FieldItemListNormalizer extends NormalizerBase {
     if (!$context['use-entity']) {
       $this->normalizeCslMultiValueFields($field_item_values);
     }
-
     return $field_item_values;
   }
 
