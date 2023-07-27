@@ -42,7 +42,6 @@ class ContentEntityNormalizer extends NormalizerBase {
       $context['csl-map'] = $mapFromSelectedCsl ?? NULL;
       $context['map-typed-rel'] = $mapFromEntity && $fieldDefinition->getType() === 'typed_relation';
       $context['use-entity'] = $mapFromEntity && $fieldDefinition->getType() !== 'typed_relation';
-      $context['normalized-entity'] = $normalized_field_items;
 
       // Defer normalization to field normalizers.
       $normalized_field_value = $this->serializer->normalize($field_item_list, $format, $context);
