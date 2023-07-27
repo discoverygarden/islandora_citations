@@ -25,10 +25,6 @@ class ContentEntityNormalizer extends NormalizerBase {
       $context['use-entity'] = '';
       $context['rel-csl-map'] = '';
       $context['er-reference'] = '';
-      $context['csl-map'] = '';
-      $context['use-entity'] = '';
-      $context['rel-csl-map'] = '';
-      $context['er-reference'] = '';
       $definition = $field_item_list->getFieldDefinition();
 
       // Do not process if there are no third party settings.
@@ -51,6 +47,7 @@ class ContentEntityNormalizer extends NormalizerBase {
         $data = $this->serializer->normalize($field_item_list, $format, $context);
         if (!empty($data)) {
           if (is_array($data)) {
+
             if (count($data) > 1) {
               for ($i = 1; $i < count($data); $i++) {
                 $keys = array_keys($data);
@@ -61,6 +58,7 @@ class ContentEntityNormalizer extends NormalizerBase {
               }
             }
           }
+
           $normalized_field_items += $data[0];
         }
       }
@@ -69,6 +67,7 @@ class ContentEntityNormalizer extends NormalizerBase {
         $data = $this->serializer->normalize($field_item_list, $format, $context);
         $key = array_key_first($data);
         if (array_key_exists($key, $normalized_field_items)) {
+
           foreach ($normalized_field_items[$key] as $index => $value) {
             $normalized_field_items[$key][$index]['family'] = $normalized_field_items[$key][$index]['family'] . ',' . $data[$key][$index]['family'];
           }
@@ -78,20 +77,9 @@ class ContentEntityNormalizer extends NormalizerBase {
         }
       }
       else {
-        $normalized_field_items += $this->serializer->normalize($field_item_list, $format, $context);
-        $data = $this->serializer->normalize($field_item_list, $format, $context);
-        $key = array_key_first($data);
-        if (array_key_exists($key, $normalized_field_items)) {
-          foreach ($normalized_field_items[$key] as $index => $value) {
-            $normalized_field_items[$key][$index]['family'] = $normalized_field_items[$key][$index]['family'] . ',' . $data[$key][$index]['family'];
-          }
-        }
-        else {
-          $normalized_field_items += $data;
-        }
-      }
-      else {
-        $normalized_field_items += $this->serializer->normalize($field_item_list, $format, $context);
+        $datas = $this->serializer->normalize($field_item_list, $format, $context);
+        // print_r($datas);
+        $normalized_field_items += $datas;
       }
       // Defer the field normalization to other individual normalizers.
     }
