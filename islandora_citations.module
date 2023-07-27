@@ -45,7 +45,7 @@ function islandora_citations_form_field_config_edit_form_alter(&$form, FormState
     }
 
     // We do not allow direct mapping for typed relation or ERR.
-    if ($entity->getType() !== 'entity_reference_revisions' || $entity->getType() !== 'typed_relation') {
+    if (!($entity->getType() === 'entity_reference_revisions' || $entity->getType() === 'typed_relation')) {
       $form['third_party_settings']['islandora_citations']['csl_field'] = [
         '#type' => 'select',
         '#title' => \t('CSL Field'),
