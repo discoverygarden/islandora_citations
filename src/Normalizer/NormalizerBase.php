@@ -43,7 +43,7 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
    * Formats date variables as per csl json.
    */
   protected function formatDateVariables($date): array {
-    return ['date-parts' => [$date]];
+    return ['date-parts' => $date];
   }
 
   /**

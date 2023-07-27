@@ -49,16 +49,20 @@ class ContentEntityNormalizer extends NormalizerBase {
       if ($context['use-entity'] && ($definition->getType() === 'entity_reference_revisions' || $definition->getType() == 'entity_reference')) {
         $context['er-reference'] = TRUE;
         $data = $this->serializer->normalize($field_item_list, $format, $context);
-        if (count($data > 1)) {
-          for ($i = 1; $i < count($data); $i++) {
-            $keys = array_keys($data);
-            foreach ($data[$keys[$i]] as $key => $value) {
-              $data[0][$key] = $data[0][$key] . "," . $value;
-              unset($data[$i]);
+        if (!empty($data)) {
+          if (is_array($data)) {
+            if (count($data) > 1) {
+              for ($i = 1; $i < count($data); $i++) {
+                $keys = array_keys($data);
+                foreach ($data[$keys[$i]] as $key => $value) {
+                  $data[0][$key] = $data[0][$key] . "," . $value;
+                  unset($data[$i]);
+                }
+              }
             }
           }
+          $normalized_field_items += $data[0];
         }
-        $normalized_field_items += $data;
       }
       elseif ($context['use-entity'] && $definition->getType() === 'typed_relation') {
         $context['rel-csl-map'] = TRUE;
