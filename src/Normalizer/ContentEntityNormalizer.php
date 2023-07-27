@@ -18,63 +18,85 @@ class ContentEntityNormalizer extends NormalizerBase {
   /**
    * {@inheritdoc}
    */
-  public function normalize($entity, $format = NULL, array $context = []) {
+  public function normalize($object, $format = NULL, array $context = []) {
     $normalized_field_items = [];
-    foreach ($entity->getFields(TRUE) as $field_item_list) {
-      $context['csl-map'] = '';
-      $context['use-entity'] = '';
-      $context['rel-csl-map'] = '';
-      $context['er-reference'] = '';
-      $definition = $field_item_list->getFieldDefinition();
+    foreach ($object->getFields(TRUE) as $field_item_list) {
+
+      /** @var \Drupal\Core\Field\FieldDefinitionInterface $fieldDefinition */
+      $fieldDefinition = $field_item_list->getFieldDefinition();
 
       // Do not process if there are no third party settings.
-      if (!($definition instanceof ThirdPartySettingsInterface)) {
+      if (!($fieldDefinition instanceof ThirdPartySettingsInterface)) {
         continue;
       }
 
-      $thirdPartySetting = $definition->getThirdPartySetting('islandora_citations', 'csl_field');
-      $eRthirdpartySettings = $definition->getThirdPartySetting('islandora_citations', 'use_entity_checkbox');
+      $mapFromSelectedCsl = $fieldDefinition->getThirdPartySetting('islandora_citations', 'csl_field');
+      $mapFromEntity = $fieldDefinition->getThirdPartySetting('islandora_citations', 'use_entity_checkbox');
 
       // Do not process if field is not mapped.
-      if (empty($thirdPartySetting) && empty($eRthirdpartySettings)) {
+      if (empty($mapFromSelectedCsl) && empty($mapFromEntity)) {
         continue;
       }
 
-      $context['csl-map'] = $thirdPartySetting;
-      $context['use-entity'] = $eRthirdpartySettings ? $eRthirdpartySettings : NULL;
-      if ($context['use-entity'] && ($definition->getType() === 'entity_reference_revisions' || $definition->getType() == 'entity_reference')) {
-        $context['er-reference'] = TRUE;
-        $data = $this->serializer->normalize($field_item_list, $format, $context);
-        if (count($data) > 1) {
-          for ($i = 1; $i < count($data); $i++) {
-            $keys = array_keys($data);
-            foreach ($data[$keys[$i]] as $key => $value) {
-              $data[0][$key] = $data[0][$key] . "," . $value;
-              unset($data[$i]);
-            }
-          }
-        }
-        $normalized_field_items += $data;
-      }
-      elseif ($context['use-entity'] && $definition->getType() === 'typed_relation') {
-        $context['rel-csl-map'] = TRUE;
-        $data = $this->serializer->normalize($field_item_list, $format, $context);
-        $key = array_key_first($data);
-        if (array_key_exists($key, $normalized_field_items)) {
-          foreach ($normalized_field_items[$key] as $index => $value) {
-            $normalized_field_items[$key][$index]['family'] = $normalized_field_items[$key][$index]['family'] . ',' . $data[$key][$index]['family'];
-          }
-        }
-        else {
-          $normalized_field_items += $data;
-        }
+      // Add values to context, so that they can be passed to other normalizers.
+      $context['csl-map'] = $mapFromSelectedCsl ?? NULL;
+      $context['map-typed-rel'] = $mapFromEntity && $fieldDefinition->getType() === 'typed_relation';
+      $context['use-entity'] = $mapFromEntity && $fieldDefinition->getType() !== 'typed_relation';
+      $context['normalized-entity'] = $normalized_field_items;
+
+      // Defer normalization to field normalizers.
+      $normalized_field_value = $this->serializer->normalize($field_item_list, $format, $context);
+
+      if (empty($normalized_field_items)) {
+        $normalized_field_items = $normalized_field_value;
       }
       else {
-        $normalized_field_items += $this->serializer->normalize($field_item_list, $format, $context);
+        foreach ($normalized_field_items as $cslKey => $cslValue) {
+          if (isset($normalized_field_value[$cslKey])) {
+            $normalized_field_items[$cslKey] = array_merge($cslValue, $normalized_field_value[$cslKey]);
+          }
+          else {
+            $normalized_field_items += $normalized_field_value;
+          }
+        }
       }
-      // Defer the field normalization to other individual normalizers.
     }
+
+    // We do not need to do this for use entity
+    // because it's already done when referenced entity is normalized.
+    if (!isset($context['mapped-entity'])) {
+      $this->normalizeCslFieldsForCiteProc($normalized_field_items);
+    }
+
     return $normalized_field_items;
+  }
+
+  /**
+   * Normalizes the array so that citeproc can accept it.
+   */
+  private function normalizeCslFieldsForCiteProc(&$normalized_field_items) {
+    foreach ($normalized_field_items as $cslKey => $cslValueArray) {
+      $fieldType = $this->getCslVariableType($cslKey);
+
+      // If the variable type if string, comma separate the values.
+      switch ($fieldType) {
+        case 'string':
+        case 'number':
+          $normalized_field_items[$cslKey] = is_array($cslValueArray) ? implode(', ', $cslValueArray) : $cslValueArray;
+          break;
+
+        case 'array':
+          foreach ($cslValueArray as $key => $arrayValue) {
+            $normalized_field_items[$cslKey][$key] = (object) $arrayValue;
+          }
+          break;
+
+        case 'object':
+          // Cannot have multi value fields here, so just taking the first item.
+          $normalized_field_items[$cslKey] = (object) ($cslValueArray[0] ?? $cslValueArray);
+          break;
+      }
+    }
   }
 
 }

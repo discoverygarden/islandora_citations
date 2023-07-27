@@ -5,20 +5,26 @@ citation rules.
 
 ```php
 <?php
-use Seboettg\CiteProc\StyleSheet; 
 use Seboettg\CiteProc\CiteProc;
+use Seboettg\CiteProc\StyleSheet;
 
 /**
  * Class CitationsService.
  */
 class IslandoraCitationsService {
 
+  /**
+   *
+   */
   public function renderFromMetadata($metadata, $style, $mode) {
     $stylesheet = StyleSheet::loadStyleSheet($style);
     $citeProc = new CiteProc($stylesheet);
     return $citeProc->render(json_decode($metadata), $mode);
   }
 
+  /**
+   *
+   */
   public function render() {
     $metadata = '[
         {
@@ -58,5 +64,6 @@ class IslandoraCitationsService {
     ]';
     return renderFromMetadata($metadata, 'din-1505-2', 'citation');
   }
+
 }
 ```
