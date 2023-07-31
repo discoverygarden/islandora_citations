@@ -2,13 +2,13 @@
 
 namespace Drupal\islandora_citations\Form;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\islandora_citations\IslandoraCitationsHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Implementing a ajax form.
@@ -33,10 +33,10 @@ class SelectCslForm extends FormBase {
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
+
   /**
    * {@inheritdoc}
    */
-
   public function __construct(IslandoraCitationsHelper $citationHelper, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager) {
     $this->citationHelper = $citationHelper;
     $this->routeMatch = $route_match;
