@@ -2,6 +2,7 @@
 
 namespace Drupal\islandora_citations\Form;
 
+use Drupal\block\Entity\Block;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -56,6 +57,15 @@ class SelectCslForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    $blocks = Block::loadMultiple();
+    foreach ($blocks as $key => $block) {
+      $settings = $block->get('settings');
+      if (isset($settings['id'])) {
+        if ($settings['id'] == 'islandora_citations_display_citations') {
+          $default_csl = !empty($settings['default_csl']) ? $settings['default_csl'] : '';
+        }
+      }
+    }
     if (empty($this->citationHelper->getCitationEntityList())) :
       $form['add_citation'] = [
         '#type' => 'link',
@@ -69,6 +79,7 @@ class SelectCslForm extends FormBase {
         '#type' => 'select',
         '#options' => $this->citationHelper->getCitationEntityList(),
         '#empty_option' => $this->t('- Select csl -'),
+        '#default_value' => $default_csl,
         '#ajax' => [
           'callback' => '::renderCitation',
           'wrapper' => 'formatted-citation',
@@ -80,7 +91,7 @@ class SelectCslForm extends FormBase {
       ];
       $form['formatted-citation'] = [
         '#type' => 'item',
-        '#markup' => '<div id="formatted-citation"></div>',
+        '#markup' => '<div id="formatted-citation">' . !empty($default_csl) ? $this->getDefaultCitation($default_csl) : '' . '</div>',
         '#theme_wrappers' => [],
       ];
     endif;
@@ -101,6 +112,7 @@ class SelectCslForm extends FormBase {
     }
     $entity = $this->routeMatch->getParameter('node');
     $citationItems[] = $this->citationHelper->encodeEntityForCiteproc($entity);
+
     $style = $this->citationHelper->loadStyle($csl_name);
 
     $rendered = $this->citationHelper->renderWithCiteproc($citationItems, $style);
@@ -116,6 +128,19 @@ class SelectCslForm extends FormBase {
    * Submitting the form.
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+  }
+
+  /**
+   * Fetching results for default csl.
+   */
+  public function getDefaultCitation($csl_name) {
+    $entity = $this->routeMatch->getParameter('node');
+    $citationItems[] = $this->citationHelper->encodeEntityForCiteproc($entity);
+    $style = $this->citationHelper->loadStyle($csl_name);
+
+    $rendered = $this->citationHelper->renderWithCiteproc($citationItems, $style);
+
+    return $rendered['data'];
   }
 
 }
