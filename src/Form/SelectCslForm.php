@@ -2,7 +2,6 @@
 
 namespace Drupal\islandora_citations\Form;
 
-use Drupal\block\Entity\Block;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -37,6 +36,7 @@ class SelectCslForm extends FormBase {
   /**
    * {@inheritdoc}
    */
+
   public function __construct(IslandoraCitationsHelper $citationHelper, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager) {
     $this->citationHelper = $citationHelper;
     $this->routeMatch = $route_match;
