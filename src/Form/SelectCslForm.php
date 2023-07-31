@@ -9,6 +9,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\islandora_citations\IslandoraCitationsHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Implementing a ajax form.
@@ -27,13 +28,19 @@ class SelectCslForm extends FormBase {
    * @var \Drupal\Core\Routing\RouteMatchInterface
    */
   protected $routeMatch;
-
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
   /**
    * {@inheritdoc}
    */
-  public function __construct(IslandoraCitationsHelper $citationHelper, RouteMatchInterface $route_match) {
+  public function __construct(IslandoraCitationsHelper $citationHelper, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager) {
     $this->citationHelper = $citationHelper;
     $this->routeMatch = $route_match;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -42,7 +49,8 @@ class SelectCslForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('islandora_citations.helper'),
-      $container->get('current_route_match')
+      $container->get('current_route_match'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -57,8 +65,9 @@ class SelectCslForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $blocks = Block::loadMultiple();
-    foreach ($blocks as $key => $block) {
+    $block_storage = $this->entityTypeManager->getStorage('block');
+    $blocks = $block_storage->loadMultiple();
+    foreach ($blocks as $block) {
       $settings = $block->get('settings');
       if (isset($settings['id'])) {
         if ($settings['id'] == 'islandora_citations_display_citations') {
