@@ -90,6 +90,7 @@ class SelectCslForm extends FormBase {
         '#options' => $this->citationHelper->getCitationEntityList(),
         '#empty_option' => $this->t('- Select csl -'),
         '#default_value' => $default_csl,
+        '#default_value' => $default_csl,
         '#ajax' => [
           'callback' => '::renderCitation',
           'wrapper' => 'formatted-citation',
@@ -102,7 +103,7 @@ class SelectCslForm extends FormBase {
       $default_citation = !empty($default_csl) ? $this->getDefaultCitation($default_csl) : '';
       $form['formatted-citation'] = [
         '#type' => 'item',
-        '#markup' => '<div id="formatted-citation">' . $default_citation . '</div>',
+        '#markup' => '<div id="formatted-citation">' . !empty($default_csl) ? $this->getDefaultCitation($default_csl) : '' . '</div>',
         '#theme_wrappers' => [],
       ];
       $form['actions']['submit'] = [
@@ -137,6 +138,7 @@ class SelectCslForm extends FormBase {
     }
     $entity = $this->routeMatch->getParameter('node');
     $citationItems[] = $this->citationHelper->encodeEntityForCiteproc($entity);
+
 
     $style = $this->citationHelper->loadStyle($csl_name);
 
