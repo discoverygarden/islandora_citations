@@ -37,7 +37,7 @@ class SelectCslForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(IslandoraCitationsHelper $citationHelper, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager) {
+
   public function __construct(IslandoraCitationsHelper $citationHelper, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager) {
     $this->citationHelper = $citationHelper;
     $this->routeMatch = $route_match;
