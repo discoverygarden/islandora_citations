@@ -144,12 +144,15 @@ class SelectCslForm extends FormBase {
    */
   public function getDefaultCitation($csl_name) {
     $entity = $this->routeMatch->getParameter('node');
-    $citationItems[] = $this->citationHelper->encodeEntityForCiteproc($entity);
-    $style = $this->citationHelper->loadStyle($csl_name);
-
-    $rendered = $this->citationHelper->renderWithCiteproc($citationItems, $style);
-
-    return $rendered['data'];
+    try{
+      $citationItems[] = $this->citationHelper->encodeEntityForCiteproc($entity);
+      $style = $this->citationHelper->loadStyle($csl_name);
+      $rendered = $this->citationHelper->renderWithCiteproc($citationItems, $style);
+      return $rendered['data'];
+    }
+    catch(\Throwable $e) {
+      return $e->getMessage();
+    }
   }
 
 }
