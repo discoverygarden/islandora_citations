@@ -176,6 +176,7 @@ class SelectCslForm extends FormBase {
       return $rendered['data'];
     }
     catch (\Throwable $e) {
+    catch (\Throwable $e) {
       return $e->getMessage();
     }
   }
