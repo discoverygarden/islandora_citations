@@ -21,13 +21,14 @@ class TypedRelationNormalizer extends NormalizerBase {
    * {@inheritdoc}
    */
   public function normalize($object, $format = NULL, array $context = []) {
-    $attributes = $context;
+    $attributes = $context['normalized-field-list'] ?? [];
 
     $parent = $object->get('entity')->getValue();
     if ($parent instanceof TermInterface) {
       $rel_types = $object->getRelTypes();
       $rel_type = $this->formatRelTypes($rel_types[$object->rel_type]);
       $label = $parent->getName();
+
       if ($parent->bundle() === self::PERSON_VOCAB) {
         $attributes[$rel_type][] = $this->formatNameVariables($label, 'person');
       }
