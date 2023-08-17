@@ -70,6 +70,7 @@ class SelectCslForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $block_storage = $this->entityTypeManager->getStorage('block');
     $blocks = $block_storage->loadMultiple();
+    $default_csl = '';
     foreach ($blocks as $block) {
       $settings = $block->get('settings');
       if (isset($settings['id'])) {
