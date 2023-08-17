@@ -1,0 +1,12 @@
+clipboardjs:
+  js:
+    js/clipboard.min.js: {}
+drupal:
+  version: "1.0.1"
+  js:
+    js/clipboard.js: {}
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+    - islandora_citations/clipboardjs
