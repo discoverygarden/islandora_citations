@@ -71,8 +71,7 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
    * {@inheritdoc}
    */
   public function build() {
-    $config = $this->getConfiguration();
-    if (!empty($config['default_csl'])) :
+    if (!empty($this->citationHelper->getCitationEntityList())) :
       $build['form'] = $this->formBuilder->getForm('Drupal\islandora_citations\Form\SelectCslForm');
       return $build;
     endif;

@@ -6,7 +6,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Url;
 use Drupal\islandora_citations\IslandoraCitationsHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -70,12 +69,13 @@ class SelectCslForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $block_storage = $this->entityTypeManager->getStorage('block');
     $blocks = $block_storage->loadMultiple();
-    $default_csl = '';
+    $cslItems = $this->citationHelper->getCitationEntityList();
+    $default_csl = array_values($cslItems)[0];
     foreach ($blocks as $block) {
       $settings = $block->get('settings');
       if (isset($settings['id'])) {
         if ($settings['id'] == 'islandora_citations_display_citations') {
-          $default_csl = !empty($settings['default_csl']) ? $settings['default_csl'] : '';
+          $default_csl = !empty($settings['default_csl']) ? $settings['default_csl'] : array_values($cslItems)[0];
         }
       }
     }
