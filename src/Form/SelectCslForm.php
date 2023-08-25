@@ -40,7 +40,6 @@ class SelectCslForm extends FormBase {
     $this->citationHelper = $citationHelper;
     $this->routeMatch = $route_match;
     $this->entityTypeManager = $entity_type_manager;
-    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -49,8 +48,6 @@ class SelectCslForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('islandora_citations.helper'),
-      $container->get('current_route_match'),
-      $container->get('entity_type.manager')
       $container->get('current_route_match'),
       $container->get('entity_type.manager')
     );
@@ -79,51 +76,26 @@ class SelectCslForm extends FormBase {
         }
       }
     }
-    if (empty($this->citationHelper->getCitationEntityList())) :
-      $form['add_citation'] = [
-        '#type' => 'link',
-        '#title' => [
-          '#markup' => $this->t('Please add CSL from here'),
-        ],
-        '#url' => Url::fromRoute('entity.islandora_citations.add_form'),
-      ];
-    else :
-      $form['csl_list'] = [
-        '#type' => 'select',
-        '#options' => $this->citationHelper->getCitationEntityList(),
-        '#empty_option' => $this->t('- Select csl -'),
-        '#default_value' => $default_csl,
-        '#default_value' => $default_csl,
-        '#ajax' => [
-          'callback' => '::renderCitation',
-          'wrapper' => 'formatted-citation',
-          'method' => 'html',
-          'event' => 'change',
-        ],
-        '#attributes' => ['aria-label' => $this->t('Select CSL')],
-        '#theme_wrappers' => [],
-      ];
-      $default_citation = !empty($default_csl) ? $this->getDefaultCitation($default_csl) : '';
-      $form['formatted-citation'] = [
-        '#type' => 'item',
-        '#markup' => '<div id="formatted-citation">' . !empty($default_csl) ? $this->getDefaultCitation($default_csl) : '' . '</div>',
-        '#theme_wrappers' => [],
-      ];
-      $form['actions']['submit'] = [
-        '#type' => 'button',
-        '#value' => $this->t('Copy Citation'),
-        '#attributes' => [
-          'onclick' => 'return false;',
-          'class' => ['clipboard-button'],
-          'data-clipboard-target' => '#formatted-citation',
-        ],
-        '#attached' => [
-          'library' => [
-            'islandora_citations/drupal',
-          ],
-        ],
-      ];
-    endif;
+    $form['csl_list'] = [
+      '#type' => 'select',
+      '#options' => $cslItems,
+      '#empty_option' => $this->t('- Select csl -'),
+      '#default_value' => $default_csl,
+      '#ajax' => [
+        'callback' => '::renderCitation',
+        'wrapper' => 'formatted-citation',
+        'method' => 'html',
+        'event' => 'change',
+      ],
+      '#attributes' => ['aria-label' => $this->t('Select CSL')],
+      '#theme_wrappers' => [],
+    ];
+    $form['formatted-citation'] = [
+      '#type' => 'item',
+      '#markup' => '<div id="formatted-citation">' . !empty($default_csl) ? $this->getDefaultCitation($default_csl) : '' . '</div>',
+      '#theme_wrappers' => [],
+    ];
+
     $form['#cache']['contexts'][] = 'url';
     $form['#theme'] = 'display_citations';
     return $form;
@@ -142,7 +114,6 @@ class SelectCslForm extends FormBase {
     $entity = $this->routeMatch->getParameter('node');
     $citationItems[] = $this->citationHelper->encodeEntityForCiteproc($entity);
 
-
     $style = $this->citationHelper->loadStyle($csl_name);
 
     $rendered = $this->citationHelper->renderWithCiteproc($citationItems, $style);
@@ -150,6 +121,7 @@ class SelectCslForm extends FormBase {
     $response = [
       '#children' => $rendered['data'],
     ];
+
     return $form['data'] = $response;
   }
 
@@ -176,7 +148,6 @@ class SelectCslForm extends FormBase {
       $rendered = $this->citationHelper->renderWithCiteproc($citationItems, $style);
       return $rendered['data'];
     }
-    catch (\Throwable $e) {
     catch (\Throwable $e) {
       return $e->getMessage();
     }
