@@ -74,7 +74,7 @@ class SelectCslForm extends FormBase {
       if (isset($settings['id'])) {
         if ($settings['id'] == 'islandora_citations_display_citations') {
           $default_csl = !empty($settings['default_csl']) ? $settings['default_csl'] : array_values($cslItems)[0];
-          $default_style = \Drupal::entityQuery('islandora_citations')
+          $default_style = $this->entityTypeManager->getStorage('islandora_citations')->getQuery()
             ->condition('id', $default_csl)
             ->execute();
         }
@@ -84,7 +84,7 @@ class SelectCslForm extends FormBase {
       $i = 0;
       while ($i < count($cslItems)) {
         $csl = array_values($cslItems);
-        $style = \Drupal::entityQuery('islandora_citations')
+        $style = $this->entityTypeManager->getStorage('islandora_citations')->getQuery()
           ->condition('id', $csl[$i])
           ->execute();
         if (!empty($style)) {
