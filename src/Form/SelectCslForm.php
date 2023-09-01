@@ -76,7 +76,7 @@ class SelectCslForm extends FormBase {
         }
       }
     }
-    // Check default csl exist or not
+    // Check default csl exist or not.
     if (!in_array($default_csl, $cslItems)) {
       $default_csl = array_values($cslItems)[0];
     }
