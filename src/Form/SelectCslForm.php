@@ -64,7 +64,6 @@ class SelectCslForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $default_style = [];
     $block_storage = $this->entityTypeManager->getStorage('block');
     $blocks = $block_storage->loadMultiple();
     $cslItems = $this->citationHelper->getCitationEntityList();
@@ -74,26 +73,12 @@ class SelectCslForm extends FormBase {
       if (isset($settings['id'])) {
         if ($settings['id'] == 'islandora_citations_display_citations') {
           $default_csl = !empty($settings['default_csl']) ? $settings['default_csl'] : array_values($cslItems)[0];
-          $default_style = $this->entityTypeManager->getStorage('islandora_citations')->getQuery()
-            ->condition('id', $default_csl)
-            ->execute();
         }
       }
     }
-    if (empty($default_style)) {
-      $i = 0;
-      while ($i < count($cslItems)) {
-        $csl = array_values($cslItems);
-        $style = $this->entityTypeManager->getStorage('islandora_citations')->getQuery()
-          ->condition('id', $csl[$i])
-          ->execute();
-        if (!empty($style)) {
-
-          $default_csl = $csl[$i];
-          break;
-        }
-        $i++;
-      }
+    // Check default csl exist or not
+    if (!in_array($default_csl, $cslItems)) {
+      $default_csl = array_values($cslItems)[0];
     }
     $form['csl_list'] = [
       '#type' => 'select',
