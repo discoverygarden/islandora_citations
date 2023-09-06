@@ -99,20 +99,20 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
         '#url' => Url::fromRoute('entity.islandora_citations.add_form'),
       ];
     }
-      else {
-        $config = $this->getConfiguration();
-        $defaultCSL = $config['default_csl'];
-        $form['csl_list'] = [
-          '#type' => 'select',
-          '#title' => $this->t('Select default CSL'),
-          '#options' => $this->citationHelper->getCitationEntityList(),
-          '#empty_option' => $this->t('- Select csl -'),
-          '#attributes' => ['aria-label' => $this->t('Select CSL')],
-          '#default_value' => $defaultCSL,
-        ];
-      }
+    else {
+      $config = $this->getConfiguration();
+      $defaultCSL = $config['default_csl'];
+      $form['csl_list'] = [
+        '#type' => 'select',
+        '#title' => $this->t('Select default CSL'),
+        '#options' => $this->citationHelper->getCitationEntityList(),
+        '#empty_option' => $this->t('- Select csl -'),
+        '#attributes' => ['aria-label' => $this->t('Select CSL')],
+        '#default_value' => $defaultCSL,
+      ];
+    }
 
-      return $form;
+    return $form;
   }
 
   /**
