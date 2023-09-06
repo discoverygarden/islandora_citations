@@ -90,7 +90,7 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
    * {@inheritdoc}
    */
   public function blockForm($form, FormStateInterface $form_state) {
-    if (empty($this->citationHelper->getCitationEntityList())) :
+    if (empty($this->citationHelper->getCitationEntityList())) {
       $form['add_citation'] = [
         '#type' => 'link',
         '#title' => [
@@ -98,7 +98,8 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
         ],
         '#url' => Url::fromRoute('entity.islandora_citations.add_form'),
       ];
-      else :
+    }
+      else {
         $config = $this->getConfiguration();
         $defaultCSL = $config['default_csl'];
         $form['csl_list'] = [
@@ -109,7 +110,7 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
           '#attributes' => ['aria-label' => $this->t('Select CSL')],
           '#default_value' => $defaultCSL,
         ];
-      endif;
+      }
 
       return $form;
   }
