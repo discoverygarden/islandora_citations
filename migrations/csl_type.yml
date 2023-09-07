@@ -2,6 +2,7 @@ id: csl_type
 label: CSL Type.
 migration_tags:
   - taxonomy
+migration_group: islandora
 source:
   plugin: embedded_data
   data_rows:
