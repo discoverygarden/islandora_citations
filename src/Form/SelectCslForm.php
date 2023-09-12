@@ -80,6 +80,7 @@ class SelectCslForm extends FormBase {
     if (!in_array($default_csl, $cslItems)) {
       $default_csl = array_values($cslItems)[0];
     }
+    $csl = !empty($default_csl) ? $this->getDefaultCitation($default_csl) : '';
     $form['csl_list'] = [
       '#type' => 'select',
       '#options' => $cslItems,
@@ -96,7 +97,7 @@ class SelectCslForm extends FormBase {
     ];
     $form['formatted-citation'] = [
       '#type' => 'item',
-      '#markup' => '<div id="formatted-citation">' . !empty($default_csl) ? $this->getDefaultCitation($default_csl) : '' . '</div>',
+      '#markup' => '<div id="formatted-citation">' . $csl . '</div>',
       '#theme_wrappers' => [],
     ];
 
