@@ -53,17 +53,18 @@ class IslandoraCitationsController extends ControllerBase {
     foreach ($fields as $field_definition) {
 
       if (!empty($field_definition->getTargetBundle())) {
-        $data = $field_definition->getThirdPartySetting('islandora_citations', 'csl_field') ?? $field_definition->getThirdPartySetting('islandora_citations', 'use_entity_checkbox');
-        $rows[] = [$field_definition->getName(),
-          $data ? implode(',', $data) : '-',
-          [
-            'data' => new FormattableMarkup('<a href=":link">@name</a>',
-          [
-            ':link' => 'fields/node.' . $node_type . '.' . $field_definition->getName(),
-            '@name' => $this->t('Edit'),
-          ]),
-          ],
-        ];
+        $data = $field_definition->getThirdPartySetting('islandora_citations', 'csl_field');
+        $dataForMappedEntities = $field_definition->getThirdPartySetting('islandora_citations', 'use_entity_checkbox');
+          $rows[] = [$field_definition->getName(),
+            $data ? implode(',', $data) : ($dataForMappedEntities ? 'Mapped from entity' : 'Not mapped'),
+            [
+              'data' => new FormattableMarkup('<a href=":link">@name</a>',
+                [
+                  ':link' => 'fields/node.' . $node_type . '.' . $field_definition->getName(),
+                  '@name' => $this->t('Edit'),
+                ]),
+            ],
+          ];
       }
     }
     return [
