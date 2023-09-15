@@ -55,8 +55,8 @@ class IslandoraCitationsController extends ControllerBase {
       if (!empty($field_definition->getTargetBundle())) {
         $data = $field_definition->getThirdPartySetting('islandora_citations', 'csl_field');
         $dataForMappedEntities = $field_definition->getThirdPartySetting('islandora_citations', 'use_entity_checkbox');
-          $rows[] = [$field_definition->getName(),
-            $data ? implode(',', $data) : ($dataForMappedEntities ? 'Mapped from entity' : '-'),
+        $rows[] = [$field_definition->getName(),
+          $data ? implode(',', $data) : ($dataForMappedEntities ? 'Mapped from entity' : '-'),
             [
               'data' => new FormattableMarkup('<a href=":link">@name</a>',
                 [
@@ -64,7 +64,7 @@ class IslandoraCitationsController extends ControllerBase {
                   '@name' => $this->t('Edit'),
                 ]),
             ],
-          ];
+        ];
       }
     }
     return [
