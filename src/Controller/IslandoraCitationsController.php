@@ -53,7 +53,7 @@ class IslandoraCitationsController extends ControllerBase {
     foreach ($fields as $field_definition) {
 
       if (!empty($field_definition->getTargetBundle())) {
-        $data = $field_definition->getThirdPartySetting('islandora_citations', 'csl_field');
+        $data = $field_definition->getThirdPartySetting('islandora_citations', 'csl_field') ?? $field_definition->getThirdPartySetting('islandora_citations', 'use_entity_checkbox');
         $rows[] = [$field_definition->getName(),
           $data ? implode(',', $data) : '-',
           [
