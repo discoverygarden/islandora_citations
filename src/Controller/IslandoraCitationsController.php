@@ -56,7 +56,7 @@ class IslandoraCitationsController extends ControllerBase {
         $data = $field_definition->getThirdPartySetting('islandora_citations', 'csl_field');
         $dataForMappedEntities = $field_definition->getThirdPartySetting('islandora_citations', 'use_entity_checkbox');
           $rows[] = [$field_definition->getName(),
-            $data ? implode(',', $data) : ($dataForMappedEntities ? 'Mapped from entity' : 'Not mapped'),
+            $data ? implode(',', $data) : ($dataForMappedEntities ? 'Mapped from entity' : '-'),
             [
               'data' => new FormattableMarkup('<a href=":link">@name</a>',
                 [
