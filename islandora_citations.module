@@ -69,7 +69,7 @@ function islandora_citations_form_field_config_edit_form_alter(&$form, FormState
 }
 
 /**
- * Entity builder for the contact form edit form with third party options.
+ * Entity builder for the config edit form with third party options.
  *
  * @see islandora_citations_field_config_edit_form_alter()
  */
