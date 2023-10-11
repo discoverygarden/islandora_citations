@@ -18,10 +18,15 @@ function islandora_citations_form_field_config_edit_form_alter(&$form, FormState
     $cslFieldOptions = array_combine($cslPropertyArray, $cslPropertyArray);
     $entity = $form_state->getFormObject()->getEntity();
 
+    $form['islandora_citations'] = [
+      '#title' => 'Citation Settings',
+      '#type' => 'fieldset'
+    ];
+
     // For typed relation, there is no separate mapping.
     // It can just be enabled and the mapping will be based on rel type.
     if ($entity->getType() == 'typed_relation') {
-      $form['third_party_settings']['islandora_citations']['use_entity_checkbox'] = [
+      $form['islandora_citations']['use_entity_checkbox'] = [
         '#title' => t('Map CSL from relation type'),
         '#description' => t('Enable mapping of this typed relation  field from the selected relation type. Rel types, author and creator both get mapped to author.'),
         '#type' => 'checkbox',
@@ -35,7 +40,7 @@ function islandora_citations_form_field_config_edit_form_alter(&$form, FormState
     // For ER fields, we allow both mapping selected from entity
     // or mapping just the title of the ER entity.
     if ($entity->getType() == 'entity_reference_revisions' || $entity->getType() == 'entity_reference') {
-      $form['third_party_settings']['islandora_citations']['use_entity_checkbox'] = [
+      $form['islandora_citations']['use_entity_checkbox'] = [
         '#title' => t('Map from referenced entity'),
         '#description' => \t('If this field is enabled, the csl mapping will be taken from the referenced entity. Make sure you map fields in the referenced entity before enabling this.'),
         '#type' => 'checkbox',
@@ -46,7 +51,7 @@ function islandora_citations_form_field_config_edit_form_alter(&$form, FormState
 
     // We do not allow direct mapping for typed relation or ERR.
     if (!($entity->getType() === 'entity_reference_revisions' || $entity->getType() === 'typed_relation')) {
-      $form['third_party_settings']['islandora_citations']['csl_field'] = [
+      $form['islandora_citations']['csl_field'] = [
         '#type' => 'select',
         '#title' => \t('CSL Field'),
         '#description' => \t('Select which CSL value this field should be mapped to.'),
@@ -57,8 +62,20 @@ function islandora_citations_form_field_config_edit_form_alter(&$form, FormState
       ];
     }
 
+    $form['#entity_builders'][] = 'islandora_citations_field_config_edit_form_form_builder';
     return $form;
   }
+}
+
+
+/**
+ * Entity builder for the contact form edit form with third party options.
+ *
+ * @see islandora_citations_field_config_edit_form_alter()
+ */
+function islandora_citations_field_config_edit_form_form_builder($entity_type, \Drupal\Core\Entity\EntityInterface $configEntity, &$form, FormStateInterface $form_state) {
+  $configEntity->setThirdPartySetting('islandora_citations', 'csl_field', $form_state->getValue('csl_field'));
+  $configEntity->setThirdPartySetting('islandora_citations', 'use_entity_checkbox', $form_state->getValue('use_entity_checkbox'));
 }
 
 /**
