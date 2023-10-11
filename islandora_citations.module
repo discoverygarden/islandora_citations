@@ -5,6 +5,7 @@
  * General hook implementations.
  */
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -20,7 +21,7 @@ function islandora_citations_form_field_config_edit_form_alter(&$form, FormState
 
     $form['islandora_citations'] = [
       '#title' => 'Citation Settings',
-      '#type' => 'fieldset'
+      '#type' => 'fieldset',
     ];
 
     // For typed relation, there is no separate mapping.
@@ -67,13 +68,12 @@ function islandora_citations_form_field_config_edit_form_alter(&$form, FormState
   }
 }
 
-
 /**
  * Entity builder for the contact form edit form with third party options.
  *
  * @see islandora_citations_field_config_edit_form_alter()
  */
-function islandora_citations_field_config_edit_form_form_builder($entity_type, \Drupal\Core\Entity\EntityInterface $configEntity, &$form, FormStateInterface $form_state) {
+function islandora_citations_field_config_edit_form_form_builder($entity_type, EntityInterface $configEntity, &$form, FormStateInterface $form_state) {
   $configEntity->setThirdPartySetting('islandora_citations', 'csl_field', $form_state->getValue('csl_field'));
   $configEntity->setThirdPartySetting('islandora_citations', 'use_entity_checkbox', $form_state->getValue('use_entity_checkbox'));
 }
