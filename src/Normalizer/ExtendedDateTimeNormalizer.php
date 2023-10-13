@@ -23,15 +23,11 @@ class ExtendedDateTimeNormalizer extends NormalizerBase {
     $dateValue = $object->getValue();
     if (!empty($dateValue['value'])) {
       // Check if date is a range. We only support date at this point.
-      if(!preg_match('/[^a-zA-Z0-9-]+/', $dateValue['value'], $matches)) {
-        // Only contains dashes
+      // @todo support other formats such as /date, date/, date ~ etc.
+      if (!preg_match('/[^a-zA-Z0-9-]+/', $dateValue['value'], $matches)) {
+        // Only contains dashes.
         $dateParts = explode('-', $dateValue['value']);
       }
-//      else {
-//        // Contains special character
-//        // @todo support other formats such as /date, date/, date ~ etc.
-//      }
-
     }
 
     return $this->formatDateVariables($dateParts ?? $dateValue);
