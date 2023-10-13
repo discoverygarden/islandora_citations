@@ -1,101 +1,56 @@
 id: csl_type
 label: CSL Type.
 migration_tags:
-  - taxonomy
+  - dgi_taxonomy
 migration_group: islandora
 source:
   plugin: embedded_data
   data_rows:
-    -
-      name: 'article'
-    -
-      name: 'article-journal'
-    -
-      name: 'article-magazine'
-    -
-      name: 'article-newspaper'
-    -
-      name: 'bill'
-    -
-      name: 'book'
-    -
-      name: 'broadcast'
-    -
-      name: 'chapter'
-    -
-      name: 'classic'
-    -
-      name: 'collection'
-    -
-      name: 'dataset'
-    -
-      name: 'document'
-    -
-      name: 'entry'
-    -
-      name: 'entry-dictionary'
-    -
-      name: 'entry-encyclopedia'
-    -
-      name: 'event'
-    -
-      name: 'figure'
-    -
-      name: 'graphic'
-    -
-      name: 'hearing'
-    -
-      name: 'interview'
-    -
-      name: 'legal_case'
-    -
-      name: 'legislation'
-    -
-      name: 'manuscript'
-    -
-      name: 'map'
-    -
-      name: 'motion_picture'
-    -
-      name: 'musical_score'
-    -
-      name: 'pamphlet'
-    -
-      name: 'paper-conference'
-    -
-      name: 'patent'
-    -
-      name: 'performance'
-    -
-      name: 'periodical'
-    -
-      name: 'personal_communication'
-    -
-      name: 'post'
-    -
-      name: 'post-weblog'
-    -
-      name: 'regulation'
-    -
-      name: 'report'
-    -
-      name: 'review'
-    -
-      name: 'review-book'
-    -
-      name: 'software'
-    -
-      name: 'song'
-    -
-      name: 'speech'
-    -
-      name: 'standard'
-    -
-      name: 'thesis'
-    -
-      name: 'treaty'
-    -
-      name: 'Webpage'
+    - name: 'article'
+    - name: 'article-journal'
+    - name: 'article-magazine'
+    - name: 'article-newspaper'
+    - name: 'bill'
+    - name: 'book'
+    - name: 'broadcast'
+    - name: 'chapter'
+    - name: 'classic'
+    - name: 'collection'
+    - name: 'dataset'
+    - name: 'document'
+    - name: 'entry'
+    - name: 'entry-dictionary'
+    - name: 'entry-encyclopedia'
+    - name: 'event'
+    - name: 'figure'
+    - name: 'graphic'
+    - name: 'hearing'
+    - name: 'interview'
+    - name: 'legal_case'
+    - name: 'legislation'
+    - name: 'manuscript'
+    - name: 'map'
+    - name: 'motion_picture'
+    - name: 'musical_score'
+    - name: 'pamphlet'
+    - name: 'paper-conference'
+    - name: 'patent'
+    - name: 'performance'
+    - name: 'periodical'
+    - name: 'personal_communication'
+    - name: 'post'
+    - name: 'post-weblog'
+    - name: 'regulation'
+    - name: 'report'
+    - name: 'review'
+    - name: 'review-book'
+    - name: 'software'
+    - name: 'song'
+    - name: 'speech'
+    - name: 'standard'
+    - name: 'thesis'
+    - name: 'treaty'
+    - name: 'webpage'
   ids:
     name:
       type: string
