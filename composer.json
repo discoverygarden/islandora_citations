@@ -3,6 +3,7 @@
     "type": "drupal-module",
       "require": {
         "seboettg/citeproc-php": "^2.6.0",
-        "webflo/drupal-finder": "^1.2.2"
+        "webflo/drupal-finder": "^1.2.2",
+        "islandora/controlled_access_terms": "^2"
     }
 }

@@ -7,4 +7,5 @@ dependencies:
   - drupal:field_permissions
   - drupal:node
   - drupal:taxonomy
+  - controlled_access_terms:controlled_access_terms
 configure: entity.islandora_citations.collection
