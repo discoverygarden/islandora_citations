@@ -81,14 +81,7 @@ class IslandoraCitationsHelper {
    * Cet citations styles from config entity.
    */
   public function getCitationEntityList() {
-    $citationIds = $this->citationsStorage->getQuery()->execute();
-    $citationEntities = $this->citationsStorage->loadMultiple($citationIds);
-    $citationList = [];
-    foreach ($citationEntities as $citationEntity) {
-      $citationList[$citationEntity->id()] = $citationEntity->label();
-    }
-
-    return $citationList;
+    return $this->citationsStorage->getQuery()->execute();
   }
 
   /**
@@ -148,10 +141,6 @@ class IslandoraCitationsHelper {
    */
   public function encodeEntityForCiteproc(EntityInterface $entity) {
     $cslEncodedData = $this->serializer->normalize($entity, 'csl-json');
-    if (!isset($cslEncodedData['type'])) {
-      $this->logger->error('CSL encoding error. Type is a mandatory field.');
-      throw new \Exception('CSL encoding error. Type is a mandatory field.');
-    }
     return (object) $cslEncodedData;
   }
 

@@ -21,6 +21,12 @@ class SelectCslForm extends FormBase {
    */
   protected $citationHelper;
   /**
+   * CSL type value from block.
+   *
+   * @var string
+   */
+  private $blockCSLType;
+  /**
    * The route match.
    *
    * @var \Drupal\Core\Routing\RouteMatchInterface
@@ -65,6 +71,8 @@ class SelectCslForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $block_storage = $this->entityTypeManager->getStorage('block');
+    // Check if the value is set in block, newly added field.
+    // Pass it in renderCitation.
     $blocks = $block_storage->loadMultiple();
     $cslItems = $this->citationHelper->getCitationEntityList();
     $default_csl = array_values($cslItems)[0];
@@ -73,6 +81,7 @@ class SelectCslForm extends FormBase {
       if (isset($settings['id'])) {
         if ($settings['id'] == 'islandora_citations_display_citations') {
           $default_csl = !empty($settings['default_csl']) ? $settings['default_csl'] : array_values($cslItems)[0];
+          $this->blockCSLType = $settings['default_csl_type'];
         }
       }
     }
@@ -87,7 +96,7 @@ class SelectCslForm extends FormBase {
       '#empty_option' => $this->t('- Select csl -'),
       '#default_value' => $default_csl,
       '#ajax' => [
-        'callback' => '::renderCitation',
+        'callback' => '::renderAjaxCitation',
         'wrapper' => 'formatted-citation',
         'method' => 'html',
         'event' => 'change',
@@ -109,20 +118,15 @@ class SelectCslForm extends FormBase {
   /**
    * Render CSL response on ajax call.
    */
-  public function renderCitation(array $form, FormStateInterface $form_state) {
+  public function renderAjaxCitation(array $form, FormStateInterface $form_state) {
     $csl_name = $form_state->getValue('csl_list');
     if ($csl_name == '') {
       return [
         '#children' => '',
       ];
     }
-    $entity = $this->routeMatch->getParameter('node');
-    $citationItems[] = $this->citationHelper->encodeEntityForCiteproc($entity);
-
-    $style = $this->citationHelper->loadStyle($csl_name);
-
-    $rendered = $this->citationHelper->renderWithCiteproc($citationItems, $style);
-
+    // Method call to render citation.
+    $rendered = $this->renderCitation($csl_name);
     $response = [
       '#children' => $rendered['data'],
     ];
@@ -143,19 +147,35 @@ class SelectCslForm extends FormBase {
    *   Block default csl name.
    */
   public function getDefaultCitation($csl_name) {
-    $entity = $this->routeMatch->getParameter('node');
     if (empty($csl_name)) {
       return $this->t('Select CSL');
     }
     try {
-      $citationItems[] = $this->citationHelper->encodeEntityForCiteproc($entity);
-      $style = $this->citationHelper->loadStyle($csl_name);
-      $rendered = $this->citationHelper->renderWithCiteproc($citationItems, $style);
+      // Method call to render citation.
+      $rendered = $this->renderCitation($csl_name);
       return $rendered['data'];
     }
     catch (\Throwable $e) {
       return $e->getMessage();
     }
+  }
+
+  /**
+   * Get rendered data.
+   *
+   * @param string $csl_name
+   *   Block default csl name.
+   */
+  private function renderCitation($csl_name) {
+    $entity = $this->routeMatch->getParameter('node');
+    $citationItems[] = $this->citationHelper->encodeEntityForCiteproc($entity);
+    $blockCSLType = $this->blockCSLType;
+    if (!isset($citationItems[0]->type)) {
+      $citationItems[0]->type = $blockCSLType;
+    }
+    $style = $this->citationHelper->loadStyle($csl_name);
+    $rendered = $this->citationHelper->renderWithCiteproc($citationItems, $style);
+    return $rendered;
   }
 
 }
