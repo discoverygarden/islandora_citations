@@ -3,6 +3,7 @@
 namespace Drupal\islandora_citations\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -20,6 +21,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
 
   /**
    * The form builder.
@@ -43,13 +51,16 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
    *   The plugin ID for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager service.
    * @param \Drupal\Core\Form\FormBuilderInterface $formBuilder
    *   The form builder instance.
    * @param \Drupal\islandora_citations\IslandoraCitationsHelper $citationHelper
    *   The CitationHelper instance.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, FormBuilderInterface $formBuilder, IslandoraCitationsHelper $citationHelper) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entityTypeManager, FormBuilderInterface $formBuilder, IslandoraCitationsHelper $citationHelper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->entityTypeManager = $entityTypeManager;
     $this->formBuilder = $formBuilder;
     $this->citationHelper = $citationHelper;
   }
@@ -62,6 +73,7 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
       $configuration,
       $plugin_id,
       $plugin_definition,
+      $container->get('entity_type.manager'),
       $container->get('form_builder'),
       $container->get('islandora_citations.helper')
     );
@@ -83,6 +95,7 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
   public function defaultConfiguration() {
     return [
       'default_csl' => '',
+      'default_csl_type' => 'Webpage',
     ];
   }
 
@@ -102,6 +115,7 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
     else {
       $config = $this->getConfiguration();
       $defaultCSL = $config['default_csl'];
+      $defaultCSLType = $config['default_csl_type'];
       $form['csl_list'] = [
         '#type' => 'select',
         '#title' => $this->t('Select default CSL'),
@@ -109,6 +123,18 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
         '#empty_option' => $this->t('- Select csl -'),
         '#attributes' => ['aria-label' => $this->t('Select CSL')],
         '#default_value' => $defaultCSL,
+      ];
+      $cslTypesVocab = $this->entityTypeManager->getStorage('taxonomy_term')->loadTree('csl_type');
+      foreach ($cslTypesVocab as $vocab) {
+        $cslTypesNames[$vocab->name] = $vocab->name;
+      }
+      $form['field_csl_type'] = [
+        '#type' => 'select',
+        '#title' => $this->t('Object Type (Citation)'),
+        '#options' => $cslTypesNames,
+        '#empty_option' => $this->t('- Select Citation -'),
+        '#attributes' => ['aria-label' => $this->t('Select Citation')],
+        '#default_value' => $defaultCSLType,
       ];
     }
 
@@ -121,6 +147,7 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
   public function blockSubmit($form, FormStateInterface $form_state) {
     $values = $form_state->getValues();
     $this->configuration['default_csl'] = $values['csl_list'];
+    $this->configuration['default_csl_type'] = $values['field_csl_type'];
   }
 
 }
