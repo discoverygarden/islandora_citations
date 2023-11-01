@@ -50,6 +50,7 @@ class IslandoraCitationsController extends ControllerBase {
     ];
     $fields = $this->entityFieldManager->getFieldDefinitions('node', $node_type);
 
+    $rows = [];
     foreach ($fields as $field_definition) {
 
       if (!empty($field_definition->getTargetBundle())) {
@@ -93,6 +94,7 @@ class IslandoraCitationsController extends ControllerBase {
     ];
     $fields = $this->entityFieldManager->getFieldDefinitions('paragraph', $paragraphs_type->id());
 
+    $rows = [];
     foreach ($fields as $field_definition) {
       if (!empty($field_definition->getTargetBundle())) {
         $data = $field_definition->getThirdPartySetting('islandora_citations', 'csl_field');
