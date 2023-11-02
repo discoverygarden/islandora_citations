@@ -2,7 +2,7 @@ name: Islandora citations
 type: module
 description: Provides a service to manage citations.
 package: Custom
-core_version_requirement: ^9 || ^10
+core_version_requirement: ^9
 dependencies:
   - drupal:field_permissions
   - drupal:node
