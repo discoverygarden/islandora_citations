@@ -57,9 +57,13 @@ class DateTimeNormalizer extends NormalizerBase {
     assert($datetime instanceof DateTimeInterface);
     $drupal_date_time = $datetime->getDateTime()->setTimezone($this->getNormalizationTimezone());
     if ($drupal_date_time === NULL) {
-      return $drupal_date_time;
+      return NULL;
     }
+
     $date = $this->dateFormatter->format($drupal_date_time->getTimestamp(), 'custom', 'Y-m-d');
+
+    $element = [];
+
     foreach ($context['csl-map'] as $cslField) {
       $element[$cslField] = $date;
     }
