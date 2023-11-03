@@ -19,7 +19,7 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
    * {@inheritdoc}
    */
   public function supportsNormalization($data, ?string $format = NULL, array $context = []): bool {
-    return $format === static::FORMAT && parent::supportsNormalization($data, $format);
+    return $format === static::FORMAT && parent::supportsNormalization($data, $format, $context);
   }
 
   /**
