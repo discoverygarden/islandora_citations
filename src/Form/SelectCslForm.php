@@ -77,7 +77,7 @@ class SelectCslForm extends FormBase {
       }
     }
     // Check default csl exist or not.
-    if (!in_array($default_csl, $cslItems)) {
+    if (!array_key_exists($default_csl, $cslItems)) {
       $default_csl = array_values($cslItems)[0];
     }
     $csl = !empty($default_csl) ? $this->getDefaultCitation($default_csl) : '';
