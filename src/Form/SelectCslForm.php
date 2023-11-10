@@ -165,6 +165,8 @@ class SelectCslForm extends FormBase {
    *
    * @param string $csl_name
    *   Block default csl name.
+   *
+   * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
    */
   private function renderCitation($csl_name) {
     $entity = $this->routeMatch->getParameter('node');
@@ -174,8 +176,7 @@ class SelectCslForm extends FormBase {
       $citationItems[0]->type = $blockCSLType;
     }
     $style = $this->citationHelper->loadStyle($csl_name);
-    $rendered = $this->citationHelper->renderWithCiteproc($citationItems, $style);
-    return $rendered;
+    return $this->citationHelper->renderWithCiteproc($citationItems, $style);
   }
 
 }

@@ -81,7 +81,14 @@ class IslandoraCitationsHelper {
    * Cet citations styles from config entity.
    */
   public function getCitationEntityList() {
-    return $this->citationsStorage->getQuery()->execute();
+    $citationIds = $this->citationsStorage->getQuery()->execute();
+    $citationEntities = $this->citationsStorage->loadMultiple($citationIds);
+    $citationList = [];
+    foreach ($citationEntities as $citationEntity) {
+      $citationList[$citationEntity->id()] = $citationEntity->label();
+    }
+
+    return $citationList;
   }
 
   /**
