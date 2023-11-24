@@ -80,7 +80,7 @@ class IslandoraCitationsHelper {
   /**
    * Cet citations styles from config entity.
    */
-  public function getCitationEntityList() {
+  public function getCitationEntityList(): array {
     $citationIds = $this->citationsStorage->getQuery()->execute();
     $citationEntities = $this->citationsStorage->loadMultiple($citationIds);
     $citationList = [];
@@ -94,7 +94,7 @@ class IslandoraCitationsHelper {
   /**
    * Load styles from citations style language.
    */
-  public function getAllCslsFromCiteproc() {
+  public function getAllCslsFromCiteproc(): array {
     $drupalFinder = new DrupalFinder();
     $drupalFinder->locateRoot(DRUPAL_ROOT);
     $vendorDir = $drupalFinder->getVendorDir();
@@ -110,6 +110,8 @@ class IslandoraCitationsHelper {
 
   /**
    * Load style string from entity or file.
+   *
+   * @throws \Seboettg\CiteProc\Exception\CiteProcException
    */
   public function loadStyle($styleName, $styleType = 'entity') {
     if ($styleType == 'entity') {
@@ -125,8 +127,6 @@ class IslandoraCitationsHelper {
 
   /**
    * Render entity with citeproc.
-   *
-   * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
    */
   public function renderWithCiteproc(array $data, string $style, string $mode = 'bibliography') {
     try {
@@ -146,12 +146,8 @@ class IslandoraCitationsHelper {
    * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
    * @throws \Exception
    */
-  public function encodeEntityForCiteproc(EntityInterface $entity) {
+  public function encodeEntityForCiteproc(EntityInterface $entity): object {
     $cslEncodedData = $this->serializer->normalize($entity, 'csl-json');
-    if (!isset($cslEncodedData['type'])) {
-      $this->logger->error('CSL encoding error. Type is a mandatory field.');
-      throw new \Exception('CSL encoding error. Type is a mandatory field.');
-    }
     return (object) $cslEncodedData;
   }
 
