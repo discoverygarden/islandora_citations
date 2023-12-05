@@ -26,11 +26,13 @@ class ExtendedDateTimeNormalizer extends NormalizerBase {
     if (!empty($dateValue['value'])) {
       $parser = EdtfFactory::newParser();
       $parsed = $parser->parse($dateValue['value']);
-      $edtf = $parsed->getEdtfValue();
-      // XXX: Only support singular EDTF dates at this time, exit out if it's
-      // an interval or set.
-      if ($edtf instanceof ExtDate) {
-        return $this->formatDateVariables(explode('-', $edtf->iso8601()));
+      if ($parsed->isValid()) {
+        $edtf = $parsed->getEdtfValue();
+        // XXX: Only support singular EDTF dates at this time, exit out if it's
+        // an interval or set.
+        if ($edtf instanceof ExtDate) {
+          return $this->formatDateVariables(explode('-', $edtf->iso8601()));
+        }
       }
     }
     return [];
