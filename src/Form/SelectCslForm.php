@@ -112,7 +112,7 @@ class SelectCslForm extends FormBase {
 
     $form['actions']['submit'] = [
       '#type' => 'button',
-      '#value' => $this->t('Copy Citation'),
+      '#value' => $this->t('Copy to Clipboard'),
       '#attributes' => [
         'onclick' => 'return false;',
         'class' => ['clipboard-button'],
