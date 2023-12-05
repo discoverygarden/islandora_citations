@@ -33,7 +33,7 @@ class ExtendedDateTimeNormalizer extends NormalizerBase {
         if ($edtf instanceof ExtDate) {
           return $this->formatDateVariables(explode('-', $edtf->iso8601()));
         }
-      }  
+      }
     }
     return [];
   }
