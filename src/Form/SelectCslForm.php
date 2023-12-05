@@ -110,6 +110,21 @@ class SelectCslForm extends FormBase {
       '#theme_wrappers' => [],
     ];
 
+    $form['actions']['submit'] = [
+      '#type' => 'button',
+      '#value' => $this->t('Copy Citation'),
+      '#attributes' => [
+        'onclick' => 'return false;',
+        'class' => ['clipboard-button'],
+        'data-clipboard-target' => '#formatted-citation',
+      ],
+      '#attached' => [
+        'library' => [
+          'islandora_citations/drupal',
+        ],
+      ],
+    ];
+
     $form['#cache']['contexts'][] = 'url';
     $form['#theme'] = 'display_citations';
     return $form;
