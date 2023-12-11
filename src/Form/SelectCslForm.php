@@ -140,13 +140,19 @@ class SelectCslForm extends FormBase {
         '#children' => '',
       ];
     }
-    // Method call to render citation.
-    $rendered = $this->renderCitation($csl_name);
-    $response = [
-      '#children' => $rendered['data'],
-    ];
 
-    return $form['data'] = $response;
+    try {
+      // Method call to render citation.
+      $rendered = $this->renderCitation($csl_name);
+      $response = [
+        '#children' => $rendered['data'],
+      ];
+
+      return $form['data'] = $response;
+    }
+    catch (\Throwable $e) {
+      return $e->getMessage();
+    }
   }
 
   /**
@@ -190,8 +196,14 @@ class SelectCslForm extends FormBase {
     if (!isset($citationItems[0]->type)) {
       $citationItems[0]->type = $blockCSLType;
     }
-    $style = $this->citationHelper->loadStyle($csl_name);
-    return $this->citationHelper->renderWithCiteproc($citationItems, $style);
+
+    try {
+      $style = $this->citationHelper->loadStyle($csl_name);
+      return $this->citationHelper->renderWithCiteproc($citationItems, $style);
+    }
+    catch (\Throwable $e) {
+      return [$e->getMessage()];
+    }
   }
 
 }

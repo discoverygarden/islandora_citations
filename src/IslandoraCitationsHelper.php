@@ -147,8 +147,13 @@ class IslandoraCitationsHelper {
    * @throws \Exception
    */
   public function encodeEntityForCiteproc(EntityInterface $entity): object {
+    try {
     $cslEncodedData = $this->serializer->normalize($entity, 'csl-json');
     return (object) $cslEncodedData;
+    }
+    catch (\Exception $e) {
+      $this->logger->error($e->getMessage());
+    }
   }
 
 }
