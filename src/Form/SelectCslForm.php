@@ -107,14 +107,15 @@ class SelectCslForm extends FormBase {
     }
     $csl = !empty($default_csl) ? $this->getDefaultCitation($default_csl) : '';
 
-    // Due to normalisation we receive errors in string and then it display
-    // same string as output.
-    // We expect output in a specific format ex:
+    // We receive error message as a string, and then we display same string
+    // as output.
+    // We expect output in a specific format when there is no error as below
     // <div class="csl-bib-body">
     //  <div class="csl-entry">“Text_Output”</div>
     // </div>.
-    // When there is an error we don't have above div structure.
-    // Based on that we will do the error handling.
+    // Based on `csl` text output, we will do the error handling.
+    // When HTML output is not as expected, add a form element which indicates
+    // we received error.
     if (!str_starts_with($csl, '<div class="csl-bib-body">')) {
       // Add a custom markup element to the form.
       $form['error_handling_element'] = [
