@@ -35,6 +35,7 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
    * @var \Drupal\Core\Form\FormBuilderInterface
    */
   protected $formBuilder;
+
   /**
    * Citation helper service.
    *
@@ -83,10 +84,16 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
    * {@inheritdoc}
    */
   public function build() {
-    if (!empty($this->citationHelper->getCitationEntityList())) :
-      $build['form'] = $this->formBuilder->getForm('Drupal\islandora_citations\Form\SelectCslForm');
+    $cite_this_form = $this->formBuilder->getForm('Drupal\islandora_citations\Form\SelectCslForm');
+    if (!empty($cite_this_form['error_handling_element'])) {
+      // Hide the entire block.
+      return NULL;
+    }
+
+    if (!empty($this->citationHelper->getCitationEntityList())) {
+      $build['form'] = $cite_this_form;
       return $build;
-    endif;
+    }
   }
 
   /**
