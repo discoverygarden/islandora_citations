@@ -9,6 +9,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\path_alias\AliasManagerInterface;
 use Drupal\islandora_citations\IslandoraCitationsHelper;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -22,18 +23,21 @@ class SelectCslForm extends FormBase {
    * @var Drupal\islandora_citations\IslandoraCitationsHelper
    */
   protected $citationHelper;
+
   /**
    * CSL type value from block.
    *
    * @var string
    */
   private $blockCSLType;
+
   /**
    * The route match.
    *
    * @var \Drupal\Core\Routing\RouteMatchInterface
    */
   protected $routeMatch;
+
   /**
    * The entity type manager.
    *
@@ -49,16 +53,25 @@ class SelectCslForm extends FormBase {
   protected $pathAliasManager;
 
   /**
+   * The logger service.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(IslandoraCitationsHelper $citationHelper,
                               RouteMatchInterface $route_match,
                               EntityTypeManagerInterface $entity_type_manager,
-                              AliasManagerInterface $pathAliasManager) {
+                              AliasManagerInterface $pathAliasManager,
+                              LoggerInterface $logger) {
     $this->citationHelper = $citationHelper;
     $this->routeMatch = $route_match;
     $this->entityTypeManager = $entity_type_manager;
     $this->pathAliasManager = $pathAliasManager;
+    $this->logger = $logger;
   }
 
   /**
@@ -69,7 +82,8 @@ class SelectCslForm extends FormBase {
       $container->get('islandora_citations.helper'),
       $container->get('current_route_match'),
       $container->get('entity_type.manager'),
-      $container->get('path_alias.manager')
+      $container->get('path_alias.manager'),
+      $container->get('logger.factory')->get('islandora_citations')
     );
   }
 
@@ -104,6 +118,28 @@ class SelectCslForm extends FormBase {
       $default_csl = array_values($cslItems)[0];
     }
     $csl = !empty($default_csl) ? $this->getDefaultCitation($default_csl) : '';
+
+    // We receive error message as a string, and then we display same string
+    // as output.
+    // We expect output in a specific format when there is no error as below
+    // <div class="csl-bib-body">
+    // <div class="csl-entry">“Text_Output”</div>
+    // </div>.
+    // Based on `csl` text output, we will do the error handling.
+    // When HTML output is not as expected, add a form element which indicates
+    // we received error.
+    if (!str_starts_with($csl, '<div class="csl-bib-body">')) {
+      // Add a custom markup element to the form.
+      $form['error_handling_element'] = [
+        '#markup' => 'Form with error',
+      ];
+
+      // Log error message.
+      $this->logger->error($csl);
+
+      return $form;
+    }
+
     $form['csl_list'] = [
       '#type' => 'select',
       '#options' => $cslItems,
@@ -154,13 +190,19 @@ class SelectCslForm extends FormBase {
         '#children' => '',
       ];
     }
-    // Method call to render citation.
-    $rendered = $this->renderCitation($csl_name);
-    $response = [
-      '#children' => $rendered['data'],
-    ];
 
-    return $form['data'] = $response;
+    try {
+      // Method call to render citation.
+      $rendered = $this->renderCitation($csl_name);
+      $response = [
+        '#children' => $rendered['data'],
+      ];
+
+      return $response;
+    }
+    catch (\Throwable $e) {
+      return $e->getMessage();
+    }
   }
 
   /**
