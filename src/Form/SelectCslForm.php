@@ -6,6 +6,8 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+use Drupal\path_alias\AliasManagerInterface;
 use Drupal\islandora_citations\IslandoraCitationsHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -40,12 +42,23 @@ class SelectCslForm extends FormBase {
   protected $entityTypeManager;
 
   /**
+   * Definition of path alias manager.
+   *
+   * @var \Drupal\path_alias\AliasManager
+   */
+  protected $pathAliasManager;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(IslandoraCitationsHelper $citationHelper, RouteMatchInterface $route_match, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(IslandoraCitationsHelper $citationHelper,
+                              RouteMatchInterface $route_match,
+                              EntityTypeManagerInterface $entity_type_manager,
+                              AliasManagerInterface $pathAliasManager) {
     $this->citationHelper = $citationHelper;
     $this->routeMatch = $route_match;
     $this->entityTypeManager = $entity_type_manager;
+    $this->pathAliasManager = $pathAliasManager;
   }
 
   /**
@@ -55,7 +68,8 @@ class SelectCslForm extends FormBase {
     return new static(
       $container->get('islandora_citations.helper'),
       $container->get('current_route_match'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('path_alias.manager')
     );
   }
 
@@ -190,6 +204,13 @@ class SelectCslForm extends FormBase {
     if (!isset($citationItems[0]->type)) {
       $citationItems[0]->type = $blockCSLType;
     }
+
+    // If no data for URL field, pass node url.
+    if (empty($citationItems[0]->URL)) {
+      $node_url = $this->pathAliasManager->getAliasByPath('/node/' . $entity->id());
+      $citationItems[0]->URL = Url::fromUserInput($node_url)->setAbsolute()->toString();;
+    }
+
     $style = $this->citationHelper->loadStyle($csl_name);
     return $this->citationHelper->renderWithCiteproc($citationItems, $style);
   }
