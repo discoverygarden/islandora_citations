@@ -208,7 +208,7 @@ class SelectCslForm extends FormBase {
     // If no data for URL field, pass node url.
     if (empty($citationItems[0]->URL)) {
       $node_url = $this->pathAliasManager->getAliasByPath('/node/' . $entity->id());
-      $citationItems[0]->URL = Url::fromUserInput($node_url)->setAbsolute()->toString();;
+      $citationItems[0]->URL = Url::fromUserInput($node_url)->setAbsolute()->toString();
     }
 
     $style = $this->citationHelper->loadStyle($csl_name);
