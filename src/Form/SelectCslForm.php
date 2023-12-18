@@ -111,7 +111,7 @@ class SelectCslForm extends FormBase {
     // as output.
     // We expect output in a specific format when there is no error as below
     // <div class="csl-bib-body">
-    //  <div class="csl-entry">“Text_Output”</div>
+    // <div class="csl-entry">“Text_Output”</div>
     // </div>.
     // Based on `csl` text output, we will do the error handling.
     // When HTML output is not as expected, add a form element which indicates
