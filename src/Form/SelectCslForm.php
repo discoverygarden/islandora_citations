@@ -2,6 +2,7 @@
 
 namespace Drupal\islandora_citations\Form;
 
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -30,6 +31,13 @@ class SelectCslForm extends FormBase {
    * @var string
    */
   private $blockCSLType;
+
+  /**
+   * CSL type value from block.
+   *
+   * @var string
+   */
+  private $blockCSLAccessedDateFormate;
 
   /**
    * The route match.
@@ -110,6 +118,7 @@ class SelectCslForm extends FormBase {
         if ($settings['id'] == 'islandora_citations_display_citations') {
           $default_csl = !empty($settings['default_csl']) ? $settings['default_csl'] : array_values($cslItems)[0];
           $this->blockCSLType = $settings['default_csl_type'];
+          $this->blockCSLAccessedDateFormate = $settings['csl_accessed_date_format'] ?? '';
         }
       }
     }
@@ -251,6 +260,13 @@ class SelectCslForm extends FormBase {
     if (empty($citationItems[0]->URL)) {
       $node_url = $this->pathAliasManager->getAliasByPath('/node/' . $entity->id());
       $citationItems[0]->URL = Url::fromUserInput($node_url)->setAbsolute()->toString();
+    }
+
+    // If Accessed is configured, add current date.
+    if (!empty($this->blockCSLAccessedDateFormate)) {
+      $current_date = new DrupalDateTime('now');
+      $citationItems[0]->URL = $citationItems[0]->URL . ' ' .
+        $current_date->format($this->blockCSLAccessedDateFormate);
     }
 
     $style = $this->citationHelper->loadStyle($csl_name);
