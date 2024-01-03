@@ -118,7 +118,7 @@ class SelectCslForm extends FormBase {
         if ($settings['id'] == 'islandora_citations_display_citations') {
           $default_csl = !empty($settings['default_csl']) ? $settings['default_csl'] : array_values($cslItems)[0];
           $this->blockCSLType = $settings['default_csl_type'];
-          $this->blockCSLAccessedDateFormate = $settings['csl_accessed_date_format'] ?? '';
+          $this->blockCSLAccessedDateFormat = $settings['csl_accessed_date_format'] ?? '';
         }
       }
     }
@@ -263,10 +263,10 @@ class SelectCslForm extends FormBase {
     }
 
     // If Accessed is configured, add current date.
-    if (!empty($this->blockCSLAccessedDateFormate)) {
+    if (!empty($this->blockCSLAccessedDateFormat)) {
       $current_date = new DrupalDateTime('now');
       $citationItems[0]->URL = $citationItems[0]->URL . ' ' .
-        $current_date->format($this->blockCSLAccessedDateFormate);
+        $current_date->format($this->blockCSLAccessedDateFormat);
     }
 
     $style = $this->citationHelper->loadStyle($csl_name);
