@@ -37,7 +37,7 @@ class SelectCslForm extends FormBase {
    *
    * @var string
    */
-  private $blockCSLAccessedDateFormate;
+  private $blockCSLAccessedDateFormat;
 
   /**
    * The route match.
