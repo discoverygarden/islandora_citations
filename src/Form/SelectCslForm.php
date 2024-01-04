@@ -275,7 +275,7 @@ class SelectCslForm extends FormBase {
       ];
 
       // Assign the inner object to the outer array.
-      $citationItems[0]->accessed = (object)['date-parts' => [$date_parts]];
+      $citationItems[0]->accessed = (object) ['date-parts' => [$date_parts]];
     }
 
     $style = $this->citationHelper->loadStyle($csl_name);
