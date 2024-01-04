@@ -262,11 +262,20 @@ class SelectCslForm extends FormBase {
       $citationItems[0]->URL = Url::fromUserInput($node_url)->setAbsolute()->toString();
     }
 
-    // If Accessed is configured, add current date.
-    if (!empty($this->blockCSLAccessedDateFormat)) {
+    // If Accessed is configured, add the current date.
+    // TODO : Check for configuration requirement.
+    if (empty($citationItems[0]->accessed) && empty($this->blockCSLAccessedDateFormate)) {
       $current_date = new DrupalDateTime('now');
-      $citationItems[0]->URL = $citationItems[0]->URL . ' ' .
-        $current_date->format($this->blockCSLAccessedDateFormat);
+
+      // TODO : User CSL JSON date formatting.
+      $date_parts = [
+        $current_date->format('Y'),
+        $current_date->format('m'),
+        $current_date->format('d'),
+      ];
+
+      // Assign the inner object to the outer array
+      $citationItems[0]->accessed = (object)['date-parts' => [$date_parts]];
     }
 
     $style = $this->citationHelper->loadStyle($csl_name);
