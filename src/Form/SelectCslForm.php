@@ -263,18 +263,18 @@ class SelectCslForm extends FormBase {
     }
 
     // If Accessed is configured, add the current date.
-    // TODO : Check for configuration requirement.
+    // @todo Check for configuration requirement.
     if (empty($citationItems[0]->accessed) && empty($this->blockCSLAccessedDateFormate)) {
       $current_date = new DrupalDateTime('now');
 
-      // TODO : User CSL JSON date formatting.
+      // @todo User CSL JSON date formatting.
       $date_parts = [
         $current_date->format('Y'),
         $current_date->format('m'),
         $current_date->format('d'),
       ];
 
-      // Assign the inner object to the outer array
+      // Assign the inner object to the outer array.
       $citationItems[0]->accessed = (object)['date-parts' => [$date_parts]];
     }
 
