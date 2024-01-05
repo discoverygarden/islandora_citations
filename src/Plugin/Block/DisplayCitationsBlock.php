@@ -123,7 +123,6 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
       $config = $this->getConfiguration();
       $defaultCSL = $config['default_csl'];
       $defaultCSLType = $config['default_csl_type'];
-      $accessedDateFormat = $config['csl_accessed_date_format'];
       $form['csl_list'] = [
         '#type' => 'select',
         '#title' => $this->t('Select default CSL'),
@@ -145,13 +144,6 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
         '#default_value' => $defaultCSLType,
       ];
 
-      $form['field_accessed'] = [
-        '#type' => 'textfield',
-        '#title' => $this->t('Accessed'),
-        '#description' => $this->t('This will show current date if configured. Date format ex. F d, Y.'),
-        '#attributes' => ['aria-label' => $this->t('Accessed')],
-        '#default_value' => $accessedDateFormat,
-      ];
     }
 
     return $form;
@@ -164,7 +156,6 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
     $values = $form_state->getValues();
     $this->configuration['default_csl'] = $values['csl_list'];
     $this->configuration['default_csl_type'] = $values['field_csl_type'];
-    $this->configuration['csl_accessed_date_format'] = $values['field_accessed'];
   }
 
 }

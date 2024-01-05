@@ -118,7 +118,6 @@ class SelectCslForm extends FormBase {
         if ($settings['id'] == 'islandora_citations_display_citations') {
           $default_csl = !empty($settings['default_csl']) ? $settings['default_csl'] : array_values($cslItems)[0];
           $this->blockCSLType = $settings['default_csl_type'];
-          $this->blockCSLAccessedDateFormat = $settings['csl_accessed_date_format'] ?? '';
         }
       }
     }
@@ -262,21 +261,16 @@ class SelectCslForm extends FormBase {
       $citationItems[0]->URL = Url::fromUserInput($node_url)->setAbsolute()->toString();
     }
 
-    // If Accessed is configured, add the current date.
-    // @todo Check for configuration requirement.
-    if (empty($citationItems[0]->accessed) && empty($this->blockCSLAccessedDateFormate)) {
-      $current_date = new DrupalDateTime('now');
+    // Pass the current date to Accessed.
+    $current_date = new DrupalDateTime('now');
 
-      // @todo User CSL JSON date formatting.
-      $date_parts = [
-        $current_date->format('Y'),
-        $current_date->format('m'),
-        $current_date->format('d'),
-      ];
+    $date_parts = [
+      $current_date->format('Y'),
+      $current_date->format('m'),
+      $current_date->format('d'),
+    ];
 
-      // Assign the inner object to the outer array.
-      $citationItems[0]->accessed = (object) ['date-parts' => [$date_parts]];
-    }
+    $citationItems[0]->accessed = (object) ['date-parts' => [$date_parts]];
 
     $style = $this->citationHelper->loadStyle($csl_name);
     return $this->citationHelper->renderWithCiteproc($citationItems, $style);
