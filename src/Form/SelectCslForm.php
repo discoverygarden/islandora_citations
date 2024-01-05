@@ -33,13 +33,6 @@ class SelectCslForm extends FormBase {
   private $blockCSLType;
 
   /**
-   * CSL type value from block.
-   *
-   * @var string
-   */
-  private $blockCSLAccessedDateFormat;
-
-  /**
    * The route match.
    *
    * @var \Drupal\Core\Routing\RouteMatchInterface
