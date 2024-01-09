@@ -31,7 +31,7 @@ class ExtendedDateTimeNormalizer extends NormalizerBase {
       if ($parsed->isValid()) {
         $edtf = $parsed->getEdtfValue();
 
-        // Check if it's an interval
+        // Check if it's an interval.
         if ($edtf instanceof Interval) {
           $start = $this->formatDateVariables(explode('-', $edtf->getStartDate()->iso8601()));
           $end = $this->formatDateVariables(explode('-', $edtf->getEndDate()->iso8601()));
@@ -43,8 +43,9 @@ class ExtendedDateTimeNormalizer extends NormalizerBase {
 
           return $date_parts;
 
-        } elseif ($edtf instanceof ExtDate) {
-          // Handle singular dates
+        }
+        elseif ($edtf instanceof ExtDate) {
+          // Handle singular dates.
           return $this->formatDateVariables(explode('-', $edtf->iso8601()));
         }
       }
