@@ -143,7 +143,6 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
         '#attributes' => ['aria-label' => $this->t('Select Citation')],
         '#default_value' => $defaultCSLType,
       ];
-
     }
 
     return $form;
