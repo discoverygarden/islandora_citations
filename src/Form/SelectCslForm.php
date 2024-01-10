@@ -2,6 +2,7 @@
 
 namespace Drupal\islandora_citations\Form;
 
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -252,6 +253,17 @@ class SelectCslForm extends FormBase {
       $node_url = $this->pathAliasManager->getAliasByPath('/node/' . $entity->id());
       $citationItems[0]->URL = Url::fromUserInput($node_url)->setAbsolute()->toString();
     }
+
+    // Pass the current date to Accessed.
+    $current_date = new DrupalDateTime('now');
+
+    $date_parts = [
+      $current_date->format('Y'),
+      $current_date->format('m'),
+      $current_date->format('d'),
+    ];
+
+    $citationItems[0]->accessed = (object) ['date-parts' => [$date_parts]];
 
     $style = $this->citationHelper->loadStyle($csl_name);
     return $this->citationHelper->renderWithCiteproc($citationItems, $style);
