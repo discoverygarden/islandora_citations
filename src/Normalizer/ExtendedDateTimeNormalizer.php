@@ -33,8 +33,21 @@ class ExtendedDateTimeNormalizer extends NormalizerBase {
 
         // Check if it's an interval.
         if ($edtf instanceof Interval) {
-          $start = $this->formatDateVariables(explode('-', $edtf->getStartDate()->iso8601()));
-          $end = $this->formatDateVariables(explode('-', $edtf->getEndDate()->iso8601()));
+          // Check for open-ended date range
+          // Handle YYYY-MM-DD/.. format.
+          if (str_contains($dateValue['value'], '/..') !== false) {
+            $end = $this->formatDateVariables(explode('-', date('Y-m-d'))); // Current date
+            $start = $this->formatDateVariables(explode('-', $edtf->getStartDate()->iso8601()));
+          }
+          elseif (str_contains($dateValue['value'], '../') !== false) {
+            // Handle ../YYYY-MM-DD format.
+            $start = $this->formatDateVariables(explode('-', date('Y-m-d'))); // Current date
+            $end = $this->formatDateVariables(explode('-', $edtf->getEndDate()->iso8601()));
+          }
+          else {
+            $start = $this->formatDateVariables(explode('-', $edtf->getStartDate()->iso8601()));
+            $end = $this->formatDateVariables(explode('-', $edtf->getEndDate()->iso8601()));
+          }
 
           $date_parts['date-parts'] = [
             'start' => $start['date-parts'][0],

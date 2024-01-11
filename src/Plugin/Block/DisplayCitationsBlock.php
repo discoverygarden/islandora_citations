@@ -85,7 +85,7 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
    */
   public function build() {
     $cite_this_form = $this->formBuilder->getForm('Drupal\islandora_citations\Form\SelectCslForm');
-    if (!empty($cite_this_form['error_handling_element'])) {
+    if ($cite_this_form['error_handling_element']['#markup']) {
       // Hide the entire block.
       return NULL;
     }

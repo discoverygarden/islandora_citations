@@ -128,11 +128,14 @@ class SelectCslForm extends FormBase {
     // Based on `csl` text output, we will do the error handling.
     // When HTML output is not as expected, add a form element which indicates
     // we received error.
+    $form['error_handling_element'] = [
+      '#markup' => 0,
+      '#access' => FALSE,
+    ];
+
     if (!str_starts_with($csl, '<div class="csl-bib-body">')) {
       // Add a custom markup element to the form.
-      $form['error_handling_element'] = [
-        '#markup' => 'Form with error',
-      ];
+      $form['error_handling_element']['#markup'] = 1;
 
       // Log error message.
       $this->logger->error($csl);
