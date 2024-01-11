@@ -35,18 +35,30 @@ class ExtendedDateTimeNormalizer extends NormalizerBase {
         if ($edtf instanceof Interval) {
           // Check for open-ended date range
           // Handle YYYY-MM-DD/.. format.
-          if (str_contains($dateValue['value'], '/..') !== false) {
-            $end = $this->formatDateVariables(explode('-', date('Y-m-d'))); // Current date
-            $start = $this->formatDateVariables(explode('-', $edtf->getStartDate()->iso8601()));
+          if (str_contains($dateValue['value'], '/..') !== FALSE) {
+            $end = $this->formatDateVariables(
+              explode('-', date('Y-m-d'))
+            );
+            $start = $this->formatDateVariables(
+              explode('-', $edtf->getStartDate()->iso8601())
+            );
           }
-          elseif (str_contains($dateValue['value'], '../') !== false) {
+          elseif (str_contains($dateValue['value'], '../') !== FALSE) {
             // Handle ../YYYY-MM-DD format.
-            $start = $this->formatDateVariables(explode('-', date('Y-m-d'))); // Current date
-            $end = $this->formatDateVariables(explode('-', $edtf->getEndDate()->iso8601()));
+            $start = $this->formatDateVariables(
+              explode('-', date('Y-m-d'))
+            );
+            $end = $this->formatDateVariables(
+              explode('-', $edtf->getEndDate()->iso8601())
+            );
           }
           else {
-            $start = $this->formatDateVariables(explode('-', $edtf->getStartDate()->iso8601()));
-            $end = $this->formatDateVariables(explode('-', $edtf->getEndDate()->iso8601()));
+            $start = $this->formatDateVariables(
+              explode('-', $edtf->getStartDate()->iso8601())
+            );
+            $end = $this->formatDateVariables(
+              explode('-', $edtf->getEndDate()->iso8601())
+            );
           }
 
           $date_parts['date-parts'] = [
