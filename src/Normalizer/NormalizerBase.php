@@ -58,7 +58,10 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
           $name_details = is_array($names) ? $this->getFirstNameAndLastName($names) : [];
 
           return !empty($name_details) ?
-            ['family' => $name_details['last_name'], 'given' => $name_details['first_name']] :
+            [
+              'family' => $name_details['last_name'],
+              'given' => $name_details['first_name'],
+            ] :
             ['family' => $name];
         }
         else {
@@ -67,7 +70,10 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
           $name_details = is_array($names) ? $this->getFirstNameAndLastName($names) : [];
 
           return !empty($name_details) ?
-            ['given' => $name_details['last_name'], 'family' => $name_details['first_name']] :
+            [
+              'given' => $name_details['last_name'],
+              'family' => $name_details['first_name'],
+            ] :
             ['family' => $name];
         }
 
