@@ -54,14 +54,20 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
       case 'person':
         if (strpos($name, ',') !== FALSE) {
           $names = explode(',', $name);
-          return is_array($names) ?
-            ['family' => $names[1], 'given' => $names[0]] :
+          // Get the first name and last name.
+          $name_details = is_array($names) ? $this->getFirstNameAndLastName($names) : [];
+
+          return !empty($name_details) ?
+            ['family' => $name_details['last_name'], 'given' => $name_details['first_name']] :
             ['family' => $name];
         }
         else {
           $names = explode(' ', $name);
-          return is_array($names) ?
-            ['given' => $names[1], 'family' => $names[0]] :
+          // Get the first name and last name.
+          $name_details = is_array($names) ? $this->getFirstNameAndLastName($names) : [];
+
+          return !empty($name_details) ?
+            ['given' => $name_details['last_name'], 'family' => $name_details['first_name']] :
             ['family' => $name];
         }
 
@@ -70,6 +76,38 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
     }
 
     return $name;
+  }
+
+  /**
+   * Get the first name and last name from name array.
+   *
+   * @param array $names
+   *   An array of name indexes.
+   */
+  protected function getFirstNameAndLastName(array $names) {
+    if (empty($names)) {
+      return [];
+    }
+
+    $name_index_count = count($names);
+    // Last index in the names array would be considered as the last name.
+    $last_name = $name_index_count > 1 ? $names[$name_index_count - 1] : '';
+
+    // Rest all make up the first name.
+    $first_name = [];
+    if ($name_index_count > 1) {
+      for ($i = 0; $i < $name_index_count - 1; $i++) {
+        $first_name[] = $names[$i];
+      }
+    }
+    else {
+      $first_name = $names[0];
+    }
+
+    return [
+      'first_name' => is_array($first_name) ? implode(' ', $first_name) : $first_name,
+      'last_name' => $last_name,
+    ];
   }
 
 }
