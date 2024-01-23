@@ -52,30 +52,11 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
   protected function formatNameVariables($name, $type): array {
     switch ($type) {
       case 'person':
-        if (strpos($name, ',') !== FALSE) {
-          $names = explode(',', $name);
-          // Get the first name and last name.
-          $name_details = is_array($names) ? $this->getFirstNameAndLastName($names) : [];
+        $name_values = strpos($name, ',') !== FALSE ?
+          $this->getFirstNameAndLastName($name, ',') :
+          $this->getFirstNameAndLastName($name);
 
-          return !empty($name_details) ?
-            [
-              'family' => $name_details['last_name'],
-              'given' => $name_details['first_name'],
-            ] :
-            ['family' => $name];
-        }
-        else {
-          $names = explode(' ', $name);
-          // Get the first name and last name.
-          $name_details = is_array($names) ? $this->getFirstNameAndLastName($names) : [];
-
-          return !empty($name_details) ?
-            [
-              'given' => $name_details['last_name'],
-              'family' => $name_details['first_name'],
-            ] :
-            ['family' => $name];
-        }
+        return !empty($name_values) ? $name_values : ['family' => $name];
 
       case 'institution':
         return ['family' => $name];
@@ -85,35 +66,49 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
   }
 
   /**
-   * Get the first name and last name from name array.
+   * Get the first name and last name from name.
    *
-   * @param array $names
-   *   An array of name indexes.
+   * @param string $name
+   *   The Person name.
+   * @param string $separator
+   *   The separator used to explode name.
    */
-  protected function getFirstNameAndLastName(array $names) {
-    if (empty($names)) {
-      return [];
-    }
-
+  protected function getFirstNameAndLastName($name, $separator = ' ') {
+    $names = explode($separator, $name);
     $name_index_count = count($names);
-    // Last index in the names array would be considered as the last name.
-    $last_name = $name_index_count > 1 ? $names[$name_index_count - 1] : '';
 
-    // Rest all make up the first name.
-    $first_name = [];
-    if ($name_index_count > 1) {
-      for ($i = 0; $i < $name_index_count - 1; $i++) {
-        $first_name[] = $names[$i];
-      }
+    // If the separator is a comma, the last name is the first index.
+    if ($separator === ',') {
+      return [
+        'family' => trim($names[1]),
+        'given' => trim($names[0]),
+      ];
     }
     else {
-      $first_name = $names[0];
-    }
+      $first_name = [];
+      $last_name = '';
 
-    return [
-      'first_name' => is_array($first_name) ? implode(' ', $first_name) : $first_name,
-      'last_name' => $last_name,
-    ];
+      if ($name_index_count > 1) {
+        // The last index in the names array would be considered as the last
+        // name.
+        $last_name = $names[$name_index_count - 1];
+
+        // The rest all make up the first name.
+        for ($i = 0; $i < $name_index_count - 1; $i++) {
+          $first_name[] = $names[$i];
+        }
+      }
+      else {
+        // Handling the case where only a single word name is provided.
+        $first_name = $names['0'];
+      }
+
+      $first_name = is_array($first_name) ? implode(' ', $first_name) : $first_name;
+      return [
+        'given' => trim($last_name),
+        'family' => trim($first_name),
+      ];
+    }
   }
 
 }
