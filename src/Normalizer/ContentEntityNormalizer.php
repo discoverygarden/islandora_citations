@@ -77,11 +77,20 @@ class ContentEntityNormalizer extends NormalizerBase {
     foreach ($normalized_field_items as $cslKey => $cslValueArray) {
       $fieldType = $this->getCslVariableType($cslKey);
 
-      // If the variable type if string, comma separate the values.
+      // If the variable type is string, comma separate the values.
       switch ($fieldType) {
         case 'string':
         case 'number':
-          $normalized_field_items[$cslKey] = is_array($cslValueArray) ? implode(', ', $cslValueArray) : $cslValueArray;
+          $values = [];
+          if (is_array($cslValueArray)) {
+            foreach ($cslValueArray as $key => $arrayValue) {
+              $values[] = is_array($arrayValue) ? $arrayValue[array_key_first($arrayValue)] : $arrayValue;
+            }
+          }
+          else {
+            $values = $cslValueArray;
+          }
+          $normalized_field_items[$cslKey] = is_array($values) ? implode(', ', $values) : $values;
           break;
 
         case 'array':
