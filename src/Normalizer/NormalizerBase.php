@@ -82,7 +82,6 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
       return [
         'given' => trim($names[1]),
         'family' => trim($names[0]),
-
       ];
     }
     else {
