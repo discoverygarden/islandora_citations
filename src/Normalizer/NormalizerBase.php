@@ -80,8 +80,9 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
     // If the separator is a comma, the last name is the first index.
     if ($separator === ',') {
       return [
-        'family' => trim($names[1]),
-        'given' => trim($names[0]),
+        'given' => trim($names[1]),
+        'family' => trim($names[0]),
+
       ];
     }
     else {
@@ -105,8 +106,8 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
 
       $first_name = is_array($first_name) ? implode(' ', $first_name) : $first_name;
       return [
-        'given' => trim($last_name),
-        'family' => trim($first_name),
+        'family' => trim($last_name),
+        'given' => trim($first_name),
       ];
     }
   }
