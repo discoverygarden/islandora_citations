@@ -101,7 +101,7 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
       }
       else {
         // Handling the case where only a single word name is provided.
-        $first_name = $names['0'];
+        return [];
       }
 
       $first_name = is_array($first_name) ? implode(' ', $first_name) : $first_name;
