@@ -79,6 +79,13 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
 
     // If the separator is a comma, the last name is the first index.
     if ($separator === ',') {
+      // Handling the case when the name starts with comma. Eg: ,First.
+      if (!$names[0]) {
+        return [
+          'family' => trim($names[1]),
+        ];
+      }
+
       return [
         'given' => trim($names[1]),
         'family' => trim($names[0]),
