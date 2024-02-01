@@ -89,7 +89,7 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
         $firstName = trim(preg_replace('#' . preg_quote($lastName, '#') . '#', '', $name));
       }
 
-      if (empty($firstName) && empty($lastName)) {
+      if (empty($firstName) || empty($lastName)) {
         throw new \Exception('Name is not formatted properly');
       }
 

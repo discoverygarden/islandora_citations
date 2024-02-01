@@ -136,7 +136,7 @@ class SelectCslForm extends FormBase {
       ];
 
       // Log error message.
-      $this->logger->error($csl);
+      $this->logger->error(json_encode($csl));
 
       return $form;
     }
@@ -225,7 +225,7 @@ class SelectCslForm extends FormBase {
     try {
       // Method call to render citation.
       $rendered = $this->renderCitation($csl_name);
-      return $rendered['data'];
+      return $rendered['data'] ?? NULL;
     }
     catch (\Throwable $e) {
       return $e->getMessage();
