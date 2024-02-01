@@ -48,74 +48,60 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
 
   /**
    * Formats name variables as per csl json.
+   *
+   * @throws \Exception
    */
   protected function formatNameVariables($name, $type): array {
-    switch ($type) {
-      case 'person':
-        $name_values = strpos($name, ',') !== FALSE ?
-          $this->getFirstNameAndLastName($name, ',') :
-          $this->getFirstNameAndLastName($name);
+    return match ($type) {
+      'person' => $this->getNameParts($name),
+      'institution' => ['family' => $name],
+      default => ['family' => $name],
+    };
 
-        return !empty($name_values) ? $name_values : ['family' => $name];
-
-      case 'institution':
-        return ['family' => $name];
-    }
-
-    return $name;
   }
 
   /**
-   * Get the first name and last name from name.
+   * Gets the first name and last name from name.
    *
    * @param string $name
-   *   The Person name.
-   * @param string $separator
-   *   The separator used to explode name.
+   *   The person's name.
+   *
+   * @return array
+   *   An array of name parts.
+   *
+   * @throws \Exception
    */
-  protected function getFirstNameAndLastName($name, $separator = ' ') {
-    $names = explode($separator, $name);
-    $name_index_count = count($names);
-
-    // If the separator is a comma, the last name is the first index.
-    if ($separator === ',') {
-      // Handling the case when the name starts with comma. Eg: ,First.
-      if (!$names[0]) {
-        return [
-          'family' => trim($names[1]),
-        ];
-      }
-
-      return [
-        'given' => trim($names[1]),
-        'family' => trim($names[0]),
-      ];
-    }
-    else {
-      $first_name = [];
-      $last_name = '';
-
-      if ($name_index_count > 1) {
-        // The last index in the names array would be considered as the last
-        // name.
-        $last_name = $names[$name_index_count - 1];
-
-        // The rest all make up the first name.
-        for ($i = 0; $i < $name_index_count - 1; $i++) {
-          $first_name[] = $names[$i];
-        }
+  protected function getNameParts(string $name): array {
+    try {
+      // If name has a comma, we assume that it's
+      // formatted as Lastname,Firstname
+      // This is kind of dicey, names might just contain commas.
+      // @todo but that's an edge case which can be handled when
+      // encountered.
+      if (str_contains($name, ',')) {
+        $nameParts = explode(',', $name);
+        $firstName = $nameParts[1] ?? '';
+        $lastName = $nameParts[0] ?? '';
       }
       else {
-        // Handling the case where only a single word name is provided.
-        return [];
+        $name = trim($name);
+        $lastName = (!str_contains($name, ' ')) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $name);
+        $firstName = trim(preg_replace('#' . preg_quote($lastName, '#') . '#', '', $name));
       }
 
-      $first_name = is_array($first_name) ? implode(' ', $first_name) : $first_name;
+      if (empty($firstName) && empty($lastName)) {
+        throw new \Exception('Name is not formatted properly');
+      }
+
       return [
-        'family' => trim($last_name),
-        'given' => trim($first_name),
+        'given' => $firstName,
+        'family' => $lastName,
       ];
     }
+    catch (\Exception $e) {
+      return ['family' => $name];
+    }
+
   }
 
 }

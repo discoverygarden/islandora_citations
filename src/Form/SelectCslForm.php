@@ -8,8 +8,8 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
-use Drupal\path_alias\AliasManagerInterface;
 use Drupal\islandora_citations\IslandoraCitationsHelper;
+use Drupal\path_alias\AliasManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
