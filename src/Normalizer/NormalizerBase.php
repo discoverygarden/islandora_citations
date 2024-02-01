@@ -48,28 +48,60 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
 
   /**
    * Formats name variables as per csl json.
+   *
+   * @throws \Exception
    */
   protected function formatNameVariables($name, $type): array {
-    switch ($type) {
-      case 'person':
-        if (strpos($name, ',') !== FALSE) {
-          $names = explode(',', $name);
-          return is_array($names) ?
-            ['family' => $names[1], 'given' => $names[0]] :
-            ['family' => $name];
-        }
-        else {
-          $names = explode(' ', $name);
-          return is_array($names) ?
-            ['given' => $names[1], 'family' => $names[0]] :
-            ['family' => $name];
-        }
+    return match ($type) {
+      'person' => $this->getNameParts($name),
+      'institution' => ['family' => $name],
+      default => ['family' => $name],
+    };
 
-      case 'institution':
-        return ['family' => $name];
+  }
+
+  /**
+   * Gets the first name and last name from name.
+   *
+   * @param string $name
+   *   The person's name.
+   *
+   * @return array
+   *   An array of name parts.
+   *
+   * @throws \Exception
+   */
+  protected function getNameParts(string $name): array {
+    try {
+      // If name has a comma, we assume that it's
+      // formatted as Lastname,Firstname
+      // This is kind of dicey, names might just contain commas.
+      // @todo but that's an edge case which can be handled when
+      // encountered.
+      if (str_contains($name, ',')) {
+        $nameParts = explode(',', $name);
+        $firstName = $nameParts[1] ?? '';
+        $lastName = $nameParts[0] ?? '';
+      }
+      else {
+        $name = trim($name);
+        $lastName = (!str_contains($name, ' ')) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $name);
+        $firstName = trim(preg_replace('#' . preg_quote($lastName, '#') . '#', '', $name));
+      }
+
+      if (empty($firstName) || empty($lastName)) {
+        throw new \Exception('Name is not formatted properly');
+      }
+
+      return [
+        'given' => $firstName,
+        'family' => $lastName,
+      ];
+    }
+    catch (\Exception $e) {
+      return ['family' => $name];
     }
 
-    return $name;
   }
 
 }

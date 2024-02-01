@@ -8,8 +8,8 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
-use Drupal\path_alias\AliasManagerInterface;
 use Drupal\islandora_citations\IslandoraCitationsHelper;
+use Drupal\path_alias\AliasManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -136,7 +136,7 @@ class SelectCslForm extends FormBase {
       ];
 
       // Log error message.
-      $this->logger->error($csl);
+      $this->logger->error(json_encode($csl));
 
       return $form;
     }
@@ -225,7 +225,7 @@ class SelectCslForm extends FormBase {
     try {
       // Method call to render citation.
       $rendered = $this->renderCitation($csl_name);
-      return $rendered['data'];
+      return $rendered['data'] ?? NULL;
     }
     catch (\Throwable $e) {
       return $e->getMessage();
