@@ -3,10 +3,12 @@
 namespace Drupal\islandora_citations\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\islandora_citations\IslandoraCitationsHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -44,6 +46,13 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
   protected $citationHelper;
 
   /**
+   * The current route match service.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
+
+  /**
    * Construct a new DisplayCitationsBlock.
    *
    * @param array $configuration
@@ -58,12 +67,15 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
    *   The form builder instance.
    * @param \Drupal\islandora_citations\IslandoraCitationsHelper $citationHelper
    *   The CitationHelper instance.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The current route match service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entityTypeManager, FormBuilderInterface $formBuilder, IslandoraCitationsHelper $citationHelper) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entityTypeManager, FormBuilderInterface $formBuilder, IslandoraCitationsHelper $citationHelper, RouteMatchInterface $route_match) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entityTypeManager;
     $this->formBuilder = $formBuilder;
     $this->citationHelper = $citationHelper;
+    $this->routeMatch = $route_match;
   }
 
   /**
@@ -76,7 +88,8 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('form_builder'),
-      $container->get('islandora_citations.helper')
+      $container->get('islandora_citations.helper'),
+      $container->get('current_route_match')
     );
   }
 
@@ -85,13 +98,14 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
    */
   public function build() {
     $cite_this_form = $this->formBuilder->getForm('Drupal\islandora_citations\Form\SelectCslForm');
-    if ($cite_this_form['error_handling_element']['#markup']) {
-      // Hide the entire block.
-      return NULL;
+    $build['form'] = $cite_this_form;
+
+    if ($cite_this_form['error_handling_element']['#markup'] == 1) {
+      // Hide entire block due to error.
+      return [];
     }
 
     if (!empty($this->citationHelper->getCitationEntityList())) {
-      $build['form'] = $cite_this_form;
       return $build;
     }
   }
@@ -155,6 +169,28 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
     $values = $form_state->getValues();
     $this->configuration['default_csl'] = $values['csl_list'];
     $this->configuration['default_csl_type'] = $values['field_csl_type'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    // Retrieve the node ID.
+    $node = $this->routeMatch->getParameter('node');
+    $node_id = $node ? $node->id() : NULL;
+
+    // Return cache tags.
+    if ($node_id) {
+      return ['node:' . $node_id];
+    }
+    return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts() {
+    return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
   }
 
 }
