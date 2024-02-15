@@ -33,8 +33,8 @@ class ExtendedDateTimeNormalizer extends NormalizerBase {
 
         // Check if it's an interval.
         if ($edtf instanceof Interval) {
-          // Check for open-ended date range
-          if (str_contains($dateValue['value'], '/..') !== FALSE || str_contains($dateValue['value'], '../') {
+          // Check for open-ended date range.
+          if (str_contains($dateValue['value'], '/..') !== FALSE || str_contains($dateValue['value'], '../')) {
             // Handle ../YYYY-MM-DD or YYYY-MM-DD/.. format.
             // As the format is not supported, we will not map.
             return [];
