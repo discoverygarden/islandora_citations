@@ -73,6 +73,15 @@ Map the relevant drupal fields to csl fields.
 
 Module is under active development and there are some known issues:
  - Normalisation of date range fields
+   - Latest under DGIR-123 we handled below date foemates
+     - 2023-12-24
+     - 2023-12
+     - 2023
+     - 2023-10/2023-12
+     - 2023-12-01/2023-12-24
+     - 2005-05-05/.. [ It will take a current date as an end date ]
+     - ../2025 [ It will take current date as a start date ]
+     - /2023-10 OR 2023-10/ [ Will not map as format is not supported ]
 
 ## Maintainers/Sponsors
 

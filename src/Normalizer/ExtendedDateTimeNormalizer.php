@@ -52,6 +52,11 @@ class ExtendedDateTimeNormalizer extends NormalizerBase {
               explode('-', $edtf->getEndDate()->iso8601())
             );
           }
+          elseif (str_ends_with($dateValue['value'], '/') || str_starts_with($dateValue['value'], '/')) {
+            // Handle /YYYY-MM-DD or YYYY-MM-DD/ format.
+            // As the format is not supported, we will not map.
+            return [];
+          }
           else {
             $start = $this->formatDateVariables(
               explode('-', $edtf->getStartDate()->iso8601())
