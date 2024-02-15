@@ -34,23 +34,10 @@ class ExtendedDateTimeNormalizer extends NormalizerBase {
         // Check if it's an interval.
         if ($edtf instanceof Interval) {
           // Check for open-ended date range
-          // Handle YYYY-MM-DD/.. format.
-          if (str_contains($dateValue['value'], '/..') !== FALSE) {
-            $end = $this->formatDateVariables(
-              explode('-', date('Y-m-d'))
-            );
-            $start = $this->formatDateVariables(
-              explode('-', $edtf->getStartDate()->iso8601())
-            );
-          }
-          elseif (str_contains($dateValue['value'], '../') !== FALSE) {
-            // Handle ../YYYY-MM-DD format.
-            $start = $this->formatDateVariables(
-              explode('-', date('Y-m-d'))
-            );
-            $end = $this->formatDateVariables(
-              explode('-', $edtf->getEndDate()->iso8601())
-            );
+          if (str_contains($dateValue['value'], '/..') !== FALSE || str_contains($dateValue['value'], '../') {
+            // Handle ../YYYY-MM-DD or YYYY-MM-DD/.. format.
+            // As the format is not supported, we will not map.
+            return [];
           }
           elseif (str_ends_with($dateValue['value'], '/') || str_starts_with($dateValue['value'], '/')) {
             // Handle /YYYY-MM-DD or YYYY-MM-DD/ format.
