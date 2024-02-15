@@ -2,13 +2,14 @@
 
 namespace Drupal\islandora_citations\Form;
 
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
-use Drupal\path_alias\AliasManagerInterface;
 use Drupal\islandora_citations\IslandoraCitationsHelper;
+use Drupal\path_alias\AliasManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -141,7 +142,7 @@ class SelectCslForm extends FormBase {
       $form['error_handling_element']['#markup'] = 1;
 
       // Log error message.
-      $this->logger->error($csl);
+      $this->logger->error(json_encode($csl));
       return $form;
     }
 
@@ -227,7 +228,7 @@ class SelectCslForm extends FormBase {
     try {
       // Method call to render citation.
       $rendered = $this->renderCitation($csl_name);
-      return $rendered['data'];
+      return $rendered['data'] ?? NULL;
     }
     catch (\Throwable $e) {
       return $e->getMessage();
@@ -256,6 +257,17 @@ class SelectCslForm extends FormBase {
       $node_url = $this->pathAliasManager->getAliasByPath('/node/' . $entity->id());
       $citationItems[0]->URL = Url::fromUserInput($node_url)->setAbsolute()->toString();
     }
+
+    // Pass the current date to Accessed.
+    $current_date = new DrupalDateTime('now');
+
+    $date_parts = [
+      $current_date->format('Y'),
+      $current_date->format('m'),
+      $current_date->format('d'),
+    ];
+
+    $citationItems[0]->accessed = (object) ['date-parts' => [$date_parts]];
 
     $style = $this->citationHelper->loadStyle($csl_name);
     return $this->citationHelper->renderWithCiteproc($citationItems, $style);
