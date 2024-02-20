@@ -120,6 +120,9 @@ class SelectCslForm extends FormBase {
     }
     $csl = !empty($default_csl) ? $this->getDefaultCitation($default_csl) : '';
 
+    $form['#cache']['contexts'][] = 'url';
+    $form['#theme'] = 'display_citations';
+
     // We receive error message as a string, and then we display same string
     // as output.
     // We expect output in a specific format when there is no error as below
@@ -129,15 +132,17 @@ class SelectCslForm extends FormBase {
     // Based on `csl` text output, we will do the error handling.
     // When HTML output is not as expected, add a form element which indicates
     // we received error.
+    $form['error_handling_element'] = [
+      '#markup' => 0,
+      '#access' => FALSE,
+    ];
+
     if (!str_starts_with($csl, '<div class="csl-bib-body">')) {
       // Add a custom markup element to the form.
-      $form['error_handling_element'] = [
-        '#markup' => 'Form with error',
-      ];
+      $form['error_handling_element']['#markup'] = 1;
 
       // Log error message.
       $this->logger->error(json_encode($csl));
-
       return $form;
     }
 
@@ -176,8 +181,6 @@ class SelectCslForm extends FormBase {
       ],
     ];
 
-    $form['#cache']['contexts'][] = 'url';
-    $form['#theme'] = 'display_citations';
     return $form;
   }
 
@@ -243,6 +246,7 @@ class SelectCslForm extends FormBase {
   private function renderCitation($csl_name): ?array {
     $entity = $this->routeMatch->getParameter('node');
     $citationItems[] = $this->citationHelper->encodeEntityForCiteproc($entity);
+
     $blockCSLType = $this->blockCSLType;
     if (!isset($citationItems[0]->type)) {
       $citationItems[0]->type = $blockCSLType;
