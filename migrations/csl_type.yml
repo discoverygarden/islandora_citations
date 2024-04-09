@@ -1,7 +1,7 @@
 id: csl_type
 label: CSL Type.
 migration_tags:
-  - dgi_taxonomy
+  - dgi_taxonomies
 migration_group: islandora
 source:
   plugin: embedded_data

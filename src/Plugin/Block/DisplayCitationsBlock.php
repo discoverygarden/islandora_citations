@@ -152,7 +152,7 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
       $form['field_csl_type'] = [
         '#type' => 'select',
         '#title' => $this->t('Object Type (Citation)'),
-        '#options' => $cslTypesNames,
+        '#options' => $cslTypesNames ?? [],
         '#empty_option' => $this->t('- Select Citation -'),
         '#attributes' => ['aria-label' => $this->t('Select Citation')],
         '#default_value' => $defaultCSLType,
