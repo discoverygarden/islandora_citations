@@ -82,9 +82,13 @@ Module is under active development and there are some known issues:
      - 2005-05-05/.. OR ../2025 [ Will not map as format is not supported ]
      - /2023-10 OR 2023-10/ [ Will not map as format is not supported ]
 
-## Maintainers/Sponsors
+## Sponsors
+* State of Florida
 
-* [discoverygarden](http://support.discoverygarden.ca)
+## Maintainers
+Current maintainers:
+
+* [discoverygarden](http://www.discoverygarden.ca)
 
 ## License
 [GPLv3](http://www.gnu.org/licenses/gpl-3.0.txt)
