@@ -1,5 +1,6 @@
 {
     "name": "discoverygarden/islandora_citations",
+    "license": "GPL-3.0-only",
     "type": "drupal-module",
       "require": {
         "seboettg/citeproc-php": "^2.6.0",
