@@ -9,6 +9,7 @@ use Drupal\Core\Field\Entity\BaseFieldOverride;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -74,7 +75,7 @@ class IslandoraCitationsController extends ControllerBase {
           $field_definition->getName(),
           $data ? implode(',', $data) : ($dataForMappedEntities ? 'Mapped from entity' : '-'),
           [
-            'data' => $this->getLinkToField($node_type, $field_definition),
+            'data' => $this->getLinkToField('node', $node_type, $field_definition),
           ],
         ];
       }
@@ -98,7 +99,13 @@ class IslandoraCitationsController extends ControllerBase {
    * @return \Drupal\Core\Link|\Drupal\Core\StringTranslation\TranslatableMarkup
    *   A link to a page to configure the given field, or a string.
    */
-  protected function getLinkToField(string $bundle, FieldDefinitionInterface $field_definition) {
+  protected function getLinkToField(string $type, string $bundle, FieldDefinitionInterface $field_definition) {
+    $add_destination = static function (Url $url) {
+      $query = $url->getOption('query');
+      $query['destination'] = Url::fromRoute('<current>')->toString();
+      $url->setOption('query', $query);
+      return $url;
+    };
     /** @var \Drupal\Core\Field\Entity\BaseFieldOverride|\Drupal\field\Entity\FieldConfig $config */
     $config = $field_definition->getConfig($bundle);
     if ($config instanceof BaseFieldOverride) {
@@ -106,24 +113,23 @@ class IslandoraCitationsController extends ControllerBase {
         return $config->isNew() ?
           new Link(
             $this->t('Add'),
-            BaseFieldOverrideUI::getAddRouteInfo($config),
+            $add_destination(BaseFieldOverrideUI::getAddRouteInfo($config)),
           ) :
           new Link(
             $this->t('Edit'),
-            BaseFieldOverrideUI::getEditRouteInfo($config),
+            $add_destination(BaseFieldOverrideUI::getEditRouteInfo($config)),
           );
       }
-      else {
-        return $this->t('Not applicable');
-      }
+
+      return $this->t('Not applicable');
     }
     else {
-      return $this->t(
-        '<a href=":link">@name</a>',
-        [
-          ':link' => "fields/{$config->id()}",
-          '@name' => $this->t('Edit'),
-        ],
+      return new Link(
+        $this->t('Edit'),
+        $add_destination(Url::fromRoute("entity.field_config.{$type}_field_edit_form", [
+          "{$type}_type" => $bundle,
+          'field_config' => $config->id(),
+        ])),
       );
     }
   }
@@ -153,7 +159,7 @@ class IslandoraCitationsController extends ControllerBase {
         $rows[] = [$field_definition->getName(),
           $data ? implode(',', $data) : '-',
           [
-            'data' => $this->getLinkToField($paragraphs_type, $field_definition),
+            'data' => $this->getLinkToField('paragraph', $paragraphs_type, $field_definition),
           ],
         ];
       }
