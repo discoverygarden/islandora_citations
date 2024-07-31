@@ -5,7 +5,8 @@ services:
     arguments: ['islandora_citations']
   islandora_citations.controller:
     class: Drupal\islandora_citations\Controller\IslandoraCitationsController
-    arguments: ['@entity_field.manager']
+    factory: [null, 'create']
+    arguments: ['@service_container']
   islandora_citations.helper:
     class: Drupal\islandora_citations\IslandoraCitationsHelper
     arguments: ['@entity_type.manager', '@file_system', '@serializer', '@logger.channel.islandora_citations']
