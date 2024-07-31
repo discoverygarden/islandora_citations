@@ -93,6 +93,8 @@ class IslandoraCitationsController extends ControllerBase {
   /**
    * Helper; generate link to the field configuration page.
    *
+   * @param string $type
+   *   The type of entity to which the field is associated.
    * @param \Drupal\Core\Config\Entity\ConfigEntityBundleBase $bundle
    *   The bundle with which the field is associated.
    * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
