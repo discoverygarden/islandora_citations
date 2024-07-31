@@ -40,7 +40,7 @@ entity.islandora_citations.add_from_file:
     _permission: 'administer islandora_citations'
   options:
     _admin_route: TRUE
-    
+
 islandora_citations.tab.node:
   path: '/admin/structure/types/manage/{node_type}/citations-map-configuration'
   defaults:
@@ -48,3 +48,7 @@ islandora_citations.tab.node:
     _controller: 'islandora_citations.controller:provideArguments'
   requirements:
     _permission: 'administer islandora_citations'
+  options:
+    parameters:
+      node_type:
+        type: entity:node_type

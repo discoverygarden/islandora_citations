@@ -3,6 +3,7 @@
 namespace Drupal\islandora_citations\Controller;
 
 use Drupal\base_field_override_ui\BaseFieldOverrideUI;
+use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Field\Entity\BaseFieldOverride;
@@ -10,6 +11,7 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\node\Entity\NodeType;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -50,20 +52,20 @@ class IslandoraCitationsController extends ControllerBase {
   /**
    * Provide arguments for FieldConfigUpdate.
    *
-   * @param string $node_type
+   * @param \Drupal\node\Entity\NodeType $node_type
    *   Node type.
    *
    * @return array
    *   Form array.
    */
-  public function provideArguments($node_type) {
+  public function provideArguments(NodeType $node_type) {
 
     $header = [
       'col1' => $this->t('Field'),
       'col2' => $this->t('CSL Field'),
       'col3' => $this->t('Operation'),
     ];
-    $fields = $this->entityFieldManager->getFieldDefinitions('node', $node_type);
+    $fields = $this->entityFieldManager->getFieldDefinitions('node', $node_type->id());
 
     $rows = [];
     foreach ($fields as $field_definition) {
@@ -91,7 +93,7 @@ class IslandoraCitationsController extends ControllerBase {
   /**
    * Helper; generate link to the field configuration page.
    *
-   * @param string $bundle
+   * @param \Drupal\Core\Config\Entity\ConfigEntityBundleBase $bundle
    *   The bundle with which the field is associated.
    * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
    *   The field definition of which to link to the configuration page.
@@ -99,7 +101,7 @@ class IslandoraCitationsController extends ControllerBase {
    * @return \Drupal\Core\Link|\Drupal\Core\StringTranslation\TranslatableMarkup
    *   A link to a page to configure the given field, or a string.
    */
-  protected function getLinkToField(string $type, string $bundle, FieldDefinitionInterface $field_definition) {
+  protected function getLinkToField(string $type, ConfigEntityBundleBase $bundle, FieldDefinitionInterface $field_definition) {
     $add_destination = static function (Url $url) {
       $query = $url->getOption('query');
       $query['destination'] = Url::fromRoute('<current>')->toString();
@@ -107,7 +109,7 @@ class IslandoraCitationsController extends ControllerBase {
       return $url;
     };
     /** @var \Drupal\Core\Field\Entity\BaseFieldOverride|\Drupal\field\Entity\FieldConfig $config */
-    $config = $field_definition->getConfig($bundle);
+    $config = $field_definition->getConfig($bundle->id());
     if ($config instanceof BaseFieldOverride) {
       if ($this->moduleHandler()->moduleExists('base_field_override_ui')) {
         return $config->isNew() ?
@@ -127,7 +129,7 @@ class IslandoraCitationsController extends ControllerBase {
       return new Link(
         $this->t('Edit'),
         $add_destination(Url::fromRoute("entity.field_config.{$type}_field_edit_form", [
-          "{$type}_type" => $bundle,
+          $bundle->getEntityTypeId() => $bundle->id(),
           'field_config' => $config->id(),
         ])),
       );
@@ -137,8 +139,8 @@ class IslandoraCitationsController extends ControllerBase {
   /**
    * Provide arguments for FieldConfigUpdate.
    *
-   * @param string $paragraphs_type
-   *   Node type.
+   * @param \Drupal\paragraphs\Entity\ParagraphsType $paragraphs_type
+   *   Paragraph type.
    *
    * @return array
    *   Form array.
@@ -150,7 +152,7 @@ class IslandoraCitationsController extends ControllerBase {
       'col2' => $this->t('CSL Field'),
       'col3' => $this->t('Operation'),
     ];
-    $fields = $this->entityFieldManager->getFieldDefinitions('paragraph', $paragraphs_type);
+    $fields = $this->entityFieldManager->getFieldDefinitions('paragraph', $paragraphs_type->id());
 
     $rows = [];
     foreach ($fields as $field_definition) {
