@@ -8,4 +8,5 @@ dependencies:
   - drupal:node
   - drupal:taxonomy
   - controlled_access_terms:controlled_access_terms
+  - paragraphs:paragraphs
 configure: entity.islandora_citations.collection
