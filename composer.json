@@ -1,5 +1,6 @@
 {
     "name": "discoverygarden/islandora_citations",
+    "license": "GPL-3.0-only",
     "type": "drupal-module",
     "require": {
         "islandora/controlled_access_terms": "^2",
