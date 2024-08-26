@@ -2,9 +2,12 @@
     "name": "discoverygarden/islandora_citations",
     "license": "GPL-3.0-only",
     "type": "drupal-module",
-      "require": {
+    "require": {
+        "islandora/controlled_access_terms": "^2",
         "seboettg/citeproc-php": "^2.6.0",
-        "webflo/drupal-finder": "^1.2.2",
-        "islandora/controlled_access_terms": "^2"
+        "webflo/drupal-finder": "^1.2.2"
+    },
+    "suggest": {
+        "drupal/base_field_override_ui": "To allow the use of 'base' entity fields in mappings."
     }
 }

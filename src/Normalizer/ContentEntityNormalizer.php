@@ -2,7 +2,6 @@
 
 namespace Drupal\islandora_citations\Normalizer;
 
-use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 
 /**
@@ -19,19 +18,18 @@ class ContentEntityNormalizer extends NormalizerBase {
    * {@inheritdoc}
    */
   public function normalize($object, $format = NULL, array $context = []) {
+    assert($object instanceof ContentEntityInterface);
     $normalized_field_items = [];
     foreach ($object->getFields(TRUE) as $field_item_list) {
 
       /** @var \Drupal\Core\Field\FieldDefinitionInterface $fieldDefinition */
       $fieldDefinition = $field_item_list->getFieldDefinition();
 
-      // Do not process if there are no third party settings.
-      if (!($fieldDefinition instanceof ThirdPartySettingsInterface)) {
-        continue;
-      }
+      /** @var \Drupal\Core\Field\Entity\BaseFieldOverride|\Drupal\field\Entity\FieldConfig $field_config */
+      $field_config = $fieldDefinition->getConfig($object->bundle());
 
-      $mapFromSelectedCsl = $fieldDefinition->getThirdPartySetting('islandora_citations', 'csl_field');
-      $mapFromEntity = $fieldDefinition->getThirdPartySetting('islandora_citations', 'use_entity_checkbox');
+      $mapFromSelectedCsl = $field_config->getThirdPartySetting('islandora_citations', 'csl_field');
+      $mapFromEntity = $field_config->getThirdPartySetting('islandora_citations', 'use_entity_checkbox');
 
       // Do not process if field is not mapped.
       if (empty($mapFromSelectedCsl) && empty($mapFromEntity)) {
