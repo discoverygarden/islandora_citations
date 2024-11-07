@@ -11,6 +11,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\islandora_citations\IslandoraCitationsHelper;
+use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -177,7 +178,7 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
   public function getCacheTags() {
     // Retrieve the node ID.
     $node = $this->routeMatch->getParameter('node');
-    $node_id = $node ? $node->id() : NULL;
+    $node_id = $node instanceof NodeInterface ? $node->id() : NULL;
 
     // Return cache tags.
     if ($node_id) {

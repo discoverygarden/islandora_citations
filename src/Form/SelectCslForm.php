@@ -61,13 +61,15 @@ class SelectCslForm extends FormBase {
   protected $logger;
 
   /**
-   * {@inheritdoc}
+   * Constructor.
    */
-  public function __construct(IslandoraCitationsHelper $citationHelper,
-                              RouteMatchInterface $route_match,
-                              EntityTypeManagerInterface $entity_type_manager,
-                              AliasManagerInterface $pathAliasManager,
-                              LoggerInterface $logger) {
+  public function __construct(
+    IslandoraCitationsHelper $citationHelper,
+    RouteMatchInterface $route_match,
+    EntityTypeManagerInterface $entity_type_manager,
+    AliasManagerInterface $pathAliasManager,
+    LoggerInterface $logger,
+  ) {
     $this->citationHelper = $citationHelper;
     $this->routeMatch = $route_match;
     $this->entityTypeManager = $entity_type_manager;

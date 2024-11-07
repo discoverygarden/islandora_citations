@@ -40,7 +40,7 @@ entity.islandora_citations.add_from_file:
     _permission: 'administer islandora_citations'
   options:
     _admin_route: TRUE
-    
+
 islandora_citations.tab.node:
   path: '/admin/structure/types/manage/{node_type}/citations-map-configuration'
   defaults:
