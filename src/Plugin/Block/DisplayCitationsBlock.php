@@ -176,9 +176,11 @@ class DisplayCitationsBlock extends BlockBase implements ContainerFactoryPluginI
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    // Retrieve the node ID.
+    // Retrieve the node parameter.
     $node = $this->routeMatch->getParameter('node');
-    $node_id = $node instanceof NodeInterface ? $node->id() : NULL;
+
+    // If it's an object, get the ID. Otherwise, assume it's already the ID.
+    $node_id = is_object($node) ? $node->id() : $node;
 
     // Return cache tags.
     if ($node_id) {
