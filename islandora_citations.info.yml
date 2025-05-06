@@ -4,7 +4,6 @@ description: Provides a service to manage citations.
 package: Custom
 core_version_requirement: ^10
 dependencies:
-  - drupal:field_permissions
   - drupal:node
   - drupal:taxonomy
   - controlled_access_terms:controlled_access_terms
