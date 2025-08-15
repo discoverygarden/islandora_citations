@@ -52,7 +52,6 @@ class TypedRelationNormalizer extends NormalizerBase {
     if ($rel_type == 'artist') { 
         return 'author';
     } 
-    
     if ($rel_type == 'creator') {
       return 'author';
     }
