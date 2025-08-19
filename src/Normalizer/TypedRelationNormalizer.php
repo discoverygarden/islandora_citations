@@ -49,11 +49,14 @@ class TypedRelationNormalizer extends NormalizerBase {
   private function formatRelTypes($rel_type) {
     $rel_type = strtolower(trim(preg_replace("/\([^)]+\)/", "", $rel_type)));
 
-    if ($rel_type == 'creator') {
-      return 'author';
-    }
+    // Map specific rel types.
+    // @todo Move to third party settings.
+    $map = [
+      'artist' => 'author',
+      'creator' => 'author',
+    ];
 
-    return $rel_type;
+    return $map[$rel_type] ?? $rel_type;
   }
 
 }

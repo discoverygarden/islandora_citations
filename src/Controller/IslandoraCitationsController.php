@@ -2,7 +2,6 @@
 
 namespace Drupal\islandora_citations\Controller;
 
-use Drupal\base_field_override_ui\BaseFieldOverrideUI;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
@@ -11,6 +10,7 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\base_field_override_ui\BaseFieldOverrideUI;
 use Drupal\node\Entity\NodeType;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
