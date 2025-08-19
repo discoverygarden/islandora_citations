@@ -50,7 +50,7 @@ class TypedRelationNormalizer extends NormalizerBase {
     $rel_type = strtolower(trim(preg_replace("/\([^)]+\)/", "", $rel_type)));
 
     // Map specific rel types.
-    // @todo: Move to third party settings.
+    // @todo Move to third party settings.
     $map = [
       'artist' => 'author',
       'creator' => 'author',
