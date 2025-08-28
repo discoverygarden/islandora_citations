@@ -37,7 +37,20 @@ class FieldItemListNormalizer extends NormalizerBase {
         }
       }
       else {
-        $field_item_values = $this->serializer->normalize($field_item, $format, $context);
+        $normalized_field_instance = $this->serializer->normalize($field_item, $format, $context);
+        if (is_array($normalized_field_instance)) {
+          foreach ($normalized_field_instance as $cslField => $normalized_value) {
+            if (arraY_key_exists($cslField, $field_item_values)) {
+              $field_item_values[$cslField] = array_merge($field_item_values[$cslField], $normalized_value);
+            }
+            else {
+              $field_item_values[$cslField] = $normalized_value;
+            }
+          }
+        }
+        else {
+          $field_item_values = $normalized_field_instance;
+        }
       }
     }
 
