@@ -2,6 +2,8 @@
 
 namespace Drupal\islandora_citations\Normalizer;
 
+use Drupal\Core\Field\Plugin\Field\FieldType\StringItemBase;
+
 /**
  * Converts StringItem fields to an array including computed values.
  */
@@ -26,6 +28,15 @@ class StringItemNormalizer extends NormalizerBase {
       }
     }
     return $value;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getSupportedTypes(?string $format) : array {
+    return [
+      StringItemBase::class => TRUE,
+    ];
   }
 
 }

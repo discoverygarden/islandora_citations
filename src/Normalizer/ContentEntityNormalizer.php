@@ -105,4 +105,13 @@ class ContentEntityNormalizer extends NormalizerBase {
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public function getSupportedTypes(?string $format) : array {
+    return [
+      ContentEntityInterface::class => TRUE,
+    ];
+  }
+
 }

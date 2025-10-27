@@ -36,4 +36,14 @@ class EntityReferenceNormalizer extends NormalizerBase {
     }
   }
 
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getSupportedTypes(?string $format) : array {
+    return [
+      EntityReferenceItem::class => TRUE,
+    ];
+  }
+
 }

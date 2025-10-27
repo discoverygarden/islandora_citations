@@ -71,4 +71,13 @@ class ExtendedDateTimeNormalizer extends NormalizerBase {
     return [];
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public function getSupportedTypes(?string $format) : array {
+    return [
+      ExtendedDateTimeFormat::class => TRUE,
+    ];
+  }
+
 }

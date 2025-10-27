@@ -85,4 +85,14 @@ class DateTimeNormalizer extends NormalizerBase {
     return new \DateTimeZone($default_site_timezone);
   }
 
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getSupportedTypes(?string $format) : array {
+    return [
+      DateTimeInterface::class => TRUE,
+    ];
+  }
+
 }

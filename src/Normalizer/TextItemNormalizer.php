@@ -33,4 +33,14 @@ class TextItemNormalizer extends NormalizerBase {
     return $field_values;
   }
 
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getSupportedTypes(?string $format) : array {
+    return [
+      TextItemBase::class => TRUE,
+    ];
+  }
+
 }

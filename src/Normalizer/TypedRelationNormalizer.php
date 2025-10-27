@@ -2,6 +2,7 @@
 
 namespace Drupal\islandora_citations\Normalizer;
 
+use Drupal\controlled_access_terms\Plugin\Field\FieldType\TypedRelation;
 use Drupal\taxonomy\TermInterface;
 
 /**
@@ -57,6 +58,15 @@ class TypedRelationNormalizer extends NormalizerBase {
     ];
 
     return $map[$rel_type] ?? $rel_type;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getSupportedTypes(?string $format) : array {
+    return [
+      TypedRelation::class => TRUE,
+    ];
   }
 
 }
