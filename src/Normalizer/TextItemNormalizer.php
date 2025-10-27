@@ -20,7 +20,7 @@ class TextItemNormalizer extends NormalizerBase {
   /**
    * {@inheritdoc}
    */
-  public function normalize($object, $format = NULL, array $context = []) {
+  public function normalize($object, $format = NULL, array $context = []) : float|int|bool|\ArrayObject|array|string|null {
     $field_values = NULL;
     $field_value = $object->getValue();
 

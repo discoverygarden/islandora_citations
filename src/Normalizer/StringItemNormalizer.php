@@ -17,7 +17,7 @@ class StringItemNormalizer extends NormalizerBase {
   /**
    * {@inheritdoc}
    */
-  public function normalize($object, $format = NULL, array $context = []) {
+  public function normalize($object, $format = NULL, array $context = []) : float|int|bool|\ArrayObject|array|string|null {
     $value = NULL;
     foreach ($object->getProperties(TRUE) as $field) {
       $value = $this->serializer->normalize($field, $format, $context);

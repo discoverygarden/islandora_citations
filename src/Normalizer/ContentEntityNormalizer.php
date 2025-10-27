@@ -17,7 +17,7 @@ class ContentEntityNormalizer extends NormalizerBase {
   /**
    * {@inheritdoc}
    */
-  public function normalize($object, $format = NULL, array $context = []) {
+  public function normalize($object, $format = NULL, array $context = []) : float|int|bool|\ArrayObject|array|string|null {
     assert($object instanceof ContentEntityInterface);
     $normalized_field_items = [];
     foreach ($object->getFields(TRUE) as $field_item_list) {
