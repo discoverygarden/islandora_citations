@@ -33,7 +33,6 @@ class TextItemNormalizer extends NormalizerBase {
     return $field_values;
   }
 
-
   /**
    * {@inheritDoc}
    */

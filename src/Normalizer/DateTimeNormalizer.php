@@ -85,7 +85,6 @@ class DateTimeNormalizer extends NormalizerBase {
     return new \DateTimeZone($default_site_timezone);
   }
 
-
   /**
    * {@inheritDoc}
    */

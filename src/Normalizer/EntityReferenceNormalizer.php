@@ -36,7 +36,6 @@ class EntityReferenceNormalizer extends NormalizerBase {
     }
   }
 
-
   /**
    * {@inheritDoc}
    */
