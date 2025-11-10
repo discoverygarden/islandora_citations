@@ -112,7 +112,7 @@ class SelectCslForm extends FormBase {
       if (isset($settings['id'])) {
         if ($settings['id'] == 'islandora_citations_display_citations') {
           $default_csl = !empty($settings['default_csl']) ? $settings['default_csl'] : array_values($cslItems)[0];
-          $this->blockCSLType = empty($settings['default_csl_type'] ? "" : $settings['default_csl_type']);
+          $this->blockCSLType = $settings['default_csl_type'] ?? "";
         }
       }
     }
