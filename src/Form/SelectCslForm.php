@@ -107,6 +107,7 @@ class SelectCslForm extends FormBase {
     $blocks = $block_storage->loadMultiple();
     $cslItems = $this->citationHelper->getCitationEntityList();
     $default_csl = array_values($cslItems)[0];
+
     foreach ($blocks as $block) {
       $settings = $block->get('settings');
       if (isset($settings['id'])) {
@@ -120,6 +121,7 @@ class SelectCslForm extends FormBase {
     if (!array_key_exists($default_csl, $cslItems)) {
       $default_csl = array_values($cslItems)[0];
     }
+
     $csl = !empty($default_csl) ? $this->getDefaultCitation($default_csl) : '';
 
     $form['#cache']['contexts'][] = 'url';
@@ -270,8 +272,15 @@ class SelectCslForm extends FormBase {
     ];
 
     $citationItems[0]->accessed = (object) ['date-parts' => [$date_parts]];
-
     $style = $this->citationHelper->loadStyle($csl_name);
+
+    if (empty($style)) {
+      $nid = $entity->id();
+      $exception_message = "CSL Style '$csl_name' not found for CSL type '$blockCSLType' on node: '$nid'";
+      $this->logger->error($exception_message);
+      throw new \Exception($exception_message);
+    }
+
     return $this->citationHelper->renderWithCiteproc($citationItems, $style);
   }
 
