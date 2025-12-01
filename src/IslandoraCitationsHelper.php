@@ -81,7 +81,7 @@ class IslandoraCitationsHelper {
    * Cet citations styles from config entity.
    */
   public function getCitationEntityList(): array {
-    $citationIds = $this->citationsStorage->getQuery()->execute();
+    $citationIds = $this->citationsStorage->getQuery()->accessCheck(FALSE)->execute();
     $citationEntities = $this->citationsStorage->loadMultiple($citationIds);
     $citationList = [];
     foreach ($citationEntities as $citationEntity) {
@@ -153,6 +153,7 @@ class IslandoraCitationsHelper {
     }
     catch (\Exception $e) {
       $this->logger->error($e->getMessage());
+      throw $e;
     }
   }
 

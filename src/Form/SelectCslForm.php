@@ -100,53 +100,22 @@ class SelectCslForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
-    $block_storage = $this->entityTypeManager->getStorage('block');
-    // Check if the value is set in block, newly added field.
-    // Pass it in renderCitation.
-    $blocks = $block_storage->loadMultiple();
+  public function buildForm(array $form, FormStateInterface $form_state, $configuration = NULL) {
     $cslItems = $this->citationHelper->getCitationEntityList();
-    $default_csl = array_values($cslItems)[0];
-    foreach ($blocks as $block) {
-      $settings = $block->get('settings');
-      if (isset($settings['id'])) {
-        if ($settings['id'] == 'islandora_citations_display_citations') {
-          $default_csl = !empty($settings['default_csl']) ? $settings['default_csl'] : array_values($cslItems)[0];
-          $this->blockCSLType = $settings['default_csl_type'] ?? "";
-        }
+
+    if (!$form_state->isRebuilding()) {
+      $default_csl = isset($cslItems[$configuration['default_csl']]) ? $configuration['default_csl'] : FALSE;
+      if ($default_csl === FALSE) {
+        $this->logger->error("Default CSL, {$configuration['default_csl']} not found in citation styles.");
       }
     }
-    // Check default csl exist or not.
-    if (!array_key_exists($default_csl, $cslItems)) {
-      $default_csl = array_values($cslItems)[0];
+    else {
+      $default_csl = $form_state->getValue('csl_list');
     }
-    $csl = !empty($default_csl) ? $this->getDefaultCitation($default_csl) : '';
+    $csl = $default_csl ? $this->getCitation($default_csl) : '';
 
     $form['#cache']['contexts'][] = 'url';
     $form['#theme'] = 'display_citations';
-
-    // We receive error message as a string, and then we display same string
-    // as output.
-    // We expect output in a specific format when there is no error as below
-    // <div class="csl-bib-body">
-    // <div class="csl-entry">“Text_Output”</div>
-    // </div>.
-    // Based on `csl` text output, we will do the error handling.
-    // When HTML output is not as expected, add a form element which indicates
-    // we received error.
-    $form['error_handling_element'] = [
-      '#markup' => 0,
-      '#access' => FALSE,
-    ];
-
-    if (!str_starts_with($csl, '<div class="csl-bib-body">')) {
-      // Add a custom markup element to the form.
-      $form['error_handling_element']['#markup'] = 1;
-
-      // Log error message.
-      $this->logger->error(json_encode($csl));
-      return $form;
-    }
 
     $form['csl_list'] = [
       '#type' => 'select',
@@ -156,8 +125,6 @@ class SelectCslForm extends FormBase {
       '#ajax' => [
         'callback' => '::renderAjaxCitation',
         'wrapper' => 'formatted-citation',
-        'method' => 'html',
-        'event' => 'change',
       ],
       '#attributes' => ['aria-label' => $this->t('Select CSL')],
       '#theme_wrappers' => [],
@@ -190,25 +157,7 @@ class SelectCslForm extends FormBase {
    * Render CSL response on ajax call.
    */
   public function renderAjaxCitation(array $form, FormStateInterface $form_state) {
-    $csl_name = $form_state->getValue('csl_list');
-    if ($csl_name == '') {
-      return [
-        '#children' => '',
-      ];
-    }
-
-    try {
-      // Method call to render citation.
-      $rendered = $this->renderCitation($csl_name);
-      $response = [
-        '#children' => $rendered['data'],
-      ];
-
-      return $response;
-    }
-    catch (\Throwable $e) {
-      return $e->getMessage();
-    }
+    return $form['formatted-citation'];
   }
 
   /**
@@ -223,10 +172,7 @@ class SelectCslForm extends FormBase {
    * @param string $csl_name
    *   Block default csl name.
    */
-  public function getDefaultCitation($csl_name) {
-    if (empty($csl_name)) {
-      return $this->t('Select CSL');
-    }
+  public function getCitation($csl_name) {
     try {
       // Method call to render citation.
       $rendered = $this->renderCitation($csl_name);
