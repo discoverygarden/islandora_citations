@@ -137,6 +137,7 @@ class IslandoraCitationsHelper {
     }
     catch (\Exception $e) {
       $this->logger->error($e->getMessage());
+      throw $e;
     }
   }
 
