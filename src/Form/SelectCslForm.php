@@ -150,6 +150,12 @@ class SelectCslForm extends FormBase {
       ],
     ];
 
+    // Attach JS for dynamic button label, disabled state when no style is
+    // selected, and screen reader announcements for citation changes and
+    // clipboard copy via a persistent live region (more reliable than
+    // aria-live on the AJAX-replaced #formatted-citation element).
+    $form['#attached']['library'][] = 'islandora_citations/cite_this_ux';
+
     return $form;
   }
 
