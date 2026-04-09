@@ -10,3 +10,10 @@ drupal:
     - core/once
     - core/drupal
     - islandora_citations/clipboardjs
+cite_this_ux:
+  js:
+    js/cite-this-ux.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
