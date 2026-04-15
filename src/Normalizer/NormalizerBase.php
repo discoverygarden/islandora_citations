@@ -94,8 +94,8 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
       }
 
       return [
-        'given' => $firstName,
-        'family' => $lastName,
+        'given' => trim($firstName),
+        'family' => trim($lastName),
       ];
     }
     catch (\Exception $e) {
