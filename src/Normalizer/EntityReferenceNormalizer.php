@@ -19,7 +19,7 @@ class EntityReferenceNormalizer extends NormalizerBase {
   /**
    * {@inheritdoc}
    */
-  public function normalize($field_item, $format = NULL, array $context = []) {
+  public function normalize($field_item, $format = NULL, array $context = []) : float|int|bool|\ArrayObject|array|string|null {
     assert($field_item instanceof EntityReferenceItem);
     $entity = $field_item->get('entity')->getValue();
     $entity_context['mapped-entity'] = TRUE;
@@ -34,6 +34,15 @@ class EntityReferenceNormalizer extends NormalizerBase {
         return $entity->label();
       }
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getSupportedTypes(?string $format) : array {
+    return [
+      EntityReferenceItem::class => TRUE,
+    ];
   }
 
 }

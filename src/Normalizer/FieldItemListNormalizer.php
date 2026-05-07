@@ -17,7 +17,7 @@ class FieldItemListNormalizer extends NormalizerBase {
   /**
    * {@inheritdoc}
    */
-  public function normalize($field_item_list, $format = NULL, array $context = []) {
+  public function normalize($field_item_list, $format = NULL, array $context = []) : float|int|bool|\ArrayObject|array|string|null {
     $field_item_values = [];
 
     /** @var \Drupal\Core\Field\FieldItemListInterface $field_item_list */
@@ -42,6 +42,15 @@ class FieldItemListNormalizer extends NormalizerBase {
     }
 
     return $field_item_values;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getSupportedTypes(?string $format) : array {
+    return [
+      FieldItemListInterface::class => TRUE,
+    ];
   }
 
 }

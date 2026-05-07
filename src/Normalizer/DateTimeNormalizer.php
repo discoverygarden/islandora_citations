@@ -53,7 +53,7 @@ class DateTimeNormalizer extends NormalizerBase {
   /**
    * {@inheritdoc}
    */
-  public function normalize($datetime, $format = NULL, array $context = []) {
+  public function normalize($datetime, $format = NULL, array $context = []) : float|int|bool|\ArrayObject|array|string|null {
     assert($datetime instanceof DateTimeInterface);
     $drupal_date_time = $datetime->getDateTime()->setTimezone($this->getNormalizationTimezone());
     if ($drupal_date_time === NULL) {
@@ -83,6 +83,15 @@ class DateTimeNormalizer extends NormalizerBase {
   protected function getNormalizationTimezone() {
     $default_site_timezone = $this->systemDateConfig->get('timezone.default');
     return new \DateTimeZone($default_site_timezone);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getSupportedTypes(?string $format) : array {
+    return [
+      DateTimeInterface::class => TRUE,
+    ];
   }
 
 }

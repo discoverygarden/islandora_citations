@@ -22,7 +22,7 @@ class ExtendedDateTimeNormalizer extends NormalizerBase {
   /**
    * {@inheritdoc}
    */
-  public function normalize($object, $format = NULL, array $context = []) {
+  public function normalize($object, $format = NULL, array $context = []) : float|int|bool|\ArrayObject|array|string|null {
     $dateValue = $object->getValue();
     if (!empty($dateValue['value'])) {
       $parser = EdtfFactory::newParser();
@@ -69,6 +69,15 @@ class ExtendedDateTimeNormalizer extends NormalizerBase {
     }
 
     return [];
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getSupportedTypes(?string $format) : array {
+    return [
+      ExtendedDateTimeFormat::class => TRUE,
+    ];
   }
 
 }

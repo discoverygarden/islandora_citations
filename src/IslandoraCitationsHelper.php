@@ -7,7 +7,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
-use DrupalFinder\DrupalFinder;
 use Psr\Log\LoggerInterface;
 use Seboettg\CiteProc\CiteProc;
 use Seboettg\CiteProc\StyleSheet;
@@ -81,7 +80,9 @@ class IslandoraCitationsHelper {
    * Cet citations styles from config entity.
    */
   public function getCitationEntityList(): array {
-    $citationIds = $this->citationsStorage->getQuery()->accessCheck(FALSE)->execute();
+    $citationIds = $this->citationsStorage->getQuery()
+      ->accessCheck(TRUE)
+      ->execute();
     $citationEntities = $this->citationsStorage->loadMultiple($citationIds);
     $citationList = [];
     foreach ($citationEntities as $citationEntity) {
@@ -89,23 +90,6 @@ class IslandoraCitationsHelper {
     }
 
     return $citationList;
-  }
-
-  /**
-   * Load styles from citations style language.
-   */
-  public function getAllCslsFromCiteproc(): array {
-    $drupalFinder = new DrupalFinder();
-    $drupalFinder->locateRoot(DRUPAL_ROOT);
-    $vendorDir = $drupalFinder->getVendorDir();
-    $cslStyleDirectory = $vendorDir . '/citation-style-language/styles';
-    $styleList = $this->fileSystem->scanDirectory($cslStyleDirectory, '/\.csl/', ['recurse' => FALSE]);
-    if (!empty($styleList)) {
-      $cslList = array_column($styleList, 'name');
-      return array_combine($cslList, $cslList);
-    }
-
-    return [];
   }
 
   /**
